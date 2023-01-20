@@ -6,6 +6,8 @@ public class ForceScript : MonoBehaviour
 {
     public Vector3 CurrentLocalForce { get; private set; }
     public float MaxForce;
+    public float MaxMomentum;
+    public bool ClockwiseRotation = true;
     public float level;
     public Vector3 AxisDirection;
     Rigidbody rb;
@@ -24,6 +26,7 @@ public class ForceScript : MonoBehaviour
     private void LateUpdate()
     {
         AddEngineForce();
+        //AddAngularMomentum();
     }
     public void AddEngineForce()
     {
@@ -33,10 +36,9 @@ public class ForceScript : MonoBehaviour
     }
     public void AddAngularMomentum()
     {
-        //rb.AddRelativeTorque()
-
-        Vector3 force = AxisDirection * MaxForce * level;
-        force = transform.TransformDirection(force);
-        rb.AddForce(force, ForceMode.Force);
+        Vector3 momemtum = AxisDirection * MaxMomentum * level;
+        if (!ClockwiseRotation)
+            momemtum *= -1;
+        rb.AddRelativeTorque(momemtum);
     }
 }
