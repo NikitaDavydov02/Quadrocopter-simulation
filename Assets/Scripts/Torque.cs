@@ -14,6 +14,6 @@ public class Torque : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rb.AddRelativeTorque(0, 1, 0, ForceMode.Force);
+        transform.Rotate(0, 1, 0);
     }
 }
