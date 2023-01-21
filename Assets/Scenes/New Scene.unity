@@ -283,10 +283,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AxisDirection: {x: 0, y: 1, z: 0}
-  MaxForce: 0
+  MaxForce: 2
   Level: 0
   AxisRadius: 0.1
-  RotationCoeffitient: 1
+  RotationCoeffitient: 20
+  clockwiseRotation: 0
 --- !u!136 &372530145
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -478,10 +479,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AxisDirection: {x: 0, y: 1, z: 0}
-  MaxForce: 10
+  MaxForce: 2
   Level: 0
   AxisRadius: 0.1
-  RotationCoeffitient: 1
+  RotationCoeffitient: 20
+  clockwiseRotation: 1
 --- !u!1 &392834940
 GameObject:
   m_ObjectHideFlags: 0
@@ -864,7 +866,6 @@ GameObject:
   - component: {fileID: 936675921}
   - component: {fileID: 936675920}
   - component: {fileID: 936675924}
-  - component: {fileID: 936675925}
   m_Layer: 0
   m_Name: Frame base
   m_TagString: Untagged
@@ -964,24 +965,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   area: 0.07
-  k: 0
+  k: 0.1
   velocity: {x: 0, y: 0, z: 0}
---- !u!54 &936675925
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 936675917}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &1023980832
 GameObject:
   m_ObjectHideFlags: 0
@@ -1087,7 +1072,6 @@ GameObject:
   - component: {fileID: 1184282141}
   - component: {fileID: 1184282143}
   - component: {fileID: 1184282144}
-  - component: {fileID: 1184282145}
   m_Layer: 0
   m_Name: Quadrocopter
   m_TagString: Untagged
@@ -1142,6 +1126,7 @@ MonoBehaviour:
   gravityForce: {fileID: 1184282144}
   resistanceForces:
   - {fileID: 936675924}
+  RotationPowerMultiplyer: 0.5
 --- !u!114 &1184282144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1155,23 +1140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 0.1
-  g: 0
---- !u!54 &1184282145
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1184282137}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  g: -9.81
 --- !u!1 &1214074563
 GameObject:
   m_ObjectHideFlags: 0
@@ -1205,10 +1174,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AxisDirection: {x: 0, y: 1, z: 0}
-  MaxForce: 0
+  MaxForce: 2
   Level: 0
   AxisRadius: 0.1
-  RotationCoeffitient: 1
+  RotationCoeffitient: 20
+  clockwiseRotation: 1
 --- !u!136 &1214074565
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1418,10 +1388,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AxisDirection: {x: 0, y: 1, z: 0}
-  MaxForce: 0
+  MaxForce: 2
   Level: 0
   AxisRadius: 0.1
-  RotationCoeffitient: 1
+  RotationCoeffitient: 20
+  clockwiseRotation: 0
 --- !u!136 &1745722022
 CapsuleCollider:
   m_ObjectHideFlags: 0

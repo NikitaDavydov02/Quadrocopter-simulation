@@ -19,6 +19,7 @@ public class EngineForce : MonoBehaviour, IForce
     Vector3 firstRotationForceRelative;
     Vector3 secondRotationForceRelative;
 
+    public bool clockwiseRotation;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,17 +39,25 @@ public class EngineForce : MonoBehaviour, IForce
     public void CountForce()
     {
         Vector3 force = AxisDirection * MaxForce * Level;
+        Debug.Log("Engine force before: " + force.magnitude);
+        
         force = transform.TransformDirection(force);
+        Debug.Log("Engine force after: " + force.magnitude);
         CurrentForceVector[0] = force;
         Vector3 pointOfApplication = Vector3.zero;
         AbsolutePointOfForceApplying[0] = transform.TransformPoint(pointOfApplication);
         //Rotation forces
         Vector3 firstRotationForceRelative = RotationCoeffitient*MaxForce * Level * new Vector3(0, 0, 1);
         Vector3 secondRotationForceRelative = -firstRotationForceRelative;
-        //CurrentForceVector[1] = transform.TransformDirection(firstRotationForceRelative);
-        //CurrentForceVector[2] = transform.TransformDirection(secondRotationForceRelative);
-        CurrentForceVector[1] = Vector3.zero;
-        CurrentForceVector[2] = Vector3.zero;
+        if (!clockwiseRotation)
+        {
+            firstRotationForceRelative *= -1;
+            secondRotationForceRelative *= -1;
+        }
+        CurrentForceVector[1] = transform.TransformDirection(firstRotationForceRelative);
+        CurrentForceVector[2] = transform.TransformDirection(secondRotationForceRelative);
+        //CurrentForceVector[1] = Vector3.zero;
+        //CurrentForceVector[2] = Vector3.zero;
         AbsolutePointOfForceApplying[1] = transform.TransformPoint(firstRotationForceRelativePoint);
         AbsolutePointOfForceApplying[2] = transform.TransformPoint(secondRotationForceRelativePoint);
     }

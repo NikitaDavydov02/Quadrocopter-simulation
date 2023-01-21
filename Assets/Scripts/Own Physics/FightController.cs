@@ -21,14 +21,16 @@ public class FightController : MonoBehaviour
     List<ResistanceForce> resistanceForces;
 
     private Vector3 ForceToCenterOfMass;
-    private Vector3 AbsoluteMomentCenterOfMass;
+    private Vector3 MomentInCoordinatesTranslatedToCenterOfMass;
 
     private Vector3 velocityOfCenterMass = Vector3.zero;
     private Vector3 AbsoluteAngularVelocity = Vector3.zero;
-    private Vector3 AbsoluteL = Vector3.zero;
+    private Vector3 LInCoordinatesTranslatedToCenterOfMass = Vector3.zero;
 
     private Vector3 lastPosition;
     private Quaternion lastRotation;
+
+    public float RotationPowerMultiplyer;
     // Start is called before the first frame update
     void Start()
     {
@@ -67,8 +69,38 @@ public class FightController : MonoBehaviour
             generalLevel = 0;
         for (int i = 0; i < engineLevels.Count; i++)
             engineLevels[i] = generalLevel;
-        foreach (EngineForce engine in engines)
-            engine.Level = generalLevel;
+        if (Input.GetKey(KeyCode.W))
+        {
+            engineLevels[0] = generalLevel*RotationPowerMultiplyer;
+            engineLevels[1] = generalLevel * RotationPowerMultiplyer;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            engineLevels[2] = generalLevel * RotationPowerMultiplyer;
+            engineLevels[3] = generalLevel * RotationPowerMultiplyer;
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            engineLevels[0] = generalLevel * RotationPowerMultiplyer;
+            engineLevels[3] = generalLevel * RotationPowerMultiplyer;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            engineLevels[1] = generalLevel * RotationPowerMultiplyer;
+            engineLevels[2] = generalLevel * RotationPowerMultiplyer;
+        }
+        if (Input.GetKey(KeyCode.Q))
+        {
+            engineLevels[1] = generalLevel * RotationPowerMultiplyer;
+            engineLevels[3] = generalLevel * RotationPowerMultiplyer;
+        }
+        if (Input.GetKey(KeyCode.E))
+        {
+            engineLevels[0] = generalLevel * RotationPowerMultiplyer;
+            engineLevels[2] = generalLevel * RotationPowerMultiplyer;
+        }
+        for (int i = 0; i < engineLevels.Count; i++)
+            engines[i].Level = engineLevels[i];
 
         
     }
@@ -76,12 +108,13 @@ public class FightController : MonoBehaviour
     {
         //Physics counting
         ForceToCenterOfMass = Vector3.zero;
-        AbsoluteMomentCenterOfMass = Vector3.zero;
+        MomentInCoordinatesTranslatedToCenterOfMass = Vector3.zero;
 
         //Engine forces
         for (int i = 0; i < engines.Count; i++)
         {
             engines[i].CountForce();
+            Debug.Log("Level:" + engines[i].Level);
             for(int j = 0; j < engines[i].CurrentForceVector.Count; j++)
             {
                 AddForce(engines[i].CurrentForceVector[j], engines[i].AbsolutePointOfForceApplying[j]);
@@ -104,20 +137,20 @@ public class FightController : MonoBehaviour
             resistanceForces[i].CountForce();
             AddForce(resistanceForces[i].CurrentForceVector[0], resistanceForces[i].AbsolutePointOfForceApplying[0]);
             Debug.DrawLine(resistanceForces[i].AbsolutePointOfForceApplying[0]+new Vector3(0.01f,0,0), resistanceForces[i].AbsolutePointOfForceApplying[0] + resistanceForces[i].CurrentForceVector[0], Color.blue);
-            Debug.Log("Resistance force: " + resistanceForces);
+            Debug.Log("Resistance force: " + resistanceForces[0]);
         }
         //Rotaion dynamics
         float dt = Time.deltaTime;
-        Vector3 dL = AbsoluteMomentCenterOfMass * dt;
-        AbsoluteL += dL;
+        Vector3 dLInCoordinatedTranslatedToCenterOfMass = MomentInCoordinatesTranslatedToCenterOfMass * dt;
+        LInCoordinatesTranslatedToCenterOfMass += dLInCoordinatedTranslatedToCenterOfMass;
         Debug.Log("Force: " + ForceToCenterOfMass);
-        Debug.Log("AbsoluteM: " + AbsoluteMomentCenterOfMass);
-        Vector3 transliationL = -gravityForce.mass * Vector3.Cross(transform.position, velocityOfCenterMass);
-        Vector3 relativeL = transform.InverseTransformDirection(AbsoluteL-transliationL);
-        Debug.DrawLine(transform.position, transform.position+AbsoluteL - transliationL, Color.black, 10);
-        Debug.Log("relativeL: " +( AbsoluteL - transliationL));
-        Vector3 relativeAngularVelocity = MultiplyTensorOnVector3(invertedInertiaTensor, relativeL);
-        AbsoluteAngularVelocity = transform.TransformDirection(relativeAngularVelocity);
+        Debug.Log("Moment: " + MomentInCoordinatesTranslatedToCenterOfMass);
+        Debug.DrawLine(transform.position, transform.position+ LInCoordinatesTranslatedToCenterOfMass, Color.black, 10);
+        Debug.Log("relativeL: " + LInCoordinatesTranslatedToCenterOfMass);
+        Vector3 LInLocalCoordinates = transform.InverseTransformDirection(LInCoordinatesTranslatedToCenterOfMass);
+        // Vector3 relativeAngularVelocity = MultiplyTensorOnVector3(invertedInertiaTensor, relativeL);
+        Vector3 AngularVelocityInLocalCoordinates = LInLocalCoordinates / 0.01f;
+        AbsoluteAngularVelocity = transform.TransformDirection(AngularVelocityInLocalCoordinates);
        // Debug.DrawRay(transform.position, AbsoluteAngularVelocity, Color.white,10,true,);
         transform.Rotate(-AbsoluteAngularVelocity.normalized, AbsoluteAngularVelocity.magnitude * dt, Space.World);
 
@@ -126,7 +159,7 @@ public class FightController : MonoBehaviour
         Vector3 acceleration = ForceToCenterOfMass / gravityForce.mass;
         Vector3 dv = acceleration * dt;
         velocityOfCenterMass += dv;
-        //transform.Translate(velocityOfCenterMass * dt);
+        transform.Translate(velocityOfCenterMass * dt, Space.World);
         if (transform.position.y < 0)
         {
             Vector3 newPosition = new Vector3(transform.position.x, 0, transform.position.z);
@@ -143,10 +176,10 @@ public class FightController : MonoBehaviour
     private void AddForce(Vector3 forceInWorldCoordinates, Vector3 pointOfApplicationINWorldCoordinates)
     {
         ForceToCenterOfMass += forceInWorldCoordinates;
-        //Vector3 r = pointOfApplicationINWorldCoordinates - transform.position;
-        Vector3 r = pointOfApplicationINWorldCoordinates;
+        Vector3 r = pointOfApplicationINWorldCoordinates - transform.position;
+        //Vector3 r = pointOfApplicationINWorldCoordinates;
         Vector3 dM = -Vector3.Cross(r, forceInWorldCoordinates);
-        AbsoluteMomentCenterOfMass +=dM;
+        MomentInCoordinatesTranslatedToCenterOfMass +=dM;
     }
     private List<List<float>> InverseMatrix(List<List<float>> matrix)
     {
