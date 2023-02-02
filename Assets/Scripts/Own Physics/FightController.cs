@@ -31,6 +31,7 @@ public class FightController : MonoBehaviour
     private Quaternion lastRotation;
 
     public float RotationPowerMultiplyer;
+    public float gasSensitivity;
     // Start is called before the first frame update
     void Start()
     {
@@ -59,6 +60,8 @@ public class FightController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float gas = Input.GetAxis("Mouse ScrollWheel") * gasSensitivity * Time.deltaTime;
+        //generalLevel += gas;
         if (Input.GetKey(KeyCode.PageUp))
             generalLevel += generalLevelChangingSpeed * Time.deltaTime;
         if (Input.GetKey(KeyCode.PageDown))
@@ -136,7 +139,7 @@ public class FightController : MonoBehaviour
         {
             resistanceForces[i].CountForce();
             AddForce(resistanceForces[i].CurrentForceVector[0], resistanceForces[i].AbsolutePointOfForceApplying[0]);
-            Debug.DrawLine(resistanceForces[i].AbsolutePointOfForceApplying[0]+new Vector3(0.01f,0,0), resistanceForces[i].AbsolutePointOfForceApplying[0] + resistanceForces[i].CurrentForceVector[0], Color.blue);
+            Debug.DrawLine(resistanceForces[i].AbsolutePointOfForceApplying[0]+new Vector3(0,0,0), resistanceForces[i].AbsolutePointOfForceApplying[0] + resistanceForces[i].CurrentForceVector[0], Color.blue);
             Debug.Log("Resistance force: " + resistanceForces[0]);
         }
         //Rotaion dynamics

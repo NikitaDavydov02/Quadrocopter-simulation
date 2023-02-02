@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class ResistanceForce : MonoBehaviour, IForce
 {
-    public float area;
-    public float k;
+    private float k;
+    public Primitive Primitive;
+    public float length;
+    public float diameter;
     public List<Vector3> CurrentForceVector { get; private set; }
 
     public List<Vector3> AbsolutePointOfForceApplying { get; private set; }
@@ -35,10 +37,28 @@ public class ResistanceForce : MonoBehaviour, IForce
             CurrentForceVector[0] = Vector3.zero;
             return;
         }
-        Vector3 direction = -velocity / velocity.magnitude;
-        float module = MainManager.AirDensity * velocity.magnitude *velocity.magnitude * k*area / 2;
-        CurrentForceVector[0]= direction * module;
+        //Vector3 direction = -velocity / velocity.magnitude;
+        float area = 0;
+        Vector3 forceInGlobalCoordinates = Vector3.zero;
+        if (Primitive == Primitive.Stick)
+        {
+            //X axis is parellel ti the stick
+            Vector3 stickAxis = transform.TransformDirection(1, 0, 0);
+            Vector3 perpendicularVelosity = velocity - Vector3.Dot(velocity, stickAxis) * stickAxis;
+            Vector3 direction = -perpendicularVelosity.normalized;
+            Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + direction, Color.grey);
+            area = diameter * length;
+            float k = 0.4f;
+            float module = MainManager.AirDensity * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * k * area / 2;
+            forceInGlobalCoordinates = direction * module;
+        }
+        //float module = MainManager.AirDensity * velocity.magnitude *velocity.magnitude * k*area / 2;
+        CurrentForceVector[0]= forceInGlobalCoordinates;
         Vector3 pointOfApplication = Vector3.zero;
         AbsolutePointOfForceApplying[0]=transform.TransformPoint(pointOfApplication);
     }
 }
+public enum Primitive {
+    Stick,
+}
+
