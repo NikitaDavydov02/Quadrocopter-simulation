@@ -6,14 +6,14 @@ public class GravityForce : MonoBehaviour,IForce
 {
     public float mass;
     public float g;
-    public List<Vector3> CurrentForceVector { get; private set; }
+    //public List<Vector3> CurrentForceVector { get; private set; }
 
-    public List<Vector3> AbsolutePointOfForceApplying { get; private set; } 
+    //public List<Vector3> AbsolutePointOfForceApplying { get; private set; } 
     // Start is called before the first frame update
     void Start()
     {
-        CurrentForceVector = new List<Vector3>() { Vector3.zero };
-        AbsolutePointOfForceApplying = new List<Vector3>() { transform.position };
+        //CurrentForceVector = new List<Vector3>() { Vector3.zero };
+        //AbsolutePointOfForceApplying = new List<Vector3>() { transform.position };
 
     }
 
@@ -22,10 +22,12 @@ public class GravityForce : MonoBehaviour,IForce
     {
         
     }
-    public void CountForce()
+    public void CountForce(out List<Vector3> CurrentForceVectors, out List<Vector3> AbsolutePointsOfForceApplying)
     {
-        CurrentForceVector[0] = new Vector3(0, g * mass, 0);
+        CurrentForceVectors = new List<Vector3>() { Vector3.zero };
+        AbsolutePointsOfForceApplying = new List<Vector3>() { transform.position };
+        CurrentForceVectors[0] = new Vector3(0, g * mass, 0);
         Vector3 pointOfApplication = Vector3.zero;
-        AbsolutePointOfForceApplying[0] = transform.TransformPoint(pointOfApplication);
+        AbsolutePointsOfForceApplying[0] = transform.TransformPoint(pointOfApplication);
     }
 }

@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class EngineForce : MonoBehaviour, IForce
 {
-    public List<Vector3> CurrentForceVector { get; private set; }
-
-    public List<Vector3> AbsolutePointOfForceApplying { get; private set; }
 
     public Vector3 AxisDirection;
     public float MaxForce;
@@ -23,10 +20,10 @@ public class EngineForce : MonoBehaviour, IForce
     // Start is called before the first frame update
     void Start()
     {
-        CurrentForceVector = new List<Vector3>() { Vector3.zero, Vector3.zero, Vector3.zero };
+        //CurrentForceVector = new List<Vector3>() { Vector3.zero, Vector3.zero, Vector3.zero };
         firstRotationForceRelativePoint = new Vector3(AxisRadius, 0, 0);
         secondRotationForceRelativePoint = new Vector3(-AxisRadius, 0, 0);
-        AbsolutePointOfForceApplying = new List<Vector3>() { transform.position, transform.TransformPoint(firstRotationForceRelativePoint), transform.TransformPoint(secondRotationForceRelativePoint)};
+        //AbsolutePointOfForceApplying = new List<Vector3>() { transform.position, transform.TransformPoint(firstRotationForceRelativePoint), transform.TransformPoint(secondRotationForceRelativePoint)};
 
     }
 
@@ -36,16 +33,18 @@ public class EngineForce : MonoBehaviour, IForce
         
     }
 
-    public void CountForce()
+    public void CountForce(out List<Vector3> CurrentForceVectors, out List<Vector3> AbsolutePointsOfForceApplying)
     {
+        CurrentForceVectors = new List<Vector3>();
+        AbsolutePointsOfForceApplying = new List<Vector3>();
         Vector3 force = AxisDirection * MaxForce * Level;
         Debug.Log("Engine force before: " + force.magnitude);
         
         force = transform.TransformDirection(force);
         Debug.Log("Engine force after: " + force.magnitude);
-        CurrentForceVector[0] = force;
+        CurrentForceVectors.Add(force);
         Vector3 pointOfApplication = Vector3.zero;
-        AbsolutePointOfForceApplying[0] = transform.TransformPoint(pointOfApplication);
+        AbsolutePointsOfForceApplying.Add(transform.TransformPoint(pointOfApplication));
         //Rotation forces
         Vector3 firstRotationForceRelative = RotationCoeffitient*MaxForce * Level * new Vector3(0, 0, 1);
         Vector3 secondRotationForceRelative = -firstRotationForceRelative;
@@ -54,11 +53,11 @@ public class EngineForce : MonoBehaviour, IForce
             firstRotationForceRelative *= -1;
             secondRotationForceRelative *= -1;
         }
-        CurrentForceVector[1] = transform.TransformDirection(firstRotationForceRelative);
-        CurrentForceVector[2] = transform.TransformDirection(secondRotationForceRelative);
+        CurrentForceVectors.Add(transform.TransformDirection(firstRotationForceRelative));
+        CurrentForceVectors.Add(transform.TransformDirection(secondRotationForceRelative));
         //CurrentForceVector[1] = Vector3.zero;
         //CurrentForceVector[2] = Vector3.zero;
-        AbsolutePointOfForceApplying[1] = transform.TransformPoint(firstRotationForceRelativePoint);
-        AbsolutePointOfForceApplying[2] = transform.TransformPoint(secondRotationForceRelativePoint);
+        AbsolutePointsOfForceApplying.Add(transform.TransformPoint(firstRotationForceRelativePoint));
+        AbsolutePointsOfForceApplying.Add(transform.TransformPoint(secondRotationForceRelativePoint));
     }
 }

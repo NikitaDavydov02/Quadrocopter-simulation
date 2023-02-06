@@ -8,9 +8,9 @@ public class ResistanceForce : MonoBehaviour, IForce
     public Primitive Primitive;
     public float length;
     public float diameter;
-    public List<Vector3> CurrentForceVector { get; private set; }
+    //public List<Vector3> CurrentForceVector { get; private set; }
 
-    public List<Vector3> AbsolutePointOfForceApplying { get; private set; }
+    //public List<Vector3> AbsolutePointOfForceApplying { get; private set; }
     public Vector3 velocity = Vector3.zero;
     private Vector3 lastPosition;
     private Rigidbody rb;
@@ -18,8 +18,8 @@ public class ResistanceForce : MonoBehaviour, IForce
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
-        CurrentForceVector = new List<Vector3>() { Vector3.zero };
-        AbsolutePointOfForceApplying = new List<Vector3>() { transform.position };
+        //CurrentForceVector = new List<Vector3>() { Vector3.zero };
+        //AbsolutePointOfForceApplying = new List<Vector3>() { transform.position };
         lastPosition = transform.position;   
     }
 
@@ -29,12 +29,15 @@ public class ResistanceForce : MonoBehaviour, IForce
         velocity = (transform.position - lastPosition) / Time.deltaTime;
         lastPosition = transform.position;
     }
-    public void CountForce()
+    public void CountForce(out List<Vector3> CurrentForceVectors, out List<Vector3> AbsolutePointsOfForceApplying)
     {
+        CurrentForceVectors = new List<Vector3>();
+        AbsolutePointsOfForceApplying = new List<Vector3>();
         Debug.Log("velostiy: " + velocity);
         if (velocity.magnitude == 0)
         {
-            CurrentForceVector[0] = Vector3.zero;
+            CurrentForceVectors.Add(Vector3.zero);
+            AbsolutePointsOfForceApplying.Add(transform.position);
             return;
         }
         //Vector3 direction = -velocity / velocity.magnitude;
@@ -52,13 +55,25 @@ public class ResistanceForce : MonoBehaviour, IForce
             float module = MainManager.AirDensity * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * k * area / 2;
             forceInGlobalCoordinates = direction * module;
         }
+        if (Primitive == Primitive.Disk)
+        {
+            Vector3 diskAxis = transform.TransformDirection(0, 1, 0);
+            Vector3 perpendicularVelosity = Vector3.Dot(velocity, diskAxis) * diskAxis;
+            Vector3 direction = -perpendicularVelosity.normalized;
+            Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + diskAxis, Color.yellow);
+            area = Mathf.PI*diameter * diameter/4;
+            float k = 1.15f;
+            float module = MainManager.AirDensity * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * k * area / 2;
+            forceInGlobalCoordinates = direction * module;
+        }
         //float module = MainManager.AirDensity * velocity.magnitude *velocity.magnitude * k*area / 2;
-        CurrentForceVector[0]= forceInGlobalCoordinates;
+        CurrentForceVectors.Add(forceInGlobalCoordinates);
         Vector3 pointOfApplication = Vector3.zero;
-        AbsolutePointOfForceApplying[0]=transform.TransformPoint(pointOfApplication);
+        AbsolutePointsOfForceApplying.Add(transform.TransformPoint(pointOfApplication));
     }
 }
 public enum Primitive {
     Stick,
+    Disk,
 }
 
