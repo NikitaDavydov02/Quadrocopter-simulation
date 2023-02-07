@@ -47,7 +47,7 @@ public class PlaneFlightController : MonoBehaviour
             {
                 InertiaTensor[i].Add(0);
                 if (i == j)
-                    InertiaTensor[i][j] = 0.5f;
+                    InertiaTensor[i][j] = 2.5f;
             }
         }
         Debug.Log("Intertia tensor:");
@@ -135,7 +135,7 @@ public class PlaneFlightController : MonoBehaviour
             }
 
         }
-
+        CharacterController c = new CharacterController();
         //Engine forces
         //for (int i = 0; i < engines.Count; i++)
         //{
@@ -169,10 +169,10 @@ public class PlaneFlightController : MonoBehaviour
         float dt = Time.deltaTime;
         Vector3 dLInCoordinatedTranslatedToCenterOfMass = MomentInCoordinatesTranslatedToCenterOfMass * dt;
         LInCoordinatesTranslatedToCenterOfMass += dLInCoordinatedTranslatedToCenterOfMass;
-        Debug.Log("Force: " + ForceToCenterOfMass);
-        Debug.Log("Moment: " + MomentInCoordinatesTranslatedToCenterOfMass);
-        Debug.DrawLine(transform.position, transform.position + LInCoordinatesTranslatedToCenterOfMass, Color.black, 10);
-        Debug.Log("relativeL: " + LInCoordinatesTranslatedToCenterOfMass);
+        //Debug.Log("Force: " + ForceToCenterOfMass);
+        //Debug.Log("Moment: " + MomentInCoordinatesTranslatedToCenterOfMass);
+       // Debug.DrawLine(transform.position, transform.position + LInCoordinatesTranslatedToCenterOfMass, Color.black, 10);
+        //Debug.Log("relativeL: " + LInCoordinatesTranslatedToCenterOfMass);
         Vector3 LInLocalCoordinates = transform.InverseTransformDirection(LInCoordinatesTranslatedToCenterOfMass);
         // Vector3 relativeAngularVelocity = MultiplyTensorOnVector3(invertedInertiaTensor, relativeL);
         Vector3 AngularVelocityInLocalCoordinates = LInLocalCoordinates / 0.01f;
@@ -186,11 +186,11 @@ public class PlaneFlightController : MonoBehaviour
         Vector3 dv = acceleration * dt;
         velocityOfCenterMass += dv;
         transform.Translate(velocityOfCenterMass * dt, Space.World);
-        if (transform.position.y < 0)
-        {
-            Vector3 newPosition = new Vector3(transform.position.x, 0, transform.position.z);
-            transform.position = newPosition;
-        }
+        //if (transform.position.y < 0)
+        //{
+       //     Vector3 newPosition = new Vector3(transform.position.x, 0, transform.position.z);
+        //    transform.position = newPosition;
+        //}
         velocityOfCenterMass = (transform.position - lastPosition) / dt;
         lastPosition = transform.position;
 
@@ -206,6 +206,7 @@ public class PlaneFlightController : MonoBehaviour
         //Vector3 r = pointOfApplicationINWorldCoordinates;
         Vector3 dM = -Vector3.Cross(r, forceInWorldCoordinates);
         MomentInCoordinatesTranslatedToCenterOfMass += dM;
+        //Debug.DrawLine(pointOfApplicationINWorldCoordinates, pointOfApplicationINWorldCoordinates + forceInWorldCoordinates, Color.blue);
     }
     private List<List<float>> InverseMatrix(List<List<float>> matrix)
     {

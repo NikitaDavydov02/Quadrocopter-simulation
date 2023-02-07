@@ -38,10 +38,10 @@ public class EngineForce : MonoBehaviour, IForce
         CurrentForceVectors = new List<Vector3>();
         AbsolutePointsOfForceApplying = new List<Vector3>();
         Vector3 force = AxisDirection * MaxForce * Level;
-        Debug.Log("Engine force before: " + force.magnitude);
+        //Debug.Log("Engine force before: " + force.magnitude);
         
         force = transform.TransformDirection(force);
-        Debug.Log("Engine force after: " + force.magnitude);
+        //Debug.Log("Engine force after: " + force.magnitude);
         CurrentForceVectors.Add(force);
         Vector3 pointOfApplication = Vector3.zero;
         AbsolutePointsOfForceApplying.Add(transform.TransformPoint(pointOfApplication));
@@ -53,11 +53,9 @@ public class EngineForce : MonoBehaviour, IForce
             firstRotationForceRelative *= -1;
             secondRotationForceRelative *= -1;
         }
-        CurrentForceVectors.Add(transform.TransformDirection(firstRotationForceRelative));
-        CurrentForceVectors.Add(transform.TransformDirection(secondRotationForceRelative));
-        //CurrentForceVector[1] = Vector3.zero;
-        //CurrentForceVector[2] = Vector3.zero;
-        AbsolutePointsOfForceApplying.Add(transform.TransformPoint(firstRotationForceRelativePoint));
-        AbsolutePointsOfForceApplying.Add(transform.TransformPoint(secondRotationForceRelativePoint));
+        //CurrentForceVectors.Add(transform.TransformDirection(firstRotationForceRelative));
+        //CurrentForceVectors.Add(transform.TransformDirection(secondRotationForceRelative));
+       // AbsolutePointsOfForceApplying.Add(transform.TransformPoint(firstRotationForceRelativePoint));
+        //AbsolutePointsOfForceApplying.Add(transform.TransformPoint(secondRotationForceRelativePoint));
     }
 }

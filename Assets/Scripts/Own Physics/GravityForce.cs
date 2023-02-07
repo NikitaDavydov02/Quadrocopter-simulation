@@ -6,6 +6,7 @@ public class GravityForce : MonoBehaviour,IForce
 {
     public float mass;
     public float g;
+    public Vector3 CenterOfMass;
     //public List<Vector3> CurrentForceVector { get; private set; }
 
     //public List<Vector3> AbsolutePointOfForceApplying { get; private set; } 
@@ -27,7 +28,7 @@ public class GravityForce : MonoBehaviour,IForce
         CurrentForceVectors = new List<Vector3>() { Vector3.zero };
         AbsolutePointsOfForceApplying = new List<Vector3>() { transform.position };
         CurrentForceVectors[0] = new Vector3(0, g * mass, 0);
-        Vector3 pointOfApplication = Vector3.zero;
+        Vector3 pointOfApplication = CenterOfMass;
         AbsolutePointsOfForceApplying[0] = transform.TransformPoint(pointOfApplication);
     }
 }

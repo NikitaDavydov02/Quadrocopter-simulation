@@ -46,7 +46,7 @@ public class FightController : MonoBehaviour
             {
                 InertiaTensor[i].Add(0);
                 if (i == j)
-                    InertiaTensor[i][j] = 0.5f;
+                    InertiaTensor[i][j] = 2.5f;
             }
         }
         Debug.Log("Intertia tensor:");

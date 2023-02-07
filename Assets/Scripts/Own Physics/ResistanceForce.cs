@@ -60,11 +60,12 @@ public class ResistanceForce : MonoBehaviour, IForce
             Vector3 diskAxis = transform.TransformDirection(0, 1, 0);
             Vector3 perpendicularVelosity = Vector3.Dot(velocity, diskAxis) * diskAxis;
             Vector3 direction = -perpendicularVelosity.normalized;
-            Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + diskAxis, Color.yellow);
+            
             area = Mathf.PI*diameter * diameter/4;
             float k = 1.15f;
             float module = MainManager.AirDensity * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * k * area / 2;
             forceInGlobalCoordinates = direction * module;
+            Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + forceInGlobalCoordinates, Color.yellow);
         }
         //float module = MainManager.AirDensity * velocity.magnitude *velocity.magnitude * k*area / 2;
         CurrentForceVectors.Add(forceInGlobalCoordinates);

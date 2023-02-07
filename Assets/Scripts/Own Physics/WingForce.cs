@@ -21,22 +21,34 @@ public class WingForce : MonoBehaviour, IForce
         //Vector3 normalvelocity = Vector3.Dot(velocity, NormalVector.normalized) * velocity;
         //Vector3 parallelVelocity = velocity - normalvelocity;
         Vector3 flowVelocityInSelfCoordinates = transform.InverseTransformDirection(-velocity);
+        Debug.Log("Flow velocity: " + flowVelocityInSelfCoordinates);
         Vector3 flowVelocityInSelfCoordinatesWithoutTangent = new Vector3(0, flowVelocityInSelfCoordinates.y, flowVelocityInSelfCoordinates.z);
-        float angleOfAtack = Mathf.Rad2Deg* Mathf.Atan2(-flowVelocityInSelfCoordinatesWithoutTangent.y, flowVelocityInSelfCoordinatesWithoutTangent.z);
+        Debug.Log("vx: " + flowVelocityInSelfCoordinatesWithoutTangent.z);
+        Debug.Log("vy: " + flowVelocityInSelfCoordinatesWithoutTangent.y);
+        float angleOfAtack = Mathf.Rad2Deg* Mathf.Atan2(flowVelocityInSelfCoordinatesWithoutTangent.y, -flowVelocityInSelfCoordinatesWithoutTangent.z);
         Debug.Log("Angle Of atack: " + angleOfAtack);
         float Cx = CxDependenceVSAngleOfAtack.Evaluate(angleOfAtack);
         float Cy = CyDependenceVSAngleOfAtack.Evaluate(angleOfAtack);
-        float lift = (1 / 2) * MainManager.AirDensity * area* flowVelocityInSelfCoordinatesWithoutTangent.sqrMagnitude * Cy;
-        float drag = (1 / 2) * MainManager.AirDensity * area * flowVelocityInSelfCoordinatesWithoutTangent.sqrMagnitude * Cx;
+        Debug.Log("Cx: " + Cx);
+        Debug.Log("Cy: " + Cy);
+        //Debug.Log("area" + area);
+        // Debug.Log("Density" + MainManager.AirDensity);
+        //Debug.Log("v2" + flowVelocityInSelfCoordinatesWithoutTangent.magnitude * flowVelocityInSelfCoordinatesWithoutTangent.magnitude);
+        float lift = MainManager.AirDensity * area* flowVelocityInSelfCoordinatesWithoutTangent.sqrMagnitude * Cy;
+        float drag = MainManager.AirDensity * area * flowVelocityInSelfCoordinatesWithoutTangent.sqrMagnitude * Cx;
+        //float lift = flowVelocityInSelfCoordinates.magnitude;
+        //float drag = 0;
+        Debug.Log("lift: " + lift);
+        Debug.Log("drag: " + drag);
         Vector3 relativeDrag = drag * flowVelocityInSelfCoordinatesWithoutTangent.normalized;
         Vector3 liftDirectionInRelative = Vector3.Cross(transform.right, flowVelocityInSelfCoordinates.normalized);
         Vector3 relativeLift = lift * liftDirectionInRelative;
         Vector3 relativeSum = relativeDrag + relativeLift;
         Vector3 absoluteForce = transform.TransformDirection(relativeSum);
-        Vector3 relativePointOfApplaing = new Vector3(0, 0, chord / 4);
-        Vector3 absolutePointOfApplaing = transform.TransformDirection(relativePointOfApplaing);
+        Vector3 relativePointOfApplaing = new Vector3(0, 0, 0);
+        Vector3 absolutePointOfApplaing = transform.TransformPoint(relativePointOfApplaing);
 
-        Debug.DrawLine(absolutePointOfApplaing, absolutePointOfApplaing + absoluteForce, Color.cyan);
+        Debug.DrawLine(absolutePointOfApplaing, absolutePointOfApplaing + 4*absoluteForce, Color.blue);
 
         CurrentForceVectors.Add(absoluteForce);
         AbsolutePointsOfForceApplying.Add(absolutePointOfApplaing);
@@ -54,5 +66,7 @@ public class WingForce : MonoBehaviour, IForce
     {
         velocity = (transform.position - lastPosition) / Time.deltaTime;
         lastPosition = transform.position;
+        //transform.Translate(new Vector3(0,0, 4*Time.deltaTime),Space.World);
+        //CountForce(out List<Vector3> a, out List<Vector3> b);
     }
 }
