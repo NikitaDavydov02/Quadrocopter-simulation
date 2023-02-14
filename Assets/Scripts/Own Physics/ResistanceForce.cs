@@ -13,20 +13,20 @@ public class ResistanceForce : MonoBehaviour, IForce
     //public List<Vector3> AbsolutePointOfForceApplying { get; private set; }
     public Vector3 velocity = Vector3.zero;
     private Vector3 lastPosition;
-    private Rigidbody rb;
+    public Rigidbody rb;
+    public float kAirbus=0.1f;
+    public float k2Airbus = 1f;
     // Start is called before the first frame update
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
-        //CurrentForceVector = new List<Vector3>() { Vector3.zero };
-        //AbsolutePointOfForceApplying = new List<Vector3>() { transform.position };
         lastPosition = transform.position;   
     }
 
     // Update is called once per frame
     void Update()
     {
-        velocity = (transform.position - lastPosition) / Time.deltaTime;
+        velocity = rb.velocity;
         lastPosition = transform.position;
     }
     public void CountForce(out List<Vector3> CurrentForceVectors, out List<Vector3> AbsolutePointsOfForceApplying)
@@ -37,15 +37,15 @@ public class ResistanceForce : MonoBehaviour, IForce
         if (velocity.magnitude == 0)
         {
             CurrentForceVectors.Add(Vector3.zero);
-            AbsolutePointsOfForceApplying.Add(transform.position);
+            AbsolutePointsOfForceApplying.Add(rb.worldCenterOfMass);
             return;
         }
-        //Vector3 direction = -velocity / velocity.magnitude;
+        if (velocity.magnitude < 0.1f)
+            return;
         float area = 0;
         Vector3 forceInGlobalCoordinates = Vector3.zero;
         if (Primitive == Primitive.Stick)
         {
-            //X axis is parellel ti the stick
             Vector3 stickAxis = transform.TransformDirection(1, 0, 0);
             Vector3 perpendicularVelosity = velocity - Vector3.Dot(velocity, stickAxis) * stickAxis;
             Vector3 direction = -perpendicularVelosity.normalized;
@@ -59,22 +59,63 @@ public class ResistanceForce : MonoBehaviour, IForce
         {
             Vector3 diskAxis = transform.TransformDirection(0, 1, 0);
             Vector3 perpendicularVelosity = Vector3.Dot(velocity, diskAxis) * diskAxis;
+            //Vector3 parallelVelosity = velocity - perpendicularVelosity;
             Vector3 direction = -perpendicularVelosity.normalized;
-            
+           // Vector3 direction2 = -parallelVelosity.normalized;
+
             area = Mathf.PI*diameter * diameter/4;
+            //float area2 = diameter * length;
+            //float k2 =1.15f;
             float k = 1.15f;
             float module = MainManager.AirDensity * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * k * area / 2;
+            //float module2 = MainManager.AirDensity * parallelVelosity.magnitude * parallelVelosity.magnitude * k2 * area2 / 2;
             forceInGlobalCoordinates = direction * module;
-            Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + forceInGlobalCoordinates, Color.yellow);
+            Debug.Log("RF:" + forceInGlobalCoordinates);
+            //Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + forceInGlobalCoordinates*4, Color.cyan);
         }
-        //float module = MainManager.AirDensity * velocity.magnitude *velocity.magnitude * k*area / 2;
+        if (Primitive == Primitive.Cylinder)
+        {
+            Vector3 diskAxis = transform.TransformDirection(0, 1, 0);
+            Vector3 perpendicularVelosity = Vector3.Dot(velocity, diskAxis) * diskAxis;
+            Vector3 parallelVelosity = velocity - perpendicularVelosity;
+            Vector3 direction = -perpendicularVelosity.normalized;
+            Vector3 direction2 = -parallelVelosity.normalized;
+
+            area = Mathf.PI * diameter * diameter / 4;
+            float area2 = diameter * length;
+            float k2 = 1.15f;
+            float k = 1.15f;
+            float module = MainManager.AirDensity * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * k * area / 2;
+            float module2 = MainManager.AirDensity * parallelVelosity.magnitude * parallelVelosity.magnitude * k2 * area2 / 2;
+            forceInGlobalCoordinates = direction * module + direction2 * module2;
+            Debug.Log("Resistance Force:" + forceInGlobalCoordinates);
+            //Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + forceInGlobalCoordinates * 4, Color.cyan);
+        }
+        if (Primitive == Primitive.Airbus)
+        {
+            Vector3 diskAxis = transform.TransformDirection(0, 1, 0);
+            Vector3 perpendicularVelosity = Vector3.Dot(velocity, diskAxis) * diskAxis;
+            Vector3 parallelVelosity = velocity - perpendicularVelosity;
+            Vector3 direction = -perpendicularVelosity.normalized;
+            Vector3 direction2 = -parallelVelosity.normalized;
+
+            area = Mathf.PI * diameter * diameter / 4;
+            float area2 = diameter * length;
+            float module = MainManager.AirDensity * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * kAirbus * area / 2;
+            float module2 = MainManager.AirDensity * parallelVelosity.magnitude * parallelVelosity.magnitude * k2Airbus * area2 / 2;
+            forceInGlobalCoordinates = direction * module + direction2 * module2;
+            Debug.Log("Resistance Force:" + forceInGlobalCoordinates);
+            //Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + forceInGlobalCoordinates * 4, Color.cyan);
+        }
         CurrentForceVectors.Add(forceInGlobalCoordinates);
         Vector3 pointOfApplication = Vector3.zero;
-        AbsolutePointsOfForceApplying.Add(transform.TransformPoint(pointOfApplication));
+        AbsolutePointsOfForceApplying.Add(rb.worldCenterOfMass);
     }
 }
 public enum Primitive {
     Stick,
     Disk,
+    Cylinder,
+    Airbus
 }
 

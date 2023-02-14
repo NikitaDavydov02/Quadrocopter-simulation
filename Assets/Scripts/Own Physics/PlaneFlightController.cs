@@ -20,6 +20,8 @@ public class PlaneFlightController : MonoBehaviour
     public List<WingForce> wings;
     [SerializeField]
     List<ResistanceForce> resistanceForces;
+    [SerializeField]
+    Transform heightController;
 
     private Vector3 ForceToCenterOfMass;
     private Vector3 MomentInCoordinatesTranslatedToCenterOfMass;
@@ -35,9 +37,12 @@ public class PlaneFlightController : MonoBehaviour
 
     public float RotationPowerMultiplyer;
     public float gasSensitivity;
+    public float heigtSensitivity;
+    private Rigidbody rb;
     // Start is called before the first frame update
     void Start()
     {
+        rb = gameObject.GetComponent<Rigidbody>();
         forceSources = new List<IForce>();
         InertiaTensor = new List<List<float>>();
         for (int i = 0; i < 3; i++)
@@ -85,6 +90,15 @@ public class PlaneFlightController : MonoBehaviour
             generalLevel = 0;
         for (int i = 0; i < engineLevels.Count; i++)
             engineLevels[i] = generalLevel;
+        float vwrticalInput = -Input.GetAxis("Mouse Y") * Time.deltaTime* heigtSensitivity;
+        Debug.Log("Vert:" + vwrticalInput);
+        heightController.Rotate(vwrticalInput, 0, 0);
+        //if (heightController.localEulerAngles.x < -45)
+        //    heightController.Rotate(-vwrticalInput, 0, 0);
+        //if (heightController.localEulerAngles.x > 45)
+        //    heightController.Rotate(-vwrticalInput, 0, 0);
+
+
         //if (Input.GetKey(KeyCode.W))
         //{
         //    engineLevels[0] = generalLevel * RotationPowerMultiplyer;
@@ -135,7 +149,11 @@ public class PlaneFlightController : MonoBehaviour
             }
 
         }
-        CharacterController c = new CharacterController();
+        Debug.Log("Force:"+ForceToCenterOfMass);
+        rb.AddForce(ForceToCenterOfMass, ForceMode.Force);
+        Debug.Log("M: "+MomentInCoordinatesTranslatedToCenterOfMass);
+        rb.AddTorque(MomentInCoordinatesTranslatedToCenterOfMass, ForceMode.Force);
+        return;
         //Engine forces
         //for (int i = 0; i < engines.Count; i++)
         //{
@@ -178,14 +196,14 @@ public class PlaneFlightController : MonoBehaviour
         Vector3 AngularVelocityInLocalCoordinates = LInLocalCoordinates / 0.01f;
         AbsoluteAngularVelocity = transform.TransformDirection(AngularVelocityInLocalCoordinates);
         // Debug.DrawRay(transform.position, AbsoluteAngularVelocity, Color.white,10,true,);
-        transform.Rotate(-AbsoluteAngularVelocity.normalized, AbsoluteAngularVelocity.magnitude * dt, Space.World);
-
+        //transform.Rotate(-AbsoluteAngularVelocity.normalized, AbsoluteAngularVelocity.magnitude * dt, Space.World);
 
         //Translation Kinematics
+        //rb.AddTorque(new Vector3(0, 1, 0), ForceMode.Force);
         Vector3 acceleration = ForceToCenterOfMass / gravityForce.mass;
         Vector3 dv = acceleration * dt;
         velocityOfCenterMass += dv;
-        transform.Translate(velocityOfCenterMass * dt, Space.World);
+        //transform.Translate(velocityOfCenterMass * dt, Space.World);
         //if (transform.position.y < 0)
         //{
        //     Vector3 newPosition = new Vector3(transform.position.x, 0, transform.position.z);
@@ -202,9 +220,11 @@ public class PlaneFlightController : MonoBehaviour
     private void AddForce(Vector3 forceInWorldCoordinates, Vector3 pointOfApplicationINWorldCoordinates)
     {
         ForceToCenterOfMass += forceInWorldCoordinates;
+        Debug.Log("forceInWorldCoordinates" + forceInWorldCoordinates);
         Vector3 r = pointOfApplicationINWorldCoordinates - transform.position;
         //Vector3 r = pointOfApplicationINWorldCoordinates;
         Vector3 dM = -Vector3.Cross(r, forceInWorldCoordinates);
+        Debug.Log("dM: " + dM);
         MomentInCoordinatesTranslatedToCenterOfMass += dM;
         //Debug.DrawLine(pointOfApplicationINWorldCoordinates, pointOfApplicationINWorldCoordinates + forceInWorldCoordinates, Color.blue);
     }
