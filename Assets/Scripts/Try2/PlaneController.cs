@@ -9,6 +9,7 @@ public class PlaneController : MonoBehaviour
     public float generalLevelChangingSpeed = 1f;
     List<float> engineLevels = new List<float>();
     public float maxEleronAngle = 2;
+    public bool ControlActive = true;
 
     [SerializeField]
     List<EngineForce> engines;
@@ -70,9 +71,9 @@ public class PlaneController : MonoBehaviour
     void Update()
     {
         CountState();
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W) && ControlActive)
             generalLevel += generalLevelChangingSpeed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S) && ControlActive)
             generalLevel -= generalLevelChangingSpeed * Time.deltaTime;
         if (generalLevel > 1)
             generalLevel = 1;
@@ -81,6 +82,8 @@ public class PlaneController : MonoBehaviour
         for (int i = 0; i < engineLevels.Count; i++)
             engineLevels[i] = generalLevel;
         float vwrticalInput = -Input.GetAxis("Mouse Y") * Time.deltaTime * heigtSensitivity;
+        if (!ControlActive)
+            vwrticalInput = 0;
         Debug.Log("Input:" + vwrticalInput);
         Debug.Log("Euler:" + heightController.localEulerAngles.x);
         heightController.Rotate(vwrticalInput, 0, 0);
@@ -96,6 +99,8 @@ public class PlaneController : MonoBehaviour
             heightAngle -= vwrticalInput;
         }
         float horInput = -Input.GetAxis("Mouse X") * Time.deltaTime * horizontalSensitivity;
+        if (!ControlActive)
+            horInput = 0;
         horizontalController.Rotate(horInput, 0, 0);
         horizontAngle += horInput;
         if (horizontAngle < -10|| horizontAngle >10)
@@ -103,22 +108,22 @@ public class PlaneController : MonoBehaviour
             horizontalController.Rotate(-horInput, 0, 0);
             horizontAngle -= horInput;
         }
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.A) && ControlActive)
         {
             leftElleron.Rotate(maxEleronAngle, 0, 0);
             rightElleron.Rotate(-maxEleronAngle, 0, 0);
         }
-        if (Input.GetKeyUp(KeyCode.A))
+        if (Input.GetKeyUp(KeyCode.A) && ControlActive)
         {
             leftElleron.Rotate(-maxEleronAngle, 0, 0);
             rightElleron.Rotate(maxEleronAngle, 0, 0);
         }
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.D) && ControlActive)
         {
             leftElleron.Rotate(-maxEleronAngle, 0, 0);
             rightElleron.Rotate(maxEleronAngle, 0, 0);
         }
-        if (Input.GetKeyUp(KeyCode.D))
+        if (Input.GetKeyUp(KeyCode.D) && ControlActive)
         {
             leftElleron.Rotate(maxEleronAngle, 0, 0);
             rightElleron.Rotate(-maxEleronAngle, 0, 0);
