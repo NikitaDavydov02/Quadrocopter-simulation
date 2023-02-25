@@ -8,6 +8,7 @@ public class PlaneController : MonoBehaviour
     public float generalLevel = 0;
     public float generalLevelChangingSpeed = 1f;
     List<float> engineLevels = new List<float>();
+    public float maxEleronAngle = 2;
 
     [SerializeField]
     List<EngineForce> engines;
@@ -104,23 +105,23 @@ public class PlaneController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            leftElleron.Rotate(2, 0, 0);
-            rightElleron.Rotate(-2, 0, 0);
+            leftElleron.Rotate(maxEleronAngle, 0, 0);
+            rightElleron.Rotate(-maxEleronAngle, 0, 0);
         }
         if (Input.GetKeyUp(KeyCode.A))
         {
-            leftElleron.Rotate(-2, 0, 0);
-            rightElleron.Rotate(2, 0, 0);
+            leftElleron.Rotate(-maxEleronAngle, 0, 0);
+            rightElleron.Rotate(maxEleronAngle, 0, 0);
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            leftElleron.Rotate(-2, 0, 0);
-            rightElleron.Rotate(2, 0, 0);
+            leftElleron.Rotate(-maxEleronAngle, 0, 0);
+            rightElleron.Rotate(maxEleronAngle, 0, 0);
         }
         if (Input.GetKeyUp(KeyCode.D))
         {
-            leftElleron.Rotate(2, 0, 0);
-            rightElleron.Rotate(-2, 0, 0);
+            leftElleron.Rotate(maxEleronAngle, 0, 0);
+            rightElleron.Rotate(-maxEleronAngle, 0, 0);
         }
 
         for (int i = 0; i < engineLevels.Count; i++)

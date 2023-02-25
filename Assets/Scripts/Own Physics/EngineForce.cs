@@ -10,6 +10,7 @@ public class EngineForce : MonoBehaviour, IForce
     public float Level;
     public float AxisRadius = 0.1f;
     public float RotationCoeffitient = 1f;
+    public bool jet = false;
 
     Vector3 firstRotationForceRelativePoint;
     Vector3 secondRotationForceRelativePoint;
@@ -48,5 +49,11 @@ public class EngineForce : MonoBehaviour, IForce
             firstRotationForceRelative *= -1;
             secondRotationForceRelative *= -1;
         }
+        if (jet)
+            return;
+        CurrentForceVectors.Add(transform.TransformDirection(firstRotationForceRelative));
+        CurrentForceVectors.Add(transform.TransformDirection(secondRotationForceRelative));
+        AbsolutePointsOfForceApplying.Add(transform.TransformPoint(firstRotationForceRelativePoint));
+        AbsolutePointsOfForceApplying.Add(transform.TransformPoint(secondRotationForceRelativePoint));
     }
 }

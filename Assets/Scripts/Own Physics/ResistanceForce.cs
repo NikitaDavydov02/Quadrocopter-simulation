@@ -14,19 +14,27 @@ public class ResistanceForce : MonoBehaviour, IForce
     public Vector3 velocity = Vector3.zero;
     private Vector3 lastPosition;
     public Rigidbody rb;
+    bool rbFromParent = false;
     public float kAirbus=0.1f;
     public float k2Airbus = 1f;
     // Start is called before the first frame update
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            rb = gameObject.transform.parent.GetComponent<Rigidbody>();
+            rbFromParent = true;
+        }
         lastPosition = transform.position;   
     }
 
     // Update is called once per frame
     void Update()
     {
-        velocity = rb.velocity;
+        //velocity = rb.velocity;
+        velocity = rb.velocity + Vector3.Cross(rb.angularVelocity, transform.position - rb.gameObject.transform.position);
+        
         lastPosition = transform.position;
     }
     public void CountForce(out List<Vector3> CurrentForceVectors, out List<Vector3> AbsolutePointsOfForceApplying)
@@ -48,10 +56,12 @@ public class ResistanceForce : MonoBehaviour, IForce
         {
             Vector3 stickAxis = transform.TransformDirection(1, 0, 0);
             Vector3 perpendicularVelosity = velocity - Vector3.Dot(velocity, stickAxis) * stickAxis;
+            Debug.DrawLine(transform.position, transform.position + velocity, Color.cyan);
+            Debug.DrawLine(transform.position, transform.position + perpendicularVelosity, Color.cyan);
             Vector3 direction = -perpendicularVelosity.normalized;
-            Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + direction, Color.grey);
+            //Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + direction, Color.grey);
             area = diameter * length;
-            float k = 0.4f;
+            float k = 4.4f;
             float module = MainManager.AirDensity * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * k * area / 2;
             forceInGlobalCoordinates = direction * module;
         }
@@ -109,7 +119,10 @@ public class ResistanceForce : MonoBehaviour, IForce
         }
         CurrentForceVectors.Add(forceInGlobalCoordinates);
         Vector3 pointOfApplication = Vector3.zero;
-        AbsolutePointsOfForceApplying.Add(rb.worldCenterOfMass);
+        if (rbFromParent)
+            AbsolutePointsOfForceApplying.Add(transform.position);
+        else
+            AbsolutePointsOfForceApplying.Add(rb.worldCenterOfMass);
     }
 }
 public enum Primitive {
