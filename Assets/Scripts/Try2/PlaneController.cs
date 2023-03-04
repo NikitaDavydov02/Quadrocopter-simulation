@@ -42,6 +42,7 @@ public class PlaneController : MonoBehaviour
     public float horizontalSensitivity;
     public float horizontAngle = 0;
     public Vector3 centerOfMassLocal;
+    public Vector3 inertiaTensor;
 
 
     public Vector3 VelocityInLocalCoordinates = Vector3.zero;
@@ -51,6 +52,9 @@ public class PlaneController : MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody>();
         rb.centerOfMass = centerOfMassLocal;
+        Debug.Log("Inertia tensor"+rb.inertiaTensor);
+        if (inertiaTensor != Vector3.zero)
+            rb.inertiaTensor = inertiaTensor;
         forceSources = new List<IForce>();
        
         //lastPosition = transform.position;
@@ -84,28 +88,28 @@ public class PlaneController : MonoBehaviour
         float vwrticalInput = -Input.GetAxis("Mouse Y") * Time.deltaTime * heigtSensitivity;
         if (!ControlActive)
             vwrticalInput = 0;
-        Debug.Log("Input:" + vwrticalInput);
-        Debug.Log("Euler:" + heightController.localEulerAngles.x);
-        heightController.Rotate(vwrticalInput, 0, 0);
+        //Debug.Log("Input:" + vwrticalInput);
+        //Debug.Log("Euler:" + heightController.localEulerAngles.x);
+        heightController.Rotate(vwrticalInput, 0, 0, Space.Self);
         heightAngle += vwrticalInput;
         if (heightAngle < -10)
         {
-            heightController.Rotate(-vwrticalInput, 0, 0);
+            heightController.Rotate(-vwrticalInput, 0, 0, Space.Self);
             heightAngle -= vwrticalInput;
         }
         if (heightAngle > 10)
         {
-            heightController.Rotate(-vwrticalInput, 0, 0);
+            heightController.Rotate(-vwrticalInput, 0, 0, Space.Self);
             heightAngle -= vwrticalInput;
         }
         float horInput = -Input.GetAxis("Mouse X") * Time.deltaTime * horizontalSensitivity;
         if (!ControlActive)
             horInput = 0;
-        horizontalController.Rotate(horInput, 0, 0);
+        horizontalController.Rotate(horInput, 0, 0, Space.Self);
         horizontAngle += horInput;
         if (horizontAngle < -10|| horizontAngle >10)
         {
-            horizontalController.Rotate(-horInput, 0, 0);
+            horizontalController.Rotate(-horInput, 0, 0,Space.Self);
             horizontAngle -= horInput;
         }
         if (Input.GetKeyDown(KeyCode.A) && ControlActive)
@@ -148,10 +152,10 @@ public class PlaneController : MonoBehaviour
             }
 
         }
-        Debug.Log("Force:" + ForceToCenterOfMass);
+        //Debug.Log("Force:" + ForceToCenterOfMass);
         rb.AddForce(ForceToCenterOfMass, ForceMode.Force);
         MomentInCoordinatesTranslatedToCenterOfMass *= -1;
-        Debug.Log("M: " + (MomentInCoordinatesTranslatedToCenterOfMass));
+        //Debug.Log("M: " + (MomentInCoordinatesTranslatedToCenterOfMass));
         rb.AddRelativeTorque(transform.InverseTransformDirection(MomentInCoordinatesTranslatedToCenterOfMass), ForceMode.Force);
     }
 
@@ -163,11 +167,11 @@ public class PlaneController : MonoBehaviour
     private void AddForce(Vector3 forceInWorldCoordinates, Vector3 pointOfApplicationINWorldCoordinates)
     {
         ForceToCenterOfMass += forceInWorldCoordinates;
-        Debug.Log("dF" + forceInWorldCoordinates);
+        //Debug.Log("dF" + forceInWorldCoordinates);
         Vector3 r = pointOfApplicationINWorldCoordinates - rb.worldCenterOfMass;
-        Debug.Log("r" + r);
+        //Debug.Log("r" + r);
         Vector3 dM = -Vector3.Cross(r, forceInWorldCoordinates);
-        Debug.Log("dM: " + dM);
+        //Debug.Log("dM: " + dM);
         MomentInCoordinatesTranslatedToCenterOfMass += dM;
         Debug.DrawLine(pointOfApplicationINWorldCoordinates, pointOfApplicationINWorldCoordinates + forceInWorldCoordinates, Color.red);
         Debug.DrawLine(pointOfApplicationINWorldCoordinates, pointOfApplicationINWorldCoordinates + dM, Color.blue);

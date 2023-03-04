@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &8726283402624851318
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1927921016356506514, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: inertiaTensor.x
+      value: 9000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927921016356506514, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: inertiaTensor.y
+      value: 10000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927921016356506514, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: inertiaTensor.z
+      value: 500000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927921016356506515, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: KAirbus
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927921016356506515, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: kAirbus
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927921016356506515, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: k2Airbus
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927921016356506524, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: m_Name
+      value: Airbus A310
+      objectReference: {fileID: 0}
+    - target: {fileID: 6527559208795062139, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: CyDependenceVSAngleOfAtack.m_Curve.Array.data[2].time
+      value: -0.0916394
+      objectReference: {fileID: 0}
+    - target: {fileID: 6527559208795062139, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: CyDependenceVSAngleOfAtack.m_Curve.Array.data[2].value
+      value: -0.00014661252
+      objectReference: {fileID: 0}
+    - target: {fileID: 6527559208795062139, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: CyDependenceVSAngleOfAtack.m_Curve.Array.data[2].inSlope
+      value: 0.01044634
+      objectReference: {fileID: 0}
+    - target: {fileID: 6527559208795062139, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: CyDependenceVSAngleOfAtack.m_Curve.Array.data[2].outSlope
+      value: 0.01044634
+      objectReference: {fileID: 0}
+    - target: {fileID: 6527559210347805504, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: CyDependenceVSAngleOfAtack.m_Curve.Array.data[2].time
+      value: 0.005225599
+      objectReference: {fileID: 0}
+    - target: {fileID: 6527559210347805504, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: CyDependenceVSAngleOfAtack.m_Curve.Array.data[2].value
+      value: 0.0000954736
+      objectReference: {fileID: 0}
+    - target: {fileID: 6527559210347805504, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: CyDependenceVSAngleOfAtack.m_Curve.Array.data[2].inSlope
+      value: 0.041069794
+      objectReference: {fileID: 0}
+    - target: {fileID: 6527559210347805504, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: CyDependenceVSAngleOfAtack.m_Curve.Array.data[2].outSlope
+      value: 0.041069794
+      objectReference: {fileID: 0}
+    - target: {fileID: 7239385275110955175, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7239385275110955175, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 510.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7239385275110955175, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 48.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7239385275110955175, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 680.1047
+      objectReference: {fileID: 0}
+    - target: {fileID: 7239385275110955175, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7239385275110955175, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7239385275110955175, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7239385275110955175, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7239385275110955175, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7239385275110955175, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7239385275110955175, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3ce480fc6d6539a4aab51c51e0c574c7, type: 3}

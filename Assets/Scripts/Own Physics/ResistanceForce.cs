@@ -15,7 +15,7 @@ public class ResistanceForce : MonoBehaviour, IForce
     private Vector3 lastPosition;
     public Rigidbody rb;
     bool rbFromParent = false;
-    public float kAirbus=0.1f;
+    public float KAirbus=0.1f;
     public float k2Airbus = 1f;
     // Start is called before the first frame update
     void Start()
@@ -41,7 +41,7 @@ public class ResistanceForce : MonoBehaviour, IForce
     {
         CurrentForceVectors = new List<Vector3>();
         AbsolutePointsOfForceApplying = new List<Vector3>();
-        Debug.Log("velostiy: " + velocity);
+        //Debug.Log("velostiy: " + velocity);
         if (velocity.magnitude == 0)
         {
             CurrentForceVectors.Add(Vector3.zero);
@@ -56,8 +56,8 @@ public class ResistanceForce : MonoBehaviour, IForce
         {
             Vector3 stickAxis = transform.TransformDirection(1, 0, 0);
             Vector3 perpendicularVelosity = velocity - Vector3.Dot(velocity, stickAxis) * stickAxis;
-            Debug.DrawLine(transform.position, transform.position + velocity, Color.cyan);
-            Debug.DrawLine(transform.position, transform.position + perpendicularVelosity, Color.cyan);
+            //Debug.DrawLine(transform.position, transform.position + velocity, Color.cyan);
+            //Debug.DrawLine(transform.position, transform.position + perpendicularVelosity, Color.cyan);
             Vector3 direction = -perpendicularVelosity.normalized;
             //Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + direction, Color.grey);
             area = diameter * length;
@@ -80,7 +80,7 @@ public class ResistanceForce : MonoBehaviour, IForce
             float module = MainManager.AirDensity * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * k * area / 2;
             //float module2 = MainManager.AirDensity * parallelVelosity.magnitude * parallelVelosity.magnitude * k2 * area2 / 2;
             forceInGlobalCoordinates = direction * module;
-            Debug.Log("RF:" + forceInGlobalCoordinates);
+            //Debug.Log("RF:" + forceInGlobalCoordinates);
             //Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + forceInGlobalCoordinates*4, Color.cyan);
         }
         if (Primitive == Primitive.Cylinder)
@@ -98,7 +98,7 @@ public class ResistanceForce : MonoBehaviour, IForce
             float module = MainManager.AirDensity * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * k * area / 2;
             float module2 = MainManager.AirDensity * parallelVelosity.magnitude * parallelVelosity.magnitude * k2 * area2 / 2;
             forceInGlobalCoordinates = direction * module + direction2 * module2;
-            Debug.Log("Resistance Force:" + forceInGlobalCoordinates);
+            //Debug.Log("Resistance Force:" + forceInGlobalCoordinates);
             //Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + forceInGlobalCoordinates * 4, Color.cyan);
         }
         if (Primitive == Primitive.Airbus)
@@ -111,10 +111,10 @@ public class ResistanceForce : MonoBehaviour, IForce
 
             area = Mathf.PI * diameter * diameter / 4;
             float area2 = diameter * length;
-            float module = MainManager.AirDensity * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * kAirbus * area / 2;
+            float module = MainManager.AirDensity * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * KAirbus * area / 2;
             float module2 = MainManager.AirDensity * parallelVelosity.magnitude * parallelVelosity.magnitude * k2Airbus * area2 / 2;
             forceInGlobalCoordinates = direction * module + direction2 * module2;
-            Debug.Log("Resistance Force:" + forceInGlobalCoordinates);
+            //Debug.Log("Resistance Force:" + forceInGlobalCoordinates);
             //Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + forceInGlobalCoordinates * 4, Color.cyan);
         }
         CurrentForceVectors.Add(forceInGlobalCoordinates);
