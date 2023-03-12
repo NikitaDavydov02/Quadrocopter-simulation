@@ -52,11 +52,11 @@ public class PlaneController : MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody>();
         rb.centerOfMass = centerOfMassLocal;
-        Debug.Log("Inertia tensor"+rb.inertiaTensor);
+        Debug.Log("Inertia tensor" + rb.inertiaTensor);
         if (inertiaTensor != Vector3.zero)
             rb.inertiaTensor = inertiaTensor;
         forceSources = new List<IForce>();
-       
+
         //lastPosition = transform.position;
         generalLevel = 0;
         for (int i = 0; i < engines.Count; i++)
@@ -107,9 +107,9 @@ public class PlaneController : MonoBehaviour
             horInput = 0;
         horizontalController.Rotate(horInput, 0, 0, Space.Self);
         horizontAngle += horInput;
-        if (horizontAngle < -10|| horizontAngle >10)
+        if (horizontAngle < -10 || horizontAngle > 10)
         {
-            horizontalController.Rotate(-horInput, 0, 0,Space.Self);
+            horizontalController.Rotate(-horInput, 0, 0, Space.Self);
             horizontAngle -= horInput;
         }
         if (Input.GetKeyDown(KeyCode.A) && ControlActive)
@@ -138,8 +138,7 @@ public class PlaneController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        ForceToCenterOfMass = Vector3.zero;
-        MomentInCoordinatesTranslatedToCenterOfMass = Vector3.zero;
+        
 
         List<Vector3> CurrentForceVectors;
         List<Vector3> AbsolutePointsOfForceApplying;
@@ -157,6 +156,8 @@ public class PlaneController : MonoBehaviour
         MomentInCoordinatesTranslatedToCenterOfMass *= -1;
         //Debug.Log("M: " + (MomentInCoordinatesTranslatedToCenterOfMass));
         rb.AddRelativeTorque(transform.InverseTransformDirection(MomentInCoordinatesTranslatedToCenterOfMass), ForceMode.Force);
+        ForceToCenterOfMass = Vector3.zero;
+        MomentInCoordinatesTranslatedToCenterOfMass = Vector3.zero;
     }
 
     public void CountState()

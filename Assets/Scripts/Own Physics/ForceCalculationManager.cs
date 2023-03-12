@@ -4,12 +4,12 @@ using UnityEngine;
 
 public abstract class ForceCalculationManager : MonoBehaviour
 {
-    private List<IForce> forceSources;
-    private Vector3 ForceToCenterOfMass;
-    private Vector3 MomentInCoordinatesTranslatedToCenterOfMass;
-    private Rigidbody rb;
+    protected List<IForce> forceSources;
+    public Vector3 ForceToCenterOfMass { get; protected set; }
+    protected Vector3 MomentInCoordinatesTranslatedToCenterOfMass;
+    public Rigidbody rb { get; protected set; }
     // Start is called before the first frame update
-    private void Init()
+    protected void Init()
     {
         rb = gameObject.GetComponent<Rigidbody>();
         forceSources = new List<IForce>();
@@ -26,9 +26,9 @@ public abstract class ForceCalculationManager : MonoBehaviour
     }
     void FixedUpdate()
     {
+        ////Physics counting
         //Physics counting
-        ForceToCenterOfMass = Vector3.zero;
-        MomentInCoordinatesTranslatedToCenterOfMass = Vector3.zero;
+        
 
         List<Vector3> CurrentForceVectors;
         List<Vector3> AbsolutePointsOfForceApplying;
@@ -46,10 +46,12 @@ public abstract class ForceCalculationManager : MonoBehaviour
         rb.AddForce(ForceToCenterOfMass, ForceMode.Force);
         //Debug.Log("M: " + MomentInCoordinatesTranslatedToCenterOfMass);
         rb.AddTorque(MomentInCoordinatesTranslatedToCenterOfMass, ForceMode.Force);
+        ForceToCenterOfMass = Vector3.zero;
+        MomentInCoordinatesTranslatedToCenterOfMass = Vector3.zero;
         return;
 
     }
-    private void AddForce(Vector3 forceInWorldCoordinates, Vector3 pointOfApplicationINWorldCoordinates)
+    public void AddForce(Vector3 forceInWorldCoordinates, Vector3 pointOfApplicationINWorldCoordinates)
     {
         ForceToCenterOfMass += forceInWorldCoordinates;
         //Debug.Log("forceInWorldCoordinates" + forceInWorldCoordinates);
@@ -59,5 +61,6 @@ public abstract class ForceCalculationManager : MonoBehaviour
         //Debug.Log("dM: " + dM);
         MomentInCoordinatesTranslatedToCenterOfMass += dM;
         Debug.DrawLine(pointOfApplicationINWorldCoordinates, pointOfApplicationINWorldCoordinates + forceInWorldCoordinates, Color.red);
+        Debug.DrawLine(pointOfApplicationINWorldCoordinates, pointOfApplicationINWorldCoordinates + dM, Color.blue);
     }
 }
