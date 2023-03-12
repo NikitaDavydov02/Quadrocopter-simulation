@@ -13,6 +13,7 @@ public class TestCube : ForceCalculationManager
     // Update is called once per frame
     void Update()
     {
-        
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.AddRelativeTorque(0, 1, 0, ForceMode.Force);
     }
 }

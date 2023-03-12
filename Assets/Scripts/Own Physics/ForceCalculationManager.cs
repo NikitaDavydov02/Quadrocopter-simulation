@@ -42,10 +42,17 @@ public abstract class ForceCalculationManager : MonoBehaviour
             }
 
         }
-        //Debug.Log("Force:" + ForceToCenterOfMass);
+        ////Debug.Log("Force:" + ForceToCenterOfMass);
+        //rb.AddForce(ForceToCenterOfMass, ForceMode.Force);
+        ////Debug.Log("M: " + MomentInCoordinatesTranslatedToCenterOfMass);
+        //rb.AddTorque(MomentInCoordinatesTranslatedToCenterOfMass, ForceMode.Force);
+        //ForceToCenterOfMass = Vector3.zero;
+        //MomentInCoordinatesTranslatedToCenterOfMass = Vector3.zero;
+        //return;
         rb.AddForce(ForceToCenterOfMass, ForceMode.Force);
-        //Debug.Log("M: " + MomentInCoordinatesTranslatedToCenterOfMass);
-        rb.AddTorque(MomentInCoordinatesTranslatedToCenterOfMass, ForceMode.Force);
+        MomentInCoordinatesTranslatedToCenterOfMass *= -1;
+        //Debug.Log("M: " + (MomentInCoordinatesTranslatedToCenterOfMass));
+        rb.AddRelativeTorque(transform.InverseTransformDirection(MomentInCoordinatesTranslatedToCenterOfMass), ForceMode.Force);
         ForceToCenterOfMass = Vector3.zero;
         MomentInCoordinatesTranslatedToCenterOfMass = Vector3.zero;
         return;
@@ -53,14 +60,24 @@ public abstract class ForceCalculationManager : MonoBehaviour
     }
     public void AddForce(Vector3 forceInWorldCoordinates, Vector3 pointOfApplicationINWorldCoordinates)
     {
+        //ForceToCenterOfMass += forceInWorldCoordinates;
+        ////Debug.Log("forceInWorldCoordinates" + forceInWorldCoordinates);
+        //Vector3 r = pointOfApplicationINWorldCoordinates - transform.position;
+        ////Vector3 r = pointOfApplicationINWorldCoordinates;
+        //Vector3 dM = -Vector3.Cross(r, forceInWorldCoordinates);
+        ////Debug.Log("dM: " + dM);
+        //MomentInCoordinatesTranslatedToCenterOfMass += dM;
+        //Debug.DrawLine(pointOfApplicationINWorldCoordinates, pointOfApplicationINWorldCoordinates + forceInWorldCoordinates, Color.red);
+        //Debug.DrawLine(pointOfApplicationINWorldCoordinates, pointOfApplicationINWorldCoordinates + dM, Color.blue);
         ForceToCenterOfMass += forceInWorldCoordinates;
-        //Debug.Log("forceInWorldCoordinates" + forceInWorldCoordinates);
-        Vector3 r = pointOfApplicationINWorldCoordinates - transform.position;
-        //Vector3 r = pointOfApplicationINWorldCoordinates;
+        //Debug.Log("dF" + forceInWorldCoordinates);
+        Vector3 r = pointOfApplicationINWorldCoordinates - rb.worldCenterOfMass;
+        //Debug.Log("r" + r);
         Vector3 dM = -Vector3.Cross(r, forceInWorldCoordinates);
         //Debug.Log("dM: " + dM);
         MomentInCoordinatesTranslatedToCenterOfMass += dM;
         Debug.DrawLine(pointOfApplicationINWorldCoordinates, pointOfApplicationINWorldCoordinates + forceInWorldCoordinates, Color.red);
         Debug.DrawLine(pointOfApplicationINWorldCoordinates, pointOfApplicationINWorldCoordinates + dM, Color.blue);
+        Debug.DrawLine(rb.worldCenterOfMass, rb.worldCenterOfMass + r, Color.green);
     }
 }

@@ -21,6 +21,10 @@ public class Rope:MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            this.enabled = false;
+        }
         Vector3 firstPoint =  first.transform.position + first.transform.TransformDirection(relativeFirstPosition);
         Vector3 secondPoint = second.transform.position + second.transform.TransformDirection(relativeSecondPosition);
         if (Vector3.Magnitude(secondPoint - firstPoint) > maxLength)

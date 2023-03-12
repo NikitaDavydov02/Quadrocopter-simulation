@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlaneController : MonoBehaviour
+public class PlaneController : ForceCalculationManager
 {
-    private Rigidbody rb;
     public float generalLevel = 0;
     public float generalLevelChangingSpeed = 1f;
     List<float> engineLevels = new List<float>();
@@ -29,10 +28,6 @@ public class PlaneController : MonoBehaviour
     Transform rightElleron;
     public float eleronAngle = 0;
     public float eleronSensitivity;
-    private Vector3 ForceToCenterOfMass;
-    private Vector3 MomentInCoordinatesTranslatedToCenterOfMass;
-
-    private List<IForce> forceSources;
 
 
     public float RotationPowerMultiplyer;
@@ -50,12 +45,11 @@ public class PlaneController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb = gameObject.GetComponent<Rigidbody>();
+        Init();
         rb.centerOfMass = centerOfMassLocal;
         Debug.Log("Inertia tensor" + rb.inertiaTensor);
         if (inertiaTensor != Vector3.zero)
             rb.inertiaTensor = inertiaTensor;
-        forceSources = new List<IForce>();
 
         //lastPosition = transform.position;
         generalLevel = 0;
@@ -136,46 +130,47 @@ public class PlaneController : MonoBehaviour
         for (int i = 0; i < engineLevels.Count; i++)
             engines[i].Level = engineLevels[i];
     }
-    void FixedUpdate()
-    {
-        
+    //void FixedUpdate()
+    //{
 
-        List<Vector3> CurrentForceVectors;
-        List<Vector3> AbsolutePointsOfForceApplying;
-        foreach (IForce force in forceSources)
-        {
-            force.CountForce(out CurrentForceVectors, out AbsolutePointsOfForceApplying);
-            for (int i = 0; i < CurrentForceVectors.Count; i++)
-            {
-                AddForce(CurrentForceVectors[i], AbsolutePointsOfForceApplying[i]);
-            }
 
-        }
-        //Debug.Log("Force:" + ForceToCenterOfMass);
-        rb.AddForce(ForceToCenterOfMass, ForceMode.Force);
-        MomentInCoordinatesTranslatedToCenterOfMass *= -1;
-        //Debug.Log("M: " + (MomentInCoordinatesTranslatedToCenterOfMass));
-        rb.AddRelativeTorque(transform.InverseTransformDirection(MomentInCoordinatesTranslatedToCenterOfMass), ForceMode.Force);
-        ForceToCenterOfMass = Vector3.zero;
-        MomentInCoordinatesTranslatedToCenterOfMass = Vector3.zero;
-    }
+    //    List<Vector3> CurrentForceVectors;
+    //    List<Vector3> AbsolutePointsOfForceApplying;
+    //    foreach (IForce force in forceSources)
+    //    {
+    //        force.CountForce(out CurrentForceVectors, out AbsolutePointsOfForceApplying);
+    //        for (int i = 0; i < CurrentForceVectors.Count; i++)
+    //        {
+    //            AddForce(CurrentForceVectors[i], AbsolutePointsOfForceApplying[i]);
+    //        }
+
+    //    }
+    //    //Debug.Log("Force:" + ForceToCenterOfMass);
+    //    rb.AddForce(ForceToCenterOfMass, ForceMode.Force);
+    //    MomentInCoordinatesTranslatedToCenterOfMass *= -1;
+    //    //Debug.Log("M: " + (MomentInCoordinatesTranslatedToCenterOfMass));
+    //    rb.AddRelativeTorque(transform.InverseTransformDirection(MomentInCoordinatesTranslatedToCenterOfMass), ForceMode.Force);
+    //    ForceToCenterOfMass = Vector3.zero;
+    //    MomentInCoordinatesTranslatedToCenterOfMass = Vector3.zero;
+    //}
 
     public void CountState()
     {
         AngularVelocityInLocalCoordinates = transform.InverseTransformDirection(rb.angularVelocity);
         VelocityInLocalCoordinates = transform.InverseTransformDirection(rb.velocity);
     }
-    private void AddForce(Vector3 forceInWorldCoordinates, Vector3 pointOfApplicationINWorldCoordinates)
-    {
-        ForceToCenterOfMass += forceInWorldCoordinates;
-        //Debug.Log("dF" + forceInWorldCoordinates);
-        Vector3 r = pointOfApplicationINWorldCoordinates - rb.worldCenterOfMass;
-        //Debug.Log("r" + r);
-        Vector3 dM = -Vector3.Cross(r, forceInWorldCoordinates);
-        //Debug.Log("dM: " + dM);
-        MomentInCoordinatesTranslatedToCenterOfMass += dM;
-        Debug.DrawLine(pointOfApplicationINWorldCoordinates, pointOfApplicationINWorldCoordinates + forceInWorldCoordinates, Color.red);
-        Debug.DrawLine(pointOfApplicationINWorldCoordinates, pointOfApplicationINWorldCoordinates + dM, Color.blue);
-        Debug.DrawLine(rb.worldCenterOfMass, rb.worldCenterOfMass + r, Color.green);
-    }
+    //}
+    //private void AddForce(Vector3 forceInWorldCoordinates, Vector3 pointOfApplicationINWorldCoordinates)
+    //{
+    //    ForceToCenterOfMass += forceInWorldCoordinates;
+    //    //Debug.Log("dF" + forceInWorldCoordinates);
+    //    Vector3 r = pointOfApplicationINWorldCoordinates - rb.worldCenterOfMass;
+    //    //Debug.Log("r" + r);
+    //    Vector3 dM = -Vector3.Cross(r, forceInWorldCoordinates);
+    //    //Debug.Log("dM: " + dM);
+    //    MomentInCoordinatesTranslatedToCenterOfMass += dM;
+    //    Debug.DrawLine(pointOfApplicationINWorldCoordinates, pointOfApplicationINWorldCoordinates + forceInWorldCoordinates, Color.red);
+    //    Debug.DrawLine(pointOfApplicationINWorldCoordinates, pointOfApplicationINWorldCoordinates + dM, Color.blue);
+    //    Debug.DrawLine(rb.worldCenterOfMass, rb.worldCenterOfMass + r, Color.green);
+    //}
 }
