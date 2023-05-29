@@ -38,6 +38,8 @@ public class PlaneController : ForceCalculationManager
     public float horizontAngle = 0;
     public Vector3 centerOfMassLocal;
     public Vector3 inertiaTensor;
+    public float maxHeightAngle = 10;
+    public float maxHorizontalAngle = 10;
 
 
     public Vector3 VelocityInLocalCoordinates = Vector3.zero;
@@ -86,12 +88,12 @@ public class PlaneController : ForceCalculationManager
         //Debug.Log("Euler:" + heightController.localEulerAngles.x);
         heightController.Rotate(vwrticalInput, 0, 0, Space.Self);
         heightAngle += vwrticalInput;
-        if (heightAngle < -10)
+        if (heightAngle < -maxHeightAngle)
         {
             heightController.Rotate(-vwrticalInput, 0, 0, Space.Self);
             heightAngle -= vwrticalInput;
         }
-        if (heightAngle > 10)
+        if (heightAngle > maxHeightAngle)
         {
             heightController.Rotate(-vwrticalInput, 0, 0, Space.Self);
             heightAngle -= vwrticalInput;
@@ -101,7 +103,7 @@ public class PlaneController : ForceCalculationManager
             horInput = 0;
         horizontalController.Rotate(horInput, 0, 0, Space.Self);
         horizontAngle += horInput;
-        if (horizontAngle < -10 || horizontAngle > 10)
+        if (horizontAngle < -maxHorizontalAngle || horizontAngle > maxHorizontalAngle)
         {
             horizontalController.Rotate(-horInput, 0, 0, Space.Self);
             horizontAngle -= horInput;

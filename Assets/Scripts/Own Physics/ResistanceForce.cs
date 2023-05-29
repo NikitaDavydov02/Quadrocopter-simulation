@@ -33,7 +33,7 @@ public class ResistanceForce : MonoBehaviour, IForce
     void Update()
     {
         //velocity = rb.velocity;
-        velocity = rb.velocity + Vector3.Cross(rb.angularVelocity, transform.position - rb.gameObject.transform.position);
+        velocity = rb.velocity + Vector3.Cross(rb.angularVelocity, transform.position - rb.gameObject.transform.position)-MainManager.GetWind(transform.position);
         
         lastPosition = transform.position;
     }

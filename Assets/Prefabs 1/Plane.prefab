@@ -373,6 +373,8 @@ MonoBehaviour:
   horizontAngle: 0
   centerOfMassLocal: {x: 0, y: -0.05, z: 0.1}
   inertiaTensor: {x: 0, y: 0, z: 0}
+  maxHeightAngle: 10
+  maxHorizontalAngle: 10
   VelocityInLocalCoordinates: {x: 0, y: 0, z: 0}
   AngularVelocityInLocalCoordinates: {x: 0, y: 0, z: 0}
 --- !u!54 &2608830551786490335
@@ -653,7 +655,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2608830552276863758}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.867, y: 0, z: -0.309}
+  m_LocalPosition: {x: -0.867, y: 0, z: -0.1}
   m_LocalScale: {x: 0.25, y: 0.02, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1445,7 +1447,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2608830552927848814}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.8670044, y: 0, z: -0.309021}
+  m_LocalPosition: {x: 0.8670044, y: 0, z: -0.1}
   m_LocalScale: {x: 0.25, y: 0.02, z: 0.19999999}
   m_ConstrainProportionsScale: 0
   m_Children: []

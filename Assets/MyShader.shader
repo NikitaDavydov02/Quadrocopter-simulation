@@ -14,9 +14,16 @@ Shader "Unlit/MyShader"
     }
     SubShader
     {
-        Tags { "LightMode"="ForwardBase" }
+        Tags {"LightMode" = "Always"}
+
         Pass
         {
+            /*PackageRequirements
+            {
+                "com.unity.render-pipelines.universal": "[10.2.1,11.0]
+            }*/
+            ZWrite Off
+
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag

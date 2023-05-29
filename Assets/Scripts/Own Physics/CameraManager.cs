@@ -6,6 +6,7 @@ public class CameraManager : MonoBehaviour
 {
     public List<Transform> targets;
     public List<Vector3> offcets;
+    public List<Vector3> offcetsRotation;
     private int currentTarget = -1;
     // Start is called before the first frame update
     void Start()
@@ -32,9 +33,19 @@ public class CameraManager : MonoBehaviour
         }
         if (currentTarget != -1)
         {
+
+            //return;
+            Debug.DrawLine(targets[currentTarget].transform.position, targets[currentTarget].transform.position + offcets[currentTarget],Color.yellow);
+            Debug.DrawLine(targets[currentTarget].transform.position, targets[currentTarget].transform.position + targets[currentTarget].transform.TransformDirection(offcets[currentTarget]), Color.black);
+            //Vector3 delta = Quaternion.Euler(offcetsRotation[currentTarget]) * offcets[currentTarget];
             Vector3 cameraPos = targets[currentTarget].transform.position + targets[currentTarget].transform.TransformDirection(offcets[currentTarget]);
             this.transform.position = cameraPos;
-            transform.LookAt(targets[currentTarget].transform);
+            
+            transform.rotation = targets[currentTarget].rotation;
+            transform.Rotate(-offcetsRotation[currentTarget], Space.Self);
+            //Vector3 angle = transform.localEulerAngles;
+            //angle.z = targets[currentTarget].localEulerAngles.z;
+            //transform.localEulerAngles = angle;
         }
     }
 }
