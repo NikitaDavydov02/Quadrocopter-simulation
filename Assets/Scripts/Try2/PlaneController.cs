@@ -44,6 +44,11 @@ public class PlaneController : ForceCalculationManager
 
     public Vector3 VelocityInLocalCoordinates = Vector3.zero;
     public Vector3 AngularVelocityInLocalCoordinates = Vector3.zero;
+
+    public int currentProfile = 0;
+    [SerializeField]
+    public List<WingProfile> wingProfiles;
+
     // Start is called before the first frame update
     void Start()
     {

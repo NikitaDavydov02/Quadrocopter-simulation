@@ -11,8 +11,10 @@ public class WingForce : MonoBehaviour, IForce
     private Vector3 lastPosition;
     public AnimationCurve CxDependenceVSAngleOfAtack;
     public AnimationCurve CyDependenceVSAngleOfAtack;
+    public bool constatnProfile = false;
     private float area;
     public Rigidbody rb;
+    
     public void CountForce(out List<Vector3> CurrentForceVectors, out List<Vector3> AbsolutePointsOfForceApplying)
     {
         velocity = rb.velocity - MainManager.GetWind(transform.position) + Vector3.Cross(rb.angularVelocity, transform.position - rb.gameObject.transform.position);
@@ -60,7 +62,17 @@ public class WingForce : MonoBehaviour, IForce
     {
         area = length * chord;
         rb = gameObject.transform.parent.GetComponent<Rigidbody>();
-
+        
+        int currentProfile = rb.GetComponent<PlaneController>().currentProfile;
+        if (currentProfile == -1)
+            return;
+        WingProfile profile = rb.GetComponent<PlaneController>().wingProfiles[currentProfile];
+        if (!constatnProfile)
+        {
+            CxDependenceVSAngleOfAtack = profile.CxDependenceVSAngleOfAtack;
+            CyDependenceVSAngleOfAtack = profile.CyDependenceVSAngleOfAtack;
+            Debug.Log("My profile is now " + profile.nameOfProfile);
+        }
 
     }
 
@@ -73,3 +85,4 @@ public class WingForce : MonoBehaviour, IForce
         lastPosition = rb.centerOfMass;
     }
 }
+

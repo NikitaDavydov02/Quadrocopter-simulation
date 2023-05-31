@@ -1686,7 +1686,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generalLevel: 0
-  generalLevelChangingSpeed: 0.1
+  generalLevelChangingSpeed: 1
   engines:
   - {fileID: 7473583071139693569}
   - {fileID: 7473583070003100454}

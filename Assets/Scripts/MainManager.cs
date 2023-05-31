@@ -12,13 +12,13 @@ public class MainManager : MonoBehaviour
     [SerializeField]
     public static Vector3 WindVector = new Vector3(0, 0, 0);
     [SerializeField]
-    public static float amplitude = 5;
+    public float amplitude = 0;
     public float XAmplitude = 5000;
     public float YAmplitude = 5000;
     public float XGridStep = 1;
     void Start()
     {
-        
+        WindVector = Vector3.forward * amplitude;
     }
 
     // Update is called once per frame
@@ -28,8 +28,9 @@ public class MainManager : MonoBehaviour
     }
     public static Vector3 GetWind(Vector3 posotion)
     {
-        Vector3 eddy = new Vector3(Random.Range(-amplitude, amplitude), Random.Range(-amplitude, amplitude), Random.Range(-amplitude, amplitude));
-        eddy = Vector3.zero;
-        return WindVector+eddy;
+        //return Vector3.zero;
+        //Vector3 eddy = new Vector3(Random.Range(-amplitude, amplitude), Random.Range(-amplitude, amplitude), Random.Range(-amplitude, amplitude));
+        //seddy = Vector3.zero;
+        return WindVector;
     }
 }
