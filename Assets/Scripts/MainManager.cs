@@ -33,4 +33,11 @@ public class MainManager : MonoBehaviour
         //seddy = Vector3.zero;
         return WindVector;
     }
+    public static float GetAirDensity(float altitude)
+    {
+        //return Vector3.zero;
+        //Vector3 eddy = new Vector3(Random.Range(-amplitude, amplitude), Random.Range(-amplitude, amplitude), Random.Range(-amplitude, amplitude));
+        //seddy = Vector3.zero;
+        return AirDensity*Mathf.Exp(-0.029f*9.81f*altitude/(8.314f*273));
+    }
 }

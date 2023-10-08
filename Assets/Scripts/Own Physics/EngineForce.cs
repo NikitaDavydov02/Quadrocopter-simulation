@@ -18,6 +18,9 @@ public class EngineForce : MonoBehaviour, IForce
     Vector3 secondRotationForceRelative;
 
     public bool clockwiseRotation;
+
+    [SerializeField]
+    private EngineAudioManager engineAudioManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +32,8 @@ public class EngineForce : MonoBehaviour, IForce
     // Update is called once per frame
     void Update()
     {
-        
+       if(engineAudioManager!=null)
+            engineAudioManager.level = Level;
     }
 
     public void CountForce(out List<Vector3> CurrentForceVectors, out List<Vector3> AbsolutePointsOfForceApplying)

@@ -9,6 +9,11 @@ public class PlaneController : ForceCalculationManager
     List<float> engineLevels = new List<float>();
     public float maxEleronAngle = 2;
     public bool ControlActive = true;
+    public bool reverseIsOn = false;
+
+    public float spoilerAngularSpeed = 90f;
+    public float spoilerCurrentAngle = 0;
+    //public float flapsAngularSpeed = 5f;
 
     [SerializeField]
     List<EngineForce> engines;
@@ -26,6 +31,17 @@ public class PlaneController : ForceCalculationManager
     Transform leftElleron;
     [SerializeField]
     Transform rightElleron;
+    [SerializeField]
+    Transform leftFlap;
+    [SerializeField]
+    Transform rightFlap;
+    [SerializeField]
+    Transform leftSpoiler;
+    [SerializeField]
+    Transform rightSpoiler;
+
+    public float flaps = 0;
+    public float flapsStep = 0.2f;
     public float eleronAngle = 0;
     public float eleronSensitivity;
 
@@ -70,6 +86,8 @@ public class PlaneController : ForceCalculationManager
         foreach (WingForce w in wings)
             forceSources.Add(w);
         //forceSources.Add(gravityForce);
+        leftSpoiler.GetComponent<WingForce>().degree = 0;
+        rightSpoiler.GetComponent<WingForce>().degree = 0;
     }
 
     // Update is called once per frame
@@ -133,7 +151,45 @@ public class PlaneController : ForceCalculationManager
             leftElleron.Rotate(maxEleronAngle, 0, 0);
             rightElleron.Rotate(-maxEleronAngle, 0, 0);
         }
-
+        if (Input.GetKeyDown(KeyCode.F) && ControlActive)
+        {
+            flaps += flapsStep;
+            if (flaps > 1)
+                flaps = 1;
+            leftFlap.GetComponent<WingForce>().degree = flaps;
+            rightFlap.GetComponent<WingForce>().degree = flaps;
+        }
+        if (Input.GetKeyDown(KeyCode.V) && ControlActive)
+        {
+            Debug.Log("Flaps");
+            flaps -= flapsStep;
+            if (flaps <0)
+                flaps = 0;
+            leftFlap.GetComponent<WingForce>().degree = flaps;
+            rightFlap.GetComponent<WingForce>().degree = flaps;
+        }
+        if (Input.GetKeyDown(KeyCode.R) && ControlActive)
+        {
+            Debug.Log("Reverse");
+            reverseIsOn = !reverseIsOn;
+            if (reverseIsOn)
+            {
+                leftSpoiler.GetComponent<WingForce>().degree = 1;
+                rightSpoiler.GetComponent<WingForce>().degree = 1;
+                leftSpoiler.Rotate(90, 0, 0, Space.Self);
+                rightSpoiler.Rotate(90, 0, 0, Space.Self);
+            }
+            else 
+            {
+                leftSpoiler.GetComponent<WingForce>().degree = 0;
+                rightSpoiler.GetComponent<WingForce>().degree = 0;
+                leftSpoiler.Rotate(-90, 0, 0, Space.Self);
+                rightSpoiler.Rotate(-90, 0, 0, Space.Self);
+            }
+        }
+        if (reverseIsOn)
+            for (int i = 0; i < engineLevels.Count; i++)
+                engineLevels[i] = -0.5f;
         for (int i = 0; i < engineLevels.Count; i++)
             engines[i].Level = engineLevels[i];
     }
@@ -180,4 +236,11 @@ public class PlaneController : ForceCalculationManager
     //    Debug.DrawLine(pointOfApplicationINWorldCoordinates, pointOfApplicationINWorldCoordinates + dM, Color.blue);
     //    Debug.DrawLine(rb.worldCenterOfMass, rb.worldCenterOfMass + r, Color.green);
     //}
+    public IEnumerator SpoilersOn()
+    {
+        leftSpoiler.Rotate(spoilerAngularSpeed * Time.deltaTime,0,0,Space.Self);
+        rightSpoiler.Rotate(spoilerAngularSpeed * Time.deltaTime, 0, 0, Space.Self);
+        spoilerCurrentAngle += spoilerAngularSpeed * Time.deltaTime;
+        yield return null;
+    }
 }

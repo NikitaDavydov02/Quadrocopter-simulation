@@ -62,7 +62,7 @@ public class ResistanceForce : MonoBehaviour, IForce
             //Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + direction, Color.grey);
             area = diameter * length;
             float k = 4.4f;
-            float module = MainManager.AirDensity * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * k * area / 2;
+            float module = MainManager.GetAirDensity(transform.position.y)* perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * k * area / 2;
             forceInGlobalCoordinates = direction * module;
         }
         if (Primitive == Primitive.Disk)
@@ -77,8 +77,8 @@ public class ResistanceForce : MonoBehaviour, IForce
             //float area2 = diameter * length;
             //float k2 =1.15f;
             float k = 1.15f;
-            float module = MainManager.AirDensity * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * k * area / 2;
-            //float module2 = MainManager.AirDensity * parallelVelosity.magnitude * parallelVelosity.magnitude * k2 * area2 / 2;
+            float module = MainManager.GetAirDensity(transform.position.y) * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * k * area / 2;
+            //float module2 = MainManager.GetAirDensity(transform.position.y) * parallelVelosity.magnitude * parallelVelosity.magnitude * k2 * area2 / 2;
             forceInGlobalCoordinates = direction * module;
             //Debug.Log("RF:" + forceInGlobalCoordinates);
             //Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + forceInGlobalCoordinates*4, Color.cyan);
@@ -95,8 +95,8 @@ public class ResistanceForce : MonoBehaviour, IForce
             float area2 = diameter * length;
             float k2 = 1.15f;
             float k = 1.15f;
-            float module = MainManager.AirDensity * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * k * area / 2;
-            float module2 = MainManager.AirDensity * parallelVelosity.magnitude * parallelVelosity.magnitude * k2 * area2 / 2;
+            float module = MainManager.GetAirDensity(transform.position.y) * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * k * area / 2;
+            float module2 = MainManager.GetAirDensity(transform.position.y) * parallelVelosity.magnitude * parallelVelosity.magnitude * k2 * area2 / 2;
             forceInGlobalCoordinates = direction * module + direction2 * module2;
             //Debug.Log("Resistance Force:" + forceInGlobalCoordinates);
             //Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + forceInGlobalCoordinates * 4, Color.cyan);
@@ -111,8 +111,8 @@ public class ResistanceForce : MonoBehaviour, IForce
 
             area = Mathf.PI * diameter * diameter / 4;
             float area2 = diameter * length;
-            float module = MainManager.AirDensity * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * KAirbus * area / 2;
-            float module2 = MainManager.AirDensity * parallelVelosity.magnitude * parallelVelosity.magnitude * k2Airbus * area2 / 2;
+            float module = MainManager.GetAirDensity(transform.position.y) * perpendicularVelosity.magnitude * perpendicularVelosity.magnitude * KAirbus * area / 2;
+            float module2 = MainManager.GetAirDensity(transform.position.y) * parallelVelosity.magnitude * parallelVelosity.magnitude * k2Airbus * area2 / 2;
             forceInGlobalCoordinates = direction * module + direction2 * module2;
             //Debug.Log("Resistance Force:" + forceInGlobalCoordinates);
             //Debug.DrawLine(transform.TransformPoint(Vector3.zero), transform.TransformPoint(Vector3.zero) + forceInGlobalCoordinates * 4, Color.cyan);

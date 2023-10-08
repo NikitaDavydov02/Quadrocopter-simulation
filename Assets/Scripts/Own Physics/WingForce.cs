@@ -14,6 +14,7 @@ public class WingForce : MonoBehaviour, IForce
     public bool constatnProfile = false;
     private float area;
     public Rigidbody rb;
+    public float degree = 1;
     
     public void CountForce(out List<Vector3> CurrentForceVectors, out List<Vector3> AbsolutePointsOfForceApplying)
     {
@@ -37,8 +38,8 @@ public class WingForce : MonoBehaviour, IForce
         float Cy = CyDependenceVSAngleOfAtack.Evaluate(angleOfAtack);
         //Debug.Log("Cx: " + Cx);
         //Debug.Log("Cy: " + Cy);
-        float lift = MainManager.AirDensity * area* flowVelocityInSelfCoordinatesWithoutTangent.sqrMagnitude * Cy;
-        float drag = MainManager.AirDensity * area * flowVelocityInSelfCoordinatesWithoutTangent.sqrMagnitude * Cx;
+        float lift = MainManager.GetAirDensity(transform.position.y) * area* flowVelocityInSelfCoordinatesWithoutTangent.sqrMagnitude * Cy;
+        float drag = MainManager.GetAirDensity(transform.position.y) * area * flowVelocityInSelfCoordinatesWithoutTangent.sqrMagnitude * Cx;
        
         Vector3 dragDirectionAbsolute = transform.TransformDirection(flowVelocityInSelfCoordinatesWithoutTangent).normalized;
         Vector3 liftDirectionInRelative = -Vector3.Cross(flowVelocityInSelfCoordinatesWithoutTangent, Vector3.right).normalized;
@@ -83,6 +84,7 @@ public class WingForce : MonoBehaviour, IForce
 
         //Debug.Log("V:" + velocity);
         lastPosition = rb.centerOfMass;
+        area = length * chord*degree;
     }
 }
 
