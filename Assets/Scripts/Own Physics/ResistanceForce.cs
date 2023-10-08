@@ -17,6 +17,7 @@ public class ResistanceForce : MonoBehaviour, IForce
     bool rbFromParent = false;
     public float KAirbus=0.1f;
     public float k2Airbus = 1f;
+    
     // Start is called before the first frame update
     void Start()
     {

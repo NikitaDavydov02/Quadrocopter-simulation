@@ -56,6 +56,7 @@ public class PlaneController : ForceCalculationManager
     public Vector3 inertiaTensor;
     public float maxHeightAngle = 10;
     public float maxHorizontalAngle = 10;
+    public bool gearsUp = false;
 
 
     public Vector3 VelocityInLocalCoordinates = Vector3.zero;
@@ -64,6 +65,8 @@ public class PlaneController : ForceCalculationManager
     public int currentProfile = 0;
     [SerializeField]
     public List<WingProfile> wingProfiles;
+    [SerializeField]
+    private GearsAudioManager gearsAudioManager;
 
     // Start is called before the first frame update
     void Start()
@@ -185,7 +188,18 @@ public class PlaneController : ForceCalculationManager
                 rightSpoiler.GetComponent<WingForce>().degree = 0;
                 leftSpoiler.Rotate(-90, 0, 0, Space.Self);
                 rightSpoiler.Rotate(-90, 0, 0, Space.Self);
+                for (int i = 0; i < engineLevels.Count; i++)
+                    engineLevels[i] = 0.1f;
             }
+
+        }
+        if (Input.GetKeyDown(KeyCode.G) && ControlActive)
+        {
+            gearsUp = !gearsUp;
+            if (gearsUp)
+                gearsAudioManager.GearsUp();
+            else
+                gearsAudioManager.GearsDown();
         }
         if (reverseIsOn)
             for (int i = 0; i < engineLevels.Count; i++)

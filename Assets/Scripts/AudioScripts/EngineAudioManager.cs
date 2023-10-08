@@ -43,7 +43,8 @@ public class EngineAudioManager : MonoBehaviour
             {
                 engineAudioSource.clip = reverseAudioClip;
                 engineAudioSource.pitch = 1;
-                engineAudioSource.volume = 1;
+                //engineAudioSource.volume = (maxVolume - minVolume) * level;
+                engineAudioSource.volume = 0.25f;
                 engineAudioSource.Play();
             }
             
