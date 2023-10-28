@@ -10,7 +10,7 @@ public class PlaneController : ForceCalculationManager
     public float maxEleronAngle = 2;
     public bool ControlActive = true;
     public bool reverseIsOn = false;
-
+    public float engineReverseLevel = -0.2f;
     public float spoilerAngularSpeed = 90f;
     public float spoilerCurrentAngle = 0;
     //public float flapsAngularSpeed = 5f;
@@ -96,6 +96,10 @@ public class PlaneController : ForceCalculationManager
     // Update is called once per frame
     void Update()
     {
+        rb.centerOfMass = centerOfMassLocal;
+        Debug.Log("Inertia tensor" + rb.inertiaTensor);
+        if (inertiaTensor != Vector3.zero)
+            rb.inertiaTensor = inertiaTensor;
         CountState();
         if (Input.GetKey(KeyCode.W) && ControlActive)
             generalLevel += generalLevelChangingSpeed * Time.deltaTime;
@@ -203,7 +207,7 @@ public class PlaneController : ForceCalculationManager
         }
         if (reverseIsOn)
             for (int i = 0; i < engineLevels.Count; i++)
-                engineLevels[i] = -0.5f;
+                engineLevels[i] = engineReverseLevel;
         for (int i = 0; i < engineLevels.Count; i++)
             engines[i].Level = engineLevels[i];
     }

@@ -15,6 +15,7 @@ public class WingForce : MonoBehaviour, IForce
     private float area;
     public Rigidbody rb;
     public float degree = 1;
+    public float angleOfAtack = 0;
     
     public void CountForce(out List<Vector3> CurrentForceVectors, out List<Vector3> AbsolutePointsOfForceApplying)
     {
@@ -30,7 +31,7 @@ public class WingForce : MonoBehaviour, IForce
         Vector3 flowVelocityInSelfCoordinatesWithoutTangent = new Vector3(0, flowVelocityInSelfCoordinates.y, flowVelocityInSelfCoordinates.z);
         //Debug.Log("vx: " + flowVelocityInSelfCoordinatesWithoutTangent.z);
         //Debug.Log("vy: " + flowVelocityInSelfCoordinatesWithoutTangent.y);
-        float angleOfAtack = Mathf.Atan2(flowVelocityInSelfCoordinates.y, -flowVelocityInSelfCoordinates.z) * Mathf.Rad2Deg;
+        angleOfAtack = Mathf.Atan2(flowVelocityInSelfCoordinates.y, -flowVelocityInSelfCoordinates.z) * Mathf.Rad2Deg;
         if (flowVelocityInSelfCoordinatesWithoutTangent.magnitude < 0.1f)
             angleOfAtack = 0;
         //Debug.Log("Angle Of atack: " + angleOfAtack);
