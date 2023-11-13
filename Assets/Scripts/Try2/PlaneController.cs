@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CesiumForUnity;
 
 public class PlaneController : ForceCalculationManager
 {
+    public float altitude;
+    public float density=1f;
+    CesiumGlobeAnchor anchor;
     public float generalLevel = 0;
     public float generalLevelChangingSpeed = 1f;
     List<float> engineLevels = new List<float>();
@@ -71,6 +75,7 @@ public class PlaneController : ForceCalculationManager
     // Start is called before the first frame update
     void Start()
     {
+        anchor = gameObject.GetComponent<CesiumGlobeAnchor>();
         Init();
         rb.centerOfMass = centerOfMassLocal;
         Debug.Log("Inertia tensor" + rb.inertiaTensor);
@@ -96,6 +101,12 @@ public class PlaneController : ForceCalculationManager
     // Update is called once per frame
     void Update()
     {
+        altitude = (float)anchor.height;
+        density = MainManager.GetAirDensity(altitude);
+        foreach (WingForce wf in wings)
+            wf.density = density;
+        foreach (ResistanceForce rf in resistanceForces)
+            rf.density = density;
         rb.centerOfMass = centerOfMassLocal;
         Debug.Log("Inertia tensor" + rb.inertiaTensor);
         if (inertiaTensor != Vector3.zero)

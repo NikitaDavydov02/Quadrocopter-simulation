@@ -5,6 +5,7 @@ using System.IO;
 
 public class WingForce : MonoBehaviour, IForce
 {
+    public float density;
     public float length;
     public float chord;
     public Vector3 velocity;
@@ -39,8 +40,8 @@ public class WingForce : MonoBehaviour, IForce
         float Cy = CyDependenceVSAngleOfAtack.Evaluate(angleOfAtack);
         //Debug.Log("Cx: " + Cx);
         //Debug.Log("Cy: " + Cy);
-        float lift = MainManager.GetAirDensity(transform.position.y) * area* flowVelocityInSelfCoordinatesWithoutTangent.sqrMagnitude * Cy;
-        float drag = MainManager.GetAirDensity(transform.position.y) * area * flowVelocityInSelfCoordinatesWithoutTangent.sqrMagnitude * Cx;
+        float lift = density * area* flowVelocityInSelfCoordinatesWithoutTangent.sqrMagnitude * Cy;
+        float drag = density * area * flowVelocityInSelfCoordinatesWithoutTangent.sqrMagnitude * Cx;
        
         Vector3 dragDirectionAbsolute = transform.TransformDirection(flowVelocityInSelfCoordinatesWithoutTangent).normalized;
         Vector3 liftDirectionInRelative = -Vector3.Cross(flowVelocityInSelfCoordinatesWithoutTangent, Vector3.right).normalized;
