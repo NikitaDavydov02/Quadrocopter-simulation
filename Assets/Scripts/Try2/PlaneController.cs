@@ -122,7 +122,7 @@ public class PlaneController : ForceCalculationManager
             generalLevel = 0;
         for (int i = 0; i < engineLevels.Count; i++)
             engineLevels[i] = generalLevel;
-        float vwrticalInput = -Input.GetAxis("Mouse Y") * Time.deltaTime * heigtSensitivity;
+        float vwrticalInput = Input.GetAxis("Mouse Y") * Time.deltaTime * heigtSensitivity;
         if (!ControlActive)
             vwrticalInput = 0;
         //Debug.Log("Input:" + vwrticalInput);
