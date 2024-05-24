@@ -94,14 +94,18 @@ public class PlaneController : ForceCalculationManager
         foreach (WingForce w in wings)
             forceSources.Add(w);
         //forceSources.Add(gravityForce);
-        leftSpoiler.GetComponent<WingForce>().degree = 0;
-        rightSpoiler.GetComponent<WingForce>().degree = 0;
+        if (leftSpoiler != null)
+        {
+            leftSpoiler.GetComponent<WingForce>().degree = 0;
+            rightSpoiler.GetComponent<WingForce>().degree = 0;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        altitude = (float)anchor.height;
+        if(anchor!=null)
+            altitude = (float)anchor.height;
         density = MainManager.GetAirDensity(altitude);
         foreach (WingForce wf in wings)
             wf.density = density;
@@ -186,7 +190,7 @@ public class PlaneController : ForceCalculationManager
             leftFlap.GetComponent<WingForce>().degree = flaps;
             rightFlap.GetComponent<WingForce>().degree = flaps;
         }
-        if (Input.GetKeyDown(KeyCode.R) && ControlActive)
+        if (Input.GetKeyDown(KeyCode.R) && ControlActive && leftSpoiler!=null)
         {
             Debug.Log("Reverse");
             reverseIsOn = !reverseIsOn;

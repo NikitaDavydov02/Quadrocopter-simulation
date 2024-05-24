@@ -27,6 +27,7 @@ public class Rope:MonoBehaviour
         }
         Vector3 firstPoint =  first.transform.position + first.transform.TransformDirection(relativeFirstPosition);
         Vector3 secondPoint = second.transform.position + second.transform.TransformDirection(relativeSecondPosition);
+        Debug.DrawLine(firstPoint, secondPoint, Color.black);
         if (Vector3.Magnitude(secondPoint - firstPoint) > maxLength)
         {
             Vector3 secondActsOnFirstDirection = Vector3.Normalize(second.transform.position - first.transform.position);
