@@ -32,6 +32,9 @@ public abstract class ForceCalculationManager : MonoBehaviour
 
         List<Vector3> CurrentForceVectors;
         List<Vector3> AbsolutePointsOfForceApplying;
+        Vector3 wingMoment = Vector3.zero;
+        Vector3 eleronMoment = Vector3.zero;
+        Vector3 engineMoment = Vector3.zero;
         foreach (IForce force in forceSources)
         {
             force.CountForce(out CurrentForceVectors, out AbsolutePointsOfForceApplying);
@@ -39,9 +42,25 @@ public abstract class ForceCalculationManager : MonoBehaviour
             {
                 AddForce(CurrentForceVectors[i], AbsolutePointsOfForceApplying[i]);
                 Debug.DrawLine(AbsolutePointsOfForceApplying[i], AbsolutePointsOfForceApplying[i] + CurrentForceVectors[i], Color.red);
+                
+                WingForce wf = force as WingForce;
+                if(wf!=null)
+                {
+                    Vector3 r = AbsolutePointsOfForceApplying[i] - rb.worldCenterOfMass;
+                    Vector3 dM = -Vector3.Cross(r, CurrentForceVectors[i]);
+                    if (wf.gameObject.name.Contains("Wing"))
+                        wingMoment += (dM);
+                    if (wf.gameObject.name.Contains("Eleron"))
+                        eleronMoment += (dM);
+                    if (wf.gameObject.name.Contains("Engine"))
+                        eleronMoment += (dM);
+                }
+                
             }
-
         }
+        Debug.DrawLine(rb.worldCenterOfMass, rb.worldCenterOfMass + wingMoment, Color.cyan);
+        Debug.DrawLine(rb.worldCenterOfMass, rb.worldCenterOfMass + eleronMoment, Color.cyan);
+        Debug.DrawLine(rb.worldCenterOfMass, rb.worldCenterOfMass + engineMoment, Color.cyan);
         ////Debug.Log("Force:" + ForceToCenterOfMass);
         //rb.AddForce(ForceToCenterOfMass, ForceMode.Force);
         ////Debug.Log("M: " + MomentInCoordinatesTranslatedToCenterOfMass);
