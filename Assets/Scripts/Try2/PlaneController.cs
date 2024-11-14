@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CesiumForUnity;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
+using TMPro;
 
 public class PlaneController : ForceCalculationManager
 {
@@ -43,6 +46,10 @@ public class PlaneController : ForceCalculationManager
     Transform leftSpoiler;
     [SerializeField]
     Transform rightSpoiler;
+
+    [SerializeField]
+    TMP_Text accelText;
+    double lastVelocity = 0f;
 
     public float flaps = 0;
     public float flapsStep = 0.2f;
@@ -112,6 +119,10 @@ public class PlaneController : ForceCalculationManager
         foreach (ResistanceForce rf in resistanceForces)
             rf.density = density;
         rb.centerOfMass = centerOfMassLocal;
+
+        accelText.text = ((rb.velocity.magnitude - lastVelocity)/ Time.deltaTime).ToString("0.00");
+        lastVelocity = rb.velocity.magnitude;
+
         Debug.Log("Inertia tensor" + rb.inertiaTensor);
         if (inertiaTensor != Vector3.zero)
             rb.inertiaTensor = inertiaTensor;

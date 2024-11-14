@@ -18,13 +18,19 @@ public class MainManager : MonoBehaviour
     public float XGridStep = 1;
     void Start()
     {
-        WindVector = Vector3.forward * amplitude;
+        //WindVector = Vector3.forward * amplitude;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+       /* float amp = 40f;
+        Vector3 delta = Vector3.zero;
+        delta.x = Random.Range(-amp, amp);
+        delta.y = Random.Range(-amp, amp);
+        delta.z = Random.Range(-amp, amp);
+        WindVector = delta ;
+        Debug.Log("Wind: " + WindVector);*/
     }
     public static Vector3 GetWind(Vector3 posotion)
     {
