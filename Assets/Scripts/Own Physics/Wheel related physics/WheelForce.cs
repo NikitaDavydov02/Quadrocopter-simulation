@@ -8,6 +8,8 @@ public enum WheelStatus
 }
 public class WheelForce : MonoBehaviour, IForce
 {
+    
+    public Vector3 globalAxisMomentum;
     public Vector3 reactionNormalForce; //absolute vector
     public Vector3 reactionNormalForcePoint; //absolute vector
     public Vector3 touchGroundPointVelocity; //absolute vector
@@ -26,8 +28,12 @@ public class WheelForce : MonoBehaviour, IForce
     private float sliding_relative_tolerance;
     [SerializeField]
     private float R;
-   // [SerializeField]
-   // private float touchPointOffsetTolerance = 1.1f;
+    [SerializeField]
+    private float maxAngularSpeed=100f;
+    [SerializeField]
+    private int maxIterationsToInAirStatus = 10;
+    // [SerializeField]
+    // private float touchPointOffsetTolerance = 1.1f;
 
     private Vector3 slidingSpeed;
     public float angularVelocity;//aligned with Vector3.up
@@ -55,10 +61,19 @@ public class WheelForce : MonoBehaviour, IForce
         //<ROTATE WHEEL>
         Vector3 r = force_point - transform.position;
         Vector3 M = Vector3.Cross(r, force_abs);
-        if(Vector3.Dot(M, transform.TransformDirection(Vector3.up))>0)
+        Debug.DrawLine(transform.position, transform.position + globalAxisMomentum, Color.blue);
+        Debug.Log("M_friction " + M );
+        Debug.Log("M_engine: " + globalAxisMomentum.magnitude);
+        Debug.Log("Dor(M_friction,M_engine):" + Vector3.Dot(M, globalAxisMomentum));
+        M += globalAxisMomentum;
+        if (Vector3.Dot(M, transform.TransformDirection(Vector3.up))>0)
             angularVelocity +=(M.magnitude/wheel_inertia_moment)*Time.deltaTime;
         else
             angularVelocity -= (M.magnitude / wheel_inertia_moment) * Time.deltaTime;
+        if (angularVelocity > maxAngularSpeed)
+            angularVelocity = maxAngularSpeed;
+        if (angularVelocity < -maxAngularSpeed)
+            angularVelocity = -maxAngularSpeed;
         //--------------------------------//
         transform.Rotate(Vector3.up, angularVelocity * Time.deltaTime*Mathf.Rad2Deg, Space.Self);
         //</ROTATE WHEEL>
@@ -70,7 +85,7 @@ public class WheelForce : MonoBehaviour, IForce
         if(status==WheelStatus.Slide && reactionNormalForcePoint!=Vector3.zero && reactionNormalForcePoint!=null)
         {
             force_point = reactionNormalForcePoint;
-            Debug.Log("Force_point: " + reactionNormalForcePoint);
+           
             force_abs = -slidingSpeed.normalized * friction_coeff* reactionNormalForce.magnitude;
         }
         
@@ -81,7 +96,7 @@ public class WheelForce : MonoBehaviour, IForce
     {
         Debug.Log("Update status of whell entered");
         //<CHECK IN AIR>
-        if(noTouchIterationsCounter>2)
+        if(noTouchIterationsCounter> maxIterationsToInAirStatus)
         //if((transform.position-reactionNormalForcePoint).magnitude>touchPointOffsetTolerance*R)
         //<CHECK IN AIR>
         //if (reactionNormalForcePoint == null || touchGroundPointVelocity == null|| reactionNormalForcePoint == Vector3.zero || touchGroundPointVelocity == Vector3.zero)
@@ -106,7 +121,21 @@ public class WheelForce : MonoBehaviour, IForce
         Debug.DrawLine(transform.position + radius_abs, transform.position + radius_abs + slidingSpeed, Color.black);
         if (touchGroundPointVelocity.magnitude > 0.01f)
         {
-            if (slidingSpeed.magnitude / touchGroundPointVelocity.magnitude > sliding_relative_tolerance)
+           if (slidingSpeed.magnitude / touchGroundPointVelocity.magnitude > sliding_relative_tolerance)
+           //if (slidingSpeed.magnitude> sliding_relative_tolerance)
+            {
+                status = WheelStatus.Slide;
+                meshRenderer.material.color = Color.yellow;
+            }
+            else
+            {
+                status = WheelStatus.Roll;
+                meshRenderer.material.color = Color.green;
+            }
+        }
+        else
+        {
+            if (slidingSpeed.magnitude > 0.01f)
             {
                 status = WheelStatus.Slide;
                 meshRenderer.material.color = Color.yellow;

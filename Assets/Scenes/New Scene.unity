@@ -248,7 +248,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260759266}
   m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -1.6, y: -0.89, z: -1.51}
+  m_LocalPosition: {x: -1.6, y: -0.89, z: 0}
   m_LocalScale: {x: 2, y: 0.20000003, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -332,14 +332,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8a2697a43eed814ca2c7ba0c5cba3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalAxisMomentum: {x: 0, y: 0, z: 0}
   reactionNormalForce: {x: 0, y: 0, z: 0}
   reactionNormalForcePoint: {x: 0, y: 0, z: 0}
   touchGroundPointVelocity: {x: 0, y: 0, z: 0}
   status: 0
   friction_coeff: 1
   wheel_inertia_moment: 10
-  sliding_relative_tolerance: 0.1
-  R: 2
+  sliding_relative_tolerance: 0.05
+  R: 1
+  maxAngularSpeed: 100
+  maxIterationsToInAirStatus: 10
   angularVelocity: 0
 --- !u!1001 &300023105
 PrefabInstance:
@@ -554,6 +557,103 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c04be05833f6c6d40b63bb69d4b5ce1b, type: 3}
+--- !u!1 &421238172
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 421238176}
+  - component: {fileID: 421238175}
+  - component: {fileID: 421238174}
+  - component: {fileID: 421238173}
+  m_Layer: 0
+  m_Name: Cube (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &421238173
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421238172}
+  m_Material: {fileID: 13400000, guid: 3862d0bd5edbda744ac5a4a39849f690, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &421238174
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421238172}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 91d469667a4c0794482b966b5a0f304f, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &421238175
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421238172}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &421238176
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421238172}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -990.5908, y: 22, z: 993.9}
+  m_LocalScale: {x: 20, y: 1, z: 150}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &579560364
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,7 +786,7 @@ MonoBehaviour:
   - {fileID: 1961625185}
   - {fileID: 1136041696}
   - {fileID: 1050609563}
-  engForce: {fileID: 1722264627}
+  engForce: {fileID: 0}
   gasIncrementSpeed: 0.2
   steeredWheels:
   - {fileID: 1294011211}
@@ -715,7 +815,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 798684608}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -990.6, y: -2.5, z: 1070.6}
+  m_LocalPosition: {x: -990.6, y: 25.4, z: 1037.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1165,7 +1265,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1050609558}
   m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 1.6, y: -0.89, z: -1.51}
+  m_LocalPosition: {x: 1.6, y: -0.89, z: 0}
   m_LocalScale: {x: 2, y: 0.20000003, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1249,14 +1349,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8a2697a43eed814ca2c7ba0c5cba3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalAxisMomentum: {x: 0, y: 0, z: 0}
   reactionNormalForce: {x: 0, y: 0, z: 0}
   reactionNormalForcePoint: {x: 0, y: 0, z: 0}
   touchGroundPointVelocity: {x: 0, y: 0, z: 0}
   status: 0
   friction_coeff: 1
   wheel_inertia_moment: 10
-  sliding_relative_tolerance: 0.1
-  R: 2
+  sliding_relative_tolerance: 0.05
+  R: 1
+  maxAngularSpeed: 100
+  maxIterationsToInAirStatus: 10
   angularVelocity: 0
 --- !u!1 &1136041691
 GameObject:
@@ -1370,14 +1473,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8a2697a43eed814ca2c7ba0c5cba3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalAxisMomentum: {x: 0, y: 0, z: 0}
   reactionNormalForce: {x: 0, y: 0, z: 0}
   reactionNormalForcePoint: {x: 0, y: 0, z: 0}
   touchGroundPointVelocity: {x: 0, y: 0, z: 0}
   status: 0
   friction_coeff: 1
   wheel_inertia_moment: 10
-  sliding_relative_tolerance: 0.1
-  R: 2
+  sliding_relative_tolerance: 0.05
+  R: 1
+  maxAngularSpeed: 100
+  maxIterationsToInAirStatus: 10
   angularVelocity: 0
 --- !u!1 &1294011210
 GameObject:
@@ -1403,7 +1509,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1294011210}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0025634766, y: 0.42, z: 4}
+  m_LocalPosition: {x: 0.0025634766, y: 0.42, z: 2.65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1802,16 +1908,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1722264622}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a638548823bb95b4590c17fbc8a917c8, type: 3}
+  m_Script: {fileID: 11500000, guid: de1883dceafd761489657fe4e0cc3e76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AxisDirection: {x: 0, y: 0, z: 1}
-  MaxForce: 3000
+  AxisDirection: {x: 1, y: 0, z: 0}
+  MaxMomentum: 1000
   Level: 0
-  AxisRadius: 0.1
-  RotationCoeffitient: 1
-  jet: 1
-  clockwiseRotation: 0
+  wheels:
+  - {fileID: 1961625185}
+  - {fileID: 1136041696}
+  gasIncrementSpeed: 0.4
   engineAudioManager: {fileID: 0}
 --- !u!1 &1729312734
 GameObject:
@@ -2198,14 +2304,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1832052916}
-  m_LocalRotation: {x: 0.03747105, y: -0, z: -0, w: 0.99929774}
-  m_LocalPosition: {x: -990.5908, y: -10, z: 1137.3}
+  m_LocalRotation: {x: 0.13570867, y: -0, z: -0, w: 0.9907488}
+  m_LocalPosition: {x: -990.5908, y: 1.6, z: 1140.5}
   m_LocalScale: {x: 20, y: 1, z: 150}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 4.295, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 15.599, y: 0, z: 0}
 --- !u!1 &1895600780
 GameObject:
   m_ObjectHideFlags: 0
@@ -2517,14 +2623,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8a2697a43eed814ca2c7ba0c5cba3ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalAxisMomentum: {x: 0, y: 0, z: 0}
   reactionNormalForce: {x: 0, y: 0, z: 0}
   reactionNormalForcePoint: {x: 0, y: 0, z: 0}
   touchGroundPointVelocity: {x: 0, y: 0, z: 0}
   status: 0
   friction_coeff: 1
   wheel_inertia_moment: 10
-  sliding_relative_tolerance: 0.1
-  R: 2
+  sliding_relative_tolerance: 0.05
+  R: 1
+  maxAngularSpeed: 100
+  maxIterationsToInAirStatus: 10
   angularVelocity: 0
 --- !u!1 &2019550880
 GameObject:
