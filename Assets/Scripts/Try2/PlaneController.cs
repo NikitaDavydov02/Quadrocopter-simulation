@@ -119,8 +119,8 @@ public class PlaneController : ForceCalculationManager
         foreach (ResistanceForce rf in resistanceForces)
             rf.density = density;
         rb.centerOfMass = centerOfMassLocal;
-
-        accelText.text = ((rb.velocity.magnitude - lastVelocity)/ Time.deltaTime).ToString("0.00");
+        if (accelText!=null)
+            accelText.text = ((rb.velocity.magnitude - lastVelocity)/ Time.deltaTime).ToString("0.00");
         lastVelocity = rb.velocity.magnitude;
 
         Debug.Log("Inertia tensor" + rb.inertiaTensor);
