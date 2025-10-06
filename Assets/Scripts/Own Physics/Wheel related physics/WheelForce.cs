@@ -10,13 +10,12 @@ public class WheelForce : MonoBehaviour, IForce
 {
     
     public Vector3 globalAxisMomentum;
-    public Vector3 reactionNormalForce; //absolute vector
-    public Vector3 reactionNormalForcePoint; //absolute vector
+    private Vector3 reactionNormalForce; //absolute vector
+    private Vector3 reactionNormalForcePoint; //absolute vector
     public Vector3 touchGroundPointVelocity; //absolute vector
-    public bool reactionForceWasUpdated
-    {
-        set { noTouchIterationsCounter = 0; }
-    }
+
+    private Vector3 wheelCenterPoint;
+    private Vector3 wheelRestCenterPoint;
 
     public WheelStatus status;
     
@@ -31,9 +30,17 @@ public class WheelForce : MonoBehaviour, IForce
     [SerializeField]
     private float maxAngularSpeed=100f;
     [SerializeField]
-    private int maxIterationsToInAirStatus = 20;
+    private float rest_distance_to_the_wheel_center = 1f;
+    [SerializeField]
+    private float max_distance_to_the_wheel_center = 2f;
+    [SerializeField]
+    private float k_stiffness;
+    [SerializeField]
+    private float dumping_coeff;
+
     [SerializeField]
     private float brakingMoment=10f;
+   
     // [SerializeField]
     // private float touchPointOffsetTolerance = 1.1f;
 
@@ -41,15 +48,19 @@ public class WheelForce : MonoBehaviour, IForce
     public float angularVelocity;//aligned with Vector3.up
     private Vector3 touchRimPointVelocity; //absolute vector
 
-    private int noTouchIterationsCounter;
     private bool braking = false;
     Vector3 force_abs;
     Vector3 force_point;
-    MeshRenderer meshRenderer;
+    
+    MeshRenderer wheelMeshRenderer;
+    private Rigidbody parent_rb;
+    [SerializeField]
+    Transform wheelTransform;
     // Start is called before the first frame update
     void Start()
     {
-        meshRenderer = GetComponent<MeshRenderer>();
+        parent_rb = transform.root.GetComponent<Rigidbody>();
+        wheelMeshRenderer = wheelTransform.gameObject.GetComponent<MeshRenderer>();
         if (wheel_inertia_moment == 0)
             Debug.LogError("wheel_inertia_moment==0");
     }
@@ -57,12 +68,11 @@ public class WheelForce : MonoBehaviour, IForce
     // Update is called once per frame
     void Update()
     {
-        noTouchIterationsCounter++;
         UpdateStatus();
         //<ROTATE WHEEL>
-        Vector3 r = force_point - transform.position;
+        Vector3 r = force_point - wheelCenterPoint;
         Vector3 M = Vector3.Cross(r, force_abs);
-        Debug.DrawLine(transform.position, transform.position + globalAxisMomentum, Color.blue);
+        Debug.DrawLine(wheelCenterPoint, wheelCenterPoint + globalAxisMomentum, Color.blue);
         Debug.Log("M_friction " + M );
         Debug.Log("M_engine: " + globalAxisMomentum.magnitude);
         Debug.Log("Dor(M_friction,M_engine):" + Vector3.Dot(M.normalized, globalAxisMomentum.normalized));
@@ -84,62 +94,99 @@ public class WheelForce : MonoBehaviour, IForce
         if (angularVelocity < -maxAngularSpeed)
             angularVelocity = -maxAngularSpeed;
         //--------------------------------//
-        transform.Rotate(Vector3.up, angularVelocity * Time.deltaTime*Mathf.Rad2Deg, Space.Self);
+        wheelTransform.Rotate(Vector3.up, angularVelocity * Time.deltaTime*Mathf.Rad2Deg, Space.Self);
         //</ROTATE WHEEL>
     }
     public void CountForce(out List<Vector3> CurrentForceVectors, out List<Vector3> AbsolutePointsOfForceApplying)
     {
         force_abs = Vector3.zero;
         force_point = Vector3.zero;
-        if(status==WheelStatus.Slide && reactionNormalForcePoint!=Vector3.zero && reactionNormalForcePoint!=null)
+        //Debug.DrawLine(transform.position, reactionNormalForcePoint, Color.green);
+        if ((status==WheelStatus.Roll|| status == WheelStatus.Slide) && reactionNormalForcePoint!=Vector3.zero)
         {
+            
             force_point = reactionNormalForcePoint;
-           
-            force_abs = -slidingSpeed.normalized * friction_coeff* reactionNormalForce.magnitude;
+            force_abs = -slidingSpeed.normalized * friction_coeff * reactionNormalForce.magnitude;
+            Debug.Log("Reaction force : " + reactionNormalForce);        
+            force_abs = reactionNormalForce;
         }
-        
+        if(force_abs.magnitude>50*parent_rb.mass)
+        {
+            Debug.Log("Exceeding force limit: " + force_abs);
+            force_abs = Vector3.zero;
+        }
         CurrentForceVectors = new List<Vector3>() { force_abs };
         AbsolutePointsOfForceApplying = new List<Vector3>() { force_point };
+    }
+    float previous_d;
+    float spring_velocity;
+    public float CalculateSpringForce()
+    {
+        float distance_to_the_wheel_center = (wheelCenterPoint - transform.position).magnitude;
+        float d_d = distance_to_the_wheel_center - previous_d;
+        spring_velocity = d_d / Time.deltaTime;
+        if (previous_d == 0 || Mathf.Abs(spring_velocity)>max_distance_to_the_wheel_center/0.1f)
+            spring_velocity = 0;
+        previous_d = distance_to_the_wheel_center;
+
+
+        float dx = distance_to_the_wheel_center - rest_distance_to_the_wheel_center;
+        if (dx > max_distance_to_the_wheel_center + 2 * R)
+            dx = 0;
+
+        Debug.Log("Force_dx: " + dx);
+        Debug.Log("Force_v: " + spring_velocity);
+        return (dx * k_stiffness + spring_velocity * dumping_coeff);// + velocity * dumping_coeff);
     }
     public void UpdateStatus()
     {
         Debug.Log("Update status of whell entered");
         //<CHECK IN AIR>
-        if(noTouchIterationsCounter> maxIterationsToInAirStatus)
-        //if((transform.position-reactionNormalForcePoint).magnitude>touchPointOffsetTolerance*R)
-        //<CHECK IN AIR>
-        //if (reactionNormalForcePoint == null || touchGroundPointVelocity == null|| reactionNormalForcePoint == Vector3.zero || touchGroundPointVelocity == Vector3.zero)
+        RaycastHit raycastHit;
+        wheelRestCenterPoint = transform.position + transform.TransformDirection(Vector3.down) * rest_distance_to_the_wheel_center;
+        Debug.DrawLine(parent_rb.position, wheelRestCenterPoint, Color.black);
+        if (Physics.Raycast(new Ray(transform.position,transform.TransformDirection(Vector3.down)),out raycastHit,max_distance_to_the_wheel_center+R))
         {
+            reactionNormalForcePoint = raycastHit.point;
+            
+            reactionNormalForce = transform.TransformDirection(Vector3.down) * CalculateSpringForce();
+            wheelCenterPoint = raycastHit.point - transform.TransformDirection(Vector3.down) * R;
+            touchGroundPointVelocity = parent_rb.GetPointVelocity(raycastHit.point);
+            Debug.DrawLine(parent_rb.position, wheelCenterPoint, Color.black);
+        }
+        else
+        {
+            reactionNormalForcePoint = Vector3.zero;
+            reactionNormalForce = Vector3.zero;
+            wheelCenterPoint = transform.position + transform.TransformDirection(Vector3.down) * max_distance_to_the_wheel_center;
             status = WheelStatus.InAir;
-            meshRenderer.material.color = Color.blue;
+            wheelMeshRenderer.material.color = Color.blue;
+            Debug.DrawLine(parent_rb.position, wheelCenterPoint, Color.black);
             return;
         }
-        //<REFINING PRECISE TOUCH POINT>
-        Vector3 r_vector = reactionNormalForce.normalized * (-R);
-        reactionNormalForcePoint = transform.position + r_vector;
-        //<REFINING PRECISE TOUCH POINT>
+        
 
         //<UPDATE STATUS>
-        Vector3 radius_abs = reactionNormalForcePoint - transform.position;
-        Vector3 angular_velocity_abs = transform.TransformDirection(Vector3.up) * angularVelocity;
+        Vector3 radius_abs = reactionNormalForcePoint - wheelCenterPoint;
+        Vector3 angular_velocity_abs = wheelTransform.TransformDirection(Vector3.up) * angularVelocity;
         touchRimPointVelocity = Vector3.Cross(angular_velocity_abs, radius_abs);
         Debug.Log("Radius abs: " + radius_abs);
-        Debug.DrawLine(transform.position + radius_abs, transform.position + radius_abs + touchRimPointVelocity, Color.cyan);
-        Debug.DrawLine(transform.position + radius_abs, transform.position + radius_abs + touchGroundPointVelocity, Color.cyan);
+        Debug.DrawLine(wheelTransform.position + radius_abs, wheelTransform.position + radius_abs + touchRimPointVelocity, Color.cyan);
+        Debug.DrawLine(wheelTransform.position + radius_abs, wheelTransform.position + radius_abs + touchGroundPointVelocity, Color.cyan);
         slidingSpeed = touchRimPointVelocity + touchGroundPointVelocity;
-        Debug.DrawLine(transform.position + radius_abs, transform.position + radius_abs + slidingSpeed, Color.black);
+        Debug.DrawLine(wheelTransform.position + radius_abs, wheelTransform.position + radius_abs + slidingSpeed, Color.black);
         if (touchGroundPointVelocity.magnitude > 0.01f)
         {
            if (slidingSpeed.magnitude / touchGroundPointVelocity.magnitude > sliding_relative_tolerance)
            //if (slidingSpeed.magnitude> sliding_relative_tolerance)
             {
                 status = WheelStatus.Slide;
-                meshRenderer.material.color = Color.yellow;
+                wheelMeshRenderer.material.color = Color.yellow;
             }
             else
             {
                 status = WheelStatus.Roll;
-                meshRenderer.material.color = Color.green;
+                wheelMeshRenderer.material.color = Color.green;
             }
         }
         else
@@ -147,12 +194,12 @@ public class WheelForce : MonoBehaviour, IForce
             if (slidingSpeed.magnitude > 0.01f)
             {
                 status = WheelStatus.Slide;
-                meshRenderer.material.color = Color.yellow;
+                wheelMeshRenderer.material.color = Color.yellow;
             }
             else
             {
                 status = WheelStatus.Roll;
-                meshRenderer.material.color = Color.green;
+                wheelMeshRenderer.material.color = Color.green;
             }
         }
         //</UPDATE STATUS>

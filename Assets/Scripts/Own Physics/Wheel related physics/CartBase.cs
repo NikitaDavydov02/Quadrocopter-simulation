@@ -70,8 +70,7 @@ public class CartBase : ForceCalculationManager
     }
     void OnCollisionStay(Collision collision)
     {
-        Vector3 reactionForce = collision.impulse/ Time.fixedDeltaTime;
-        //Debug.Log("Collision reaction force: " + reactionForce);
+        /*Vector3 reactionForce = collision.impulse/ Time.fixedDeltaTime;
         
         foreach(ContactPoint point in collision.contacts)
         {
@@ -86,10 +85,9 @@ public class CartBase : ForceCalculationManager
                 Vector3 touchPointVelocity = rb.GetPointVelocity(wheelForce.reactionNormalForcePoint);
                 wheelForce.touchGroundPointVelocity = touchPointVelocity;
                 wheelForce.reactionNormalForce = reactionForce;
-                //Debug.DrawLine(wheelForce.reactionNormalForcePoint, wheelForce.reactionNormalForcePoint + reactionForce, Color.black);
                 Debug.DrawLine(wheelForce.reactionNormalForcePoint, wheelForce.reactionNormalForcePoint + reactionForce, Color.red);
             }
-        }
+        }*/
         
     }
 }
