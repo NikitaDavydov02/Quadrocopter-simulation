@@ -31,7 +31,9 @@ public class WheelForce : MonoBehaviour, IForce
     [SerializeField]
     private float maxAngularSpeed=100f;
     [SerializeField]
-    private int maxIterationsToInAirStatus = 10;
+    private int maxIterationsToInAirStatus = 20;
+    [SerializeField]
+    private float brakingMoment=10f;
     // [SerializeField]
     // private float touchPointOffsetTolerance = 1.1f;
 
@@ -40,8 +42,7 @@ public class WheelForce : MonoBehaviour, IForce
     private Vector3 touchRimPointVelocity; //absolute vector
 
     private int noTouchIterationsCounter;
-    
-
+    private bool braking = false;
     Vector3 force_abs;
     Vector3 force_point;
     MeshRenderer meshRenderer;
@@ -64,8 +65,16 @@ public class WheelForce : MonoBehaviour, IForce
         Debug.DrawLine(transform.position, transform.position + globalAxisMomentum, Color.blue);
         Debug.Log("M_friction " + M );
         Debug.Log("M_engine: " + globalAxisMomentum.magnitude);
-        Debug.Log("Dor(M_friction,M_engine):" + Vector3.Dot(M, globalAxisMomentum));
-        M += globalAxisMomentum;
+        Debug.Log("Dor(M_friction,M_engine):" + Vector3.Dot(M.normalized, globalAxisMomentum.normalized));
+        if(!braking)
+            M += globalAxisMomentum;
+        else
+        {
+            Debug.Log("Braking");
+            //calculate braking momentum
+            //M += globalAxisMomentum.normalized * (-brakingMoment);
+            angularVelocity = 0f;
+        }
         if (Vector3.Dot(M, transform.TransformDirection(Vector3.up))>0)
             angularVelocity +=(M.magnitude/wheel_inertia_moment)*Time.deltaTime;
         else
@@ -148,6 +157,13 @@ public class WheelForce : MonoBehaviour, IForce
         }
         //</UPDATE STATUS>
     }
+    public void BrakeIn()
+    {
+        braking = true;
+    }
+    public void BrakeOut()
+    {
+        braking = false;
+    }
 
-   
 }

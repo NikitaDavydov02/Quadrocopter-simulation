@@ -41,7 +41,16 @@ public class CartBase : ForceCalculationManager
         /* Vector3 forcePosition = transform.position + transform.TransformVector(forceOffset);
          Debug.DrawLine(transform.position, forcePosition, Color.green);
          rb.AddForceAtPosition(Vector3.up * upForce, forcePosition);*/
-
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            foreach (WheelForce wheel in wheelForces)
+                wheel.BrakeIn();
+        }
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            foreach (WheelForce wheel in wheelForces)
+                wheel.BrakeOut();
+        }
         if (engForce != null)
         {
             if (Input.GetKey(KeyCode.W))
@@ -66,7 +75,6 @@ public class CartBase : ForceCalculationManager
         
         foreach(ContactPoint point in collision.contacts)
         {
-            Debug.DrawLine(transform.position, point.point, Color.green);
             WheelForce wheelForce = point.thisCollider.gameObject.GetComponent<WheelForce>();
             if (wheelForce!=null)
             {

@@ -26,5 +26,6 @@ public class ConstantForce : MonoBehaviour, IForce
         Vector3 absolutePointOfApplication = transform.position + transform.TransformVector(offset);
         CurrentForceVectors = new List<Vector3>() { absoluteForce };
         AbsolutePointsOfForceApplying = new List<Vector3>() { absolutePointOfApplication };
+       
     }
 }
