@@ -209,6 +209,7 @@ public class WheelForce : MonoBehaviour, IForce
             dx = -max_dx;
 
         sw.Write(dx + ";");
+        sw.Write(spring_velocity + ";");
         Debug.Log("Force_dx: " + dx);
         Debug.Log("Force_v: " + spring_velocity);
         return (dx * k_stiffness + spring_velocity * dumping_coeff);// + velocity * dumping_coeff);
@@ -223,10 +224,10 @@ public class WheelForce : MonoBehaviour, IForce
         //if (Physics.Raycast(new Ray(transform.position,Vector3.down),out raycastHit,max_distance_to_the_wheel_center+R))
         if (Physics.Raycast(new Ray(transform.position, transform.TransformDirection(Vector3.down)), out raycastHit, max_distance_to_the_wheel_center + R))
         {
+            wheelCenterPoint = raycastHit.point - transform.TransformDirection(Vector3.down) * R;
             reactionNormalForcePoint = raycastHit.point;
             reactionNormalForce = Vector3.down * CalculateSpringForce();
            
-            wheelCenterPoint = raycastHit.point - transform.TransformDirection(Vector3.down) * R;
             touchGroundPointVelocity = parent_rb.GetPointVelocity(raycastHit.point);
             touchGroundPointVelocity.y = 0;//COMMENT
             Debug.DrawLine(parent_rb.position, wheelCenterPoint, Color.black);

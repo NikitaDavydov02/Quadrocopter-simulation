@@ -372,10 +372,10 @@ MonoBehaviour:
   maxAngularSpeed: 100
   rest_distance_to_the_wheel_center: 1
   max_distance_to_the_wheel_center: 2
-  k_stiffness: 500000
+  k_stiffness: 700000
   dumping_coeff: 100000
   force_filter: 2
-  brakingMoment: 100000
+  brakingMoment: 200000
   max_dx: 1
   angularVelocity: 0
   wheelTransform: {fileID: 76901660}
@@ -469,7 +469,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 154893661}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -990.5908, y: 5, z: 63}
+  m_LocalPosition: {x: -990.5908, y: 10, z: 63}
   m_LocalScale: {x: 100, y: 1, z: 2000}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1020,10 +1020,10 @@ MonoBehaviour:
   maxAngularSpeed: 100
   rest_distance_to_the_wheel_center: 1
   max_distance_to_the_wheel_center: 2
-  k_stiffness: 500000
+  k_stiffness: 700000
   dumping_coeff: 100000
   force_filter: 2
-  brakingMoment: 100000
+  brakingMoment: 200000
   max_dx: 1
   angularVelocity: 0
   wheelTransform: {fileID: 1792057708}
@@ -1271,10 +1271,10 @@ MonoBehaviour:
   maxAngularSpeed: 100
   rest_distance_to_the_wheel_center: 1
   max_distance_to_the_wheel_center: 2
-  k_stiffness: 500000
+  k_stiffness: 700000
   dumping_coeff: 100000
   force_filter: 2
-  brakingMoment: 100000
+  brakingMoment: 200000
   max_dx: 1
   angularVelocity: 0
   wheelTransform: {fileID: 1832971982}
@@ -1331,10 +1331,10 @@ MonoBehaviour:
   maxAngularSpeed: 100
   rest_distance_to_the_wheel_center: 1
   max_distance_to_the_wheel_center: 2
-  k_stiffness: 500000
+  k_stiffness: 700000
   dumping_coeff: 100000
   force_filter: 2
-  brakingMoment: 100000
+  brakingMoment: 200000
   max_dx: 1
   angularVelocity: 0
   wheelTransform: {fileID: 508215736}
