@@ -34,6 +34,7 @@ public class WheelForce : MonoBehaviour, IForce
     private float maxAngularSpeed=100f;
     [SerializeField]
     private float rest_distance_to_the_wheel_center = 1f;
+    private float distance_to_the_wheel_center;
     [SerializeField]
     private float max_distance_to_the_wheel_center = 2f;
     [SerializeField]
@@ -96,6 +97,10 @@ public class WheelForce : MonoBehaviour, IForce
         time += Time.deltaTime;
         sw.Write(time + ";");
         UpdateStatus();
+
+        Vector3 wheelRestLocal = Vector3.down * distance_to_the_wheel_center;
+        wheelTransform.localPosition = wheelRestLocal + transform.localPosition;
+
         //<ROTATE WHEEL>
         Vector3 r = force_point - wheelCenterPoint;
         Vector3 M = Vector3.Cross(r, frictionForce);
@@ -105,8 +110,8 @@ public class WheelForce : MonoBehaviour, IForce
         Debug.Log("Dor(M_friction,M_engine):" + Vector3.Dot(M.normalized, globalAxisMomentum.normalized));
         if (!braking)
         {
-            //    M += globalAxisMomentum;//COMMENT
-            parent_rb.AddForce(parent_rb.transform.TransformDirection(Vector3.forward) * globalAxisMomentum.magnitude);
+            M += globalAxisMomentum;//COMMENT
+            //parent_rb.AddForce(parent_rb.transform.TransformDirection(Vector3.forward) * globalAxisMomentum.magnitude);
         }
         if (braking)
         {
@@ -142,11 +147,11 @@ public class WheelForce : MonoBehaviour, IForce
             
             force_point = reactionNormalForcePoint;
             force_abs += reactionNormalForce;
-            if(status==WheelStatus.Slide||status==WheelStatus.Roll)
+            if(status==WheelStatus.Slide)
             {
                 //reactionNormalForce = Vector3.up * parent_rb.mass * 9.81f / 4f;//COMMENT
                 frictionForce = -slidingSpeed.normalized * friction_coeff * reactionNormalForce.magnitude;
-                frictionForce.y = 0;//COMMENT
+                //frictionForce.y = 0;//COMMENT
                 //force_abs += frictionForce;
             }
 
@@ -191,10 +196,10 @@ public class WheelForce : MonoBehaviour, IForce
     float spring_velocity;
     public float CalculateSpringForce()
     {
-        float distance_to_the_wheel_center = (wheelCenterPoint - transform.position).magnitude;
+        distance_to_the_wheel_center = (wheelCenterPoint - transform.position).magnitude;
         float d_d = distance_to_the_wheel_center - previous_d;
-        spring_velocity = d_d / Time.deltaTime;
-        spring_velocity = Vector3.Dot(Vector3.up, parent_rb.GetPointVelocity(transform.position));
+        spring_velocity = d_d / Time.deltaTime;//COMMENT
+        //spring_velocity = Vector3.Dot(Vector3.up, parent_rb.GetPointVelocity(transform.position));
         if (previous_d == 0 || Mathf.Abs(spring_velocity)>max_distance_to_the_wheel_center/0.05f)
             spring_velocity = 0;
         previous_d = distance_to_the_wheel_center;
@@ -219,11 +224,26 @@ public class WheelForce : MonoBehaviour, IForce
         Debug.Log("Update status of whell entered");
         //<CHECK IN AIR>
         RaycastHit raycastHit;
+        //int ignoreLayer = LayerMask.NameToLayer("IgnoreRaycast");
+        //int ignoreMask = (1 << ignoreLayer);
+        //int mask = ~ignoreMask;
+        
+        //int raycastLayer = LayerMask.GetMask("IgnoreRaycast");
+        //int ignoreRaycastLayer = ~raycastLayer;
+
+        int raycastLayer = LayerMask.NameToLayer("Ignore Raycast");
+        int ignoreRaycastLayer = ~(1 << raycastLayer);
+        Debug.Log("raycat layer: " + raycastLayer);
+        Debug.Log("ignore raycast layer: " + ignoreRaycastLayer);
+
         wheelRestCenterPoint = transform.position + transform.TransformDirection(Vector3.down) * rest_distance_to_the_wheel_center;
+       
+        Debug.Log("Wheel " + name + " position: " + wheelRestCenterPoint);
         Debug.DrawLine(parent_rb.position, wheelRestCenterPoint, Color.black);
         //if (Physics.Raycast(new Ray(transform.position,Vector3.down),out raycastHit,max_distance_to_the_wheel_center+R))
-        if (Physics.Raycast(new Ray(transform.position, transform.TransformDirection(Vector3.down)), out raycastHit, max_distance_to_the_wheel_center + R))
+        if (Physics.Raycast(new Ray(transform.position, transform.TransformDirection(Vector3.down)), out raycastHit, max_distance_to_the_wheel_center + R, ignoreRaycastLayer))
         {
+            Debug.Log("raycast hit: " + raycastHit.collider.name);
             wheelCenterPoint = raycastHit.point - transform.TransformDirection(Vector3.down) * R;
             reactionNormalForcePoint = raycastHit.point;
             reactionNormalForce = Vector3.down * CalculateSpringForce();
@@ -231,6 +251,7 @@ public class WheelForce : MonoBehaviour, IForce
             touchGroundPointVelocity = parent_rb.GetPointVelocity(raycastHit.point);
             touchGroundPointVelocity.y = 0;//COMMENT
             Debug.DrawLine(parent_rb.position, wheelCenterPoint, Color.black);
+            Debug.DrawLine(parent_rb.position, raycastHit.point, Color.yellow);
         }
         else
         {
@@ -250,10 +271,10 @@ public class WheelForce : MonoBehaviour, IForce
         Debug.DrawLine(wheelTransform.position, wheelTransform.position+angular_velocity_abs, Color.yellow);
         touchRimPointVelocity = Vector3.Cross(angular_velocity_abs, radius_abs);
         Debug.Log("Radius abs: " + radius_abs);
-        Debug.DrawLine(wheelTransform.position + radius_abs, wheelTransform.position + radius_abs + touchRimPointVelocity, Color.cyan);
-        Debug.DrawLine(wheelTransform.position + radius_abs, wheelTransform.position + radius_abs + touchGroundPointVelocity, Color.cyan);
+        Debug.DrawLine(reactionNormalForcePoint, reactionNormalForcePoint + touchRimPointVelocity, Color.cyan);
+        Debug.DrawLine(reactionNormalForcePoint, reactionNormalForcePoint + touchGroundPointVelocity, Color.cyan);
         slidingSpeed = touchRimPointVelocity + touchGroundPointVelocity;
-        Debug.DrawLine(wheelTransform.position + radius_abs, wheelTransform.position + radius_abs + slidingSpeed, Color.black);
+        Debug.DrawLine(reactionNormalForcePoint, reactionNormalForcePoint + slidingSpeed, Color.black);
         if (touchGroundPointVelocity.magnitude > 0.01f)
         {
            if (slidingSpeed.magnitude / touchGroundPointVelocity.magnitude > sliding_relative_tolerance)
