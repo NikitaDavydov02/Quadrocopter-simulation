@@ -21,12 +21,20 @@ public class CartBase : ForceCalculationManager
     List<Transform> steeredWheels;
     [SerializeField]
     private float steeringSensitivity;
+    
+    public Vector3 centerOfMassLocal;
+    public Vector3 inertiaTensor;
     // Start is called before the first frame update
     void Start()
     {
         //rb = GetComponent<Rigidbody>();
         Init();
-        if(resistanceForce!=null)
+       rb.centerOfMass = centerOfMassLocal;
+        Debug.Log("Inertia tensor" + rb.inertiaTensor);
+        if (inertiaTensor != Vector3.zero)
+            rb.inertiaTensor = inertiaTensor;
+
+        if (resistanceForce!=null)
             forceSources.Add(resistanceForce);
         foreach (IForce wheel in wheelForces)
             forceSources.Add(wheel);
