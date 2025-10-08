@@ -98,8 +98,11 @@ public class WheelForce : MonoBehaviour, IForce
         sw.Write(time + ";");
         UpdateStatus();
 
-        Vector3 wheelRestLocal = Vector3.down * distance_to_the_wheel_center;
+        /*Vector3 wheelRestLocal = Vector3.down * distance_to_the_wheel_center;
         wheelTransform.localPosition = wheelRestLocal + transform.localPosition;
+        Debug.Log("Wheel " + name + ": wheelRestLocal " + wheelRestLocal);
+        Debug.Log("Wheel " + name + ": ray point local position " + transform.localPosition);*/
+        wheelTransform.position = transform.position + Vector3.down * distance_to_the_wheel_center;
 
         //<ROTATE WHEEL>
         Vector3 r = force_point - wheelCenterPoint;

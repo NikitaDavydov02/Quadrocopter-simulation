@@ -10,6 +10,8 @@ public class CartBase : ForceCalculationManager
      Vector3 forceOffset;*/
     //Rigidbody rb;
     [SerializeField]
+    BasicLiftForce basicLift;
+    [SerializeField]
     ResistanceForce resistanceForce;
     [SerializeField]
     List<WheelForce> wheelForces;
@@ -38,8 +40,11 @@ public class CartBase : ForceCalculationManager
             forceSources.Add(resistanceForce);
         foreach (IForce wheel in wheelForces)
             forceSources.Add(wheel);
+        
         if(engForce!=null)
             forceSources.Add(engForce);
+        if (basicLift != null)
+            forceSources.Add(basicLift);
     }
 
     // Update is called once per frame
