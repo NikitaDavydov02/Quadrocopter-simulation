@@ -7,7 +7,8 @@ public class EngineForce : MonoBehaviour, IForce
 
     public Vector3 AxisDirection;
     public float MaxForce;
-    public float Level;
+    private float Level;
+    private bool reverseOn;
     public float AxisRadius = 0.1f;
     public float RotationCoeffitient = 1f;
     public bool jet = false;
@@ -21,12 +22,76 @@ public class EngineForce : MonoBehaviour, IForce
 
     [SerializeField]
     private EngineAudioManager engineAudioManager;
+    [SerializeField]
+    private float reverseLevel = -0.1f;
+    private Vector3 closedPos;
+    private Vector3 openedPos;
+    [SerializeField]
+    private float reverseDoorOpenSpeed =  0.1f;
+    [SerializeField]
+    private Vector3 reverseDoorOpenOffset;
+    [SerializeField]
+    private Transform reverseDoor;
     // Start is called before the first frame update
+    public void SetEngineLevel(float Level)
+    {
+        if (!reverseOn)
+            this.Level = Level;
+    }
+    public void ReverseOn()
+    {
+        reverseOn = true;
+        this.Level = reverseLevel;
+        StopCoroutine(CloseReverseDoor());
+        StartCoroutine(OpenReverseDoor());
+    }
+    public void ReverseOff()
+    {
+        reverseOn = false;
+        this.Level = 0;
+        StopCoroutine(OpenReverseDoor());
+        StartCoroutine(CloseReverseDoor());
+    }
+    IEnumerator OpenReverseDoor()
+    {
+        //float elapsed = 0f;
+        Vector3 dr = openedPos - reverseDoor.localPosition;
+
+        while (Vector3.Dot(dr,reverseDoorOpenOffset)>0)
+        {
+            //elapsed += Time.deltaTime;
+            //float t = Mathf.SmoothStep(0f, 1f, elapsed / reverseDoorOpenDuration);
+            reverseDoor.localPosition += reverseDoorOpenOffset.normalized * Time.deltaTime * reverseDoorOpenSpeed;
+            dr = openedPos - reverseDoor.localPosition;
+            Debug.Log("Open door");
+            yield return null;
+        }
+
+        reverseDoor.localPosition = openedPos;
+    }
+    IEnumerator CloseReverseDoor()
+    {
+        //float elapsed = 0f;
+        Vector3 dr = closedPos - reverseDoor.localPosition;
+
+        while (Vector3.Dot(dr, -reverseDoorOpenOffset) > 0)
+        {
+            //elapsed += Time.deltaTime;
+            //float t = Mathf.SmoothStep(0f, 1f, elapsed / reverseDoorOpenDuration);
+            reverseDoor.localPosition += (-reverseDoorOpenOffset.normalized) * Time.deltaTime * reverseDoorOpenSpeed;
+            dr = closedPos - reverseDoor.localPosition;
+            Debug.Log("Close door");
+            yield return null;
+        }
+
+        reverseDoor.localPosition = closedPos;
+    }
     void Start()
     {
         firstRotationForceRelativePoint = new Vector3(AxisRadius, 0, 0);
         secondRotationForceRelativePoint = new Vector3(-AxisRadius, 0, 0);
-        
+        closedPos = reverseDoor.localPosition;
+        openedPos = closedPos + reverseDoorOpenOffset;
     }
 
     // Update is called once per frame

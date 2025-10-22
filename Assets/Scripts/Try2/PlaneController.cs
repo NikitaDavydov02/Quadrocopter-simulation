@@ -16,12 +16,20 @@ public class PlaneController : ForceCalculationManager
     List<float> engineLevels = new List<float>();
     public float maxEleronAngle = 2;
     public bool ControlActive = true;
-    public bool reverseIsOn = false;
-    public float engineReverseLevel = -0.2f;
+    //public bool reverseIsOn = false;
+    //public float engineReverseLevel = -0.2f;
     public float spoilerAngularSpeed = 90f;
     public float spoilerCurrentAngle = 0;
     //public float flapsAngularSpeed = 5f;
-
+    [SerializeField]
+    Transform steeringPart;
+    [SerializeField]
+    private float steeringSensitivity;
+    [SerializeField]
+    private float maxSteeringAngle;
+    private float steeringAngle;
+    [SerializeField]
+    List<WheelForce> wheels;
     [SerializeField]
     List<EngineForce> engines;
     [SerializeField]
@@ -79,6 +87,13 @@ public class PlaneController : ForceCalculationManager
     [SerializeField]
     private GearsAudioManager gearsAudioManager;
 
+    [SerializeField]
+    private ReverseManager reverseManager;
+    [SerializeField]
+    private SpoilersManager spoilersManager;
+    [SerializeField]
+    private List<FlapsManager> flapsManagers;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -99,6 +114,8 @@ public class PlaneController : ForceCalculationManager
         foreach (ResistanceForce f in resistanceForces)
             forceSources.Add(f);
         foreach (WingForce w in wings)
+            forceSources.Add(w);
+        foreach (WheelForce w in wheels)
             forceSources.Add(w);
         //forceSources.Add(gravityForce);
         if (leftSpoiler != null)
@@ -164,6 +181,28 @@ public class PlaneController : ForceCalculationManager
             horizontalController.Rotate(-horInput, 0, 0, Space.Self);
             horizontAngle -= horInput;
         }
+
+        float steeringInput = Input.GetAxis("Mouse X") * Time.deltaTime * steeringSensitivity;
+        steeringPart.Rotate(0, steeringInput, 0, Space.Self);
+        steeringAngle += steeringInput;
+        float correction = 0;
+        if (steeringAngle > maxSteeringAngle)
+            correction = maxSteeringAngle - steeringAngle;
+        if (steeringAngle < -maxSteeringAngle)
+            correction = -maxSteeringAngle - steeringAngle;
+        steeringPart.Rotate(0, correction, 0, Space.Self);
+        steeringAngle += correction;
+
+        if (Input.GetKeyDown(KeyCode.B) && ControlActive)
+        {
+            foreach (WheelForce w in wheels)
+                w.BrakeIn();
+        }
+        if (Input.GetKeyUp(KeyCode.B) && ControlActive)
+        {
+            foreach (WheelForce w in wheels)
+                w.BrakeOut();
+        }
         if (Input.GetKeyDown(KeyCode.A) && ControlActive)
         {
             leftElleron.Rotate(maxEleronAngle, 0, 0);
@@ -184,28 +223,50 @@ public class PlaneController : ForceCalculationManager
             leftElleron.Rotate(maxEleronAngle, 0, 0);
             rightElleron.Rotate(-maxEleronAngle, 0, 0);
         }
-        if (Input.GetKeyDown(KeyCode.F) && ControlActive)
-        {
-            flaps += flapsStep;
-            if (flaps > 1)
-                flaps = 1;
-            leftFlap.GetComponent<WingForce>().degree = flaps;
-            rightFlap.GetComponent<WingForce>().degree = flaps;
-        }
-        if (Input.GetKeyDown(KeyCode.V) && ControlActive)
-        {
-            Debug.Log("Flaps");
-            flaps -= flapsStep;
-            if (flaps <0)
-                flaps = 0;
-            leftFlap.GetComponent<WingForce>().degree = flaps;
-            rightFlap.GetComponent<WingForce>().degree = flaps;
-        }
-        if (Input.GetKeyDown(KeyCode.R) && ControlActive && leftSpoiler!=null)
+        if (Input.GetKeyDown(KeyCode.Alpha0) && ControlActive)
+            Flaps(0);
+        if (Input.GetKeyDown(KeyCode.Alpha1) && ControlActive)
+            Flaps(1);
+        if (Input.GetKeyDown(KeyCode.Alpha2) && ControlActive)
+            Flaps(2);
+        if (Input.GetKeyDown(KeyCode.Alpha3) && ControlActive)
+            Flaps(3);
+        if (Input.GetKeyDown(KeyCode.Alpha4) && ControlActive)
+            Flaps(4);
+        if (Input.GetKeyDown(KeyCode.Alpha5) && ControlActive)
+            Flaps(5);
+        if (Input.GetKeyDown(KeyCode.Alpha6) && ControlActive)
+            Flaps(6);
+        if (Input.GetKeyDown(KeyCode.Alpha7) && ControlActive)
+            Flaps(7);
+        if (Input.GetKeyDown(KeyCode.Alpha8) && ControlActive)
+            Flaps(8);
+        
+        /* if (Input.GetKeyDown(KeyCode.F) && ControlActive)
+         {
+             flaps += flapsStep;
+             if (flaps > 1)
+                 flaps = 1;
+             leftFlap.GetComponent<WingForce>().degree = flaps;
+             rightFlap.GetComponent<WingForce>().degree = flaps;
+         }
+         if (Input.GetKeyDown(KeyCode.V) && ControlActive)
+         {
+             Debug.Log("Flaps");
+             flaps -= flapsStep;
+             if (flaps <0)
+                 flaps = 0;
+             leftFlap.GetComponent<WingForce>().degree = flaps;
+             rightFlap.GetComponent<WingForce>().degree = flaps;
+         }*/
+
+        if (Input.GetKeyDown(KeyCode.R) && ControlActive)
         {
             Debug.Log("Reverse");
-            reverseIsOn = !reverseIsOn;
-            if (reverseIsOn)
+            reverseManager.ReverseToggle();
+            spoilersManager.SpoilersToggle();
+            /*reverseIsOn = !reverseIsOn;
+            if(reverseIsOn)
             {
                 leftSpoiler.GetComponent<WingForce>().degree = 1;
                 rightSpoiler.GetComponent<WingForce>().degree = 1;
@@ -220,7 +281,7 @@ public class PlaneController : ForceCalculationManager
                 rightSpoiler.Rotate(-90, 0, 0, Space.Self);
                 for (int i = 0; i < engineLevels.Count; i++)
                     engineLevels[i] = 0.1f;
-            }
+            }*/
 
         }
         if (Input.GetKeyDown(KeyCode.G) && ControlActive)
@@ -231,11 +292,11 @@ public class PlaneController : ForceCalculationManager
             else
                 gearsAudioManager.GearsDown();
         }
-        if (reverseIsOn)
+        /*if (reverseIsOn)
             for (int i = 0; i < engineLevels.Count; i++)
-                engineLevels[i] = engineReverseLevel;
+                engineLevels[i] = engineReverseLevel;*/
         for (int i = 0; i < engineLevels.Count; i++)
-            engines[i].Level = engineLevels[i];
+            engines[i].SetEngineLevel(engineLevels[i]);
 
         
     }
@@ -262,7 +323,11 @@ public class PlaneController : ForceCalculationManager
     //    ForceToCenterOfMass = Vector3.zero;
     //    MomentInCoordinatesTranslatedToCenterOfMass = Vector3.zero;
     //}
-
+    public void Flaps(int pos)
+    {
+        foreach (FlapsManager m in flapsManagers)
+            m.Flaps(pos);
+    }
     public void CountState()
     {
         AngularVelocityInLocalCoordinates = transform.InverseTransformDirection(rb.angularVelocity);

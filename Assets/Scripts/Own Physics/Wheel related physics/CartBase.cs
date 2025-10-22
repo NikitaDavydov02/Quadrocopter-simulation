@@ -66,14 +66,14 @@ public class CartBase : ForceCalculationManager
         }
         if (engForce != null)
         {
-            if (Input.GetKey(KeyCode.W))
+            /*if (Input.GetKey(KeyCode.W))
                 engForce.Level += gasIncrementSpeed * Time.deltaTime;
             if (Input.GetKey(KeyCode.S))
                 engForce.Level -= gasIncrementSpeed * Time.deltaTime;
             if (engForce.Level > 1)
                 engForce.Level = 1;
             if (engForce.Level < 0)
-                engForce.Level = 0;
+                engForce.Level = 0;*/
         }
         float steeringInput = Input.GetAxis("Mouse X") * Time.deltaTime * steeringSensitivity;
         foreach(Transform t in steeredWheels)

@@ -14,7 +14,7 @@ public class WingForce : MonoBehaviour, IForce
     public AnimationCurve CyDependenceVSAngleOfAtack;
     public bool constatnProfile = false;
     private float area;
-    public Rigidbody rb;
+    private Rigidbody rb;
     public float degree = 1;
     public float angleOfAtack = 0;
     
@@ -64,8 +64,11 @@ public class WingForce : MonoBehaviour, IForce
     void Start()
     {
         area = length * chord;
-        rb = gameObject.transform.parent.GetComponent<Rigidbody>();
-        
+        //if(rb=null)
+        //   rb = gameObject.transform.parent.GetComponent<Rigidbody>();
+        rb = GetComponentInParent<Rigidbody>();
+
+
         int currentProfile = rb.GetComponent<PlaneController>().currentProfile;
         if (currentProfile == -1)
             return;

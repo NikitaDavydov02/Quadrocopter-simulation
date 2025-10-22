@@ -74,9 +74,9 @@ public class PlaneFlightController : ForceCalculationManager
             engineLevels[i] = generalLevel;
         float vwrticalInput = -Input.GetAxis("Mouse Y") * Time.deltaTime* heigtSensitivity;
         heightController.Rotate(vwrticalInput, 0, 0);
-        
+
         for (int i = 0; i < engineLevels.Count; i++)
-            engines[i].Level = engineLevels[i];
+            engines[i].SetEngineLevel(engineLevels[i]);
     }
     //private void LateUpdate()
     //{

@@ -85,7 +85,7 @@ public abstract class QuadFlightControler : ForceCalculationManager
             TurnLeft();
         }
         for (int i = 0; i < engineLevels.Count; i++)
-            engines[i].Level = engineLevels[i];
+            engines[i].SetEngineLevel(engineLevels[i]);
 
 
     }

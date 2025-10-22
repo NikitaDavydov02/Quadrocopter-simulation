@@ -21,7 +21,8 @@ public class WheelForce : MonoBehaviour, IForce
     
 
     public WheelStatus status;
-    
+    [SerializeField]
+    private GameObject airplane;
     [SerializeField]
     private float friction_coeff;
     [SerializeField]
@@ -69,6 +70,10 @@ public class WheelForce : MonoBehaviour, IForce
     private Rigidbody parent_rb;
     [SerializeField]
     Transform wheelTransform;
+    [SerializeField]
+    Transform boogieTransform;
+    [SerializeField]
+    private float relativeBoogieNeutralPosition;
 
     private float time;
     private StreamWriter sw;
@@ -85,24 +90,28 @@ public class WheelForce : MonoBehaviour, IForce
         sw = new StreamWriter(new FileStream(logPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite));
         sw.AutoFlush = true;
         //sw.Close();
-        parent_rb = transform.root.GetComponent<Rigidbody>();
+        parent_rb = airplane.GetComponent<Rigidbody>();
         wheelMeshRenderer = wheelTransform.gameObject.GetComponent<MeshRenderer>();
         if (wheel_inertia_moment == 0)
             Debug.LogError("wheel_inertia_moment==0");
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         time += Time.deltaTime;
         sw.Write(time + ";");
         UpdateStatus();
 
-        /*Vector3 wheelRestLocal = Vector3.down * distance_to_the_wheel_center;
-        wheelTransform.localPosition = wheelRestLocal + transform.localPosition;
-        Debug.Log("Wheel " + name + ": wheelRestLocal " + wheelRestLocal);
-        Debug.Log("Wheel " + name + ": ray point local position " + transform.localPosition);*/
-        wheelTransform.position = transform.position + Vector3.down * distance_to_the_wheel_center;
+        //wheelTransform.position = transform.position + transform.TransformDirection(Vector3.down) * distance_to_the_wheel_center;
+        if (boogieTransform != null)
+        {
+            Vector3 newBoggiePos = transform.position + airplane.transform.TransformDirection(Vector3.down) * (relativeBoogieNeutralPosition + distance_to_the_wheel_center - rest_distance_to_the_wheel_center);
+            boogieTransform.Translate(newBoggiePos - boogieTransform.position, Space.World);
+            Debug.Log("Distance to the wheel center: " + distance_to_the_wheel_center);
+        }
+        else
+            wheelTransform.position = transform.position + transform.TransformDirection(Vector3.down) * distance_to_the_wheel_center;
 
         //<ROTATE WHEEL>
         Vector3 r = force_point - wheelCenterPoint;
@@ -145,7 +154,7 @@ public class WheelForce : MonoBehaviour, IForce
         force_point = Vector3.zero;
         frictionForce = Vector3.zero;
         //Debug.DrawLine(transform.position, reactionNormalForcePoint, Color.green);
-        if (reactionNormalForcePoint!=Vector3.zero)
+        if (reactionNormalForcePoint!=Vector3.zero && Vector3.Dot(reactionNormalForce,Vector3.up)>=0)
         {
             
             force_point = reactionNormalForcePoint;
@@ -154,7 +163,7 @@ public class WheelForce : MonoBehaviour, IForce
             {
                 //reactionNormalForce = Vector3.up * parent_rb.mass * 9.81f / 4f;//COMMENT
                 frictionForce = -slidingSpeed.normalized * friction_coeff * reactionNormalForce.magnitude;
-                //frictionForce.y = 0;//COMMENT
+                frictionForce.y = 0;//COMMENT
                 //force_abs += frictionForce;
             }
 
@@ -224,16 +233,20 @@ public class WheelForce : MonoBehaviour, IForce
     }
     public void UpdateStatus()
     {
-        Debug.Log("Update status of whell entered");
+        /*Collider[] neighbors = Physics.OverlapCapsule(wheelCenterPoint, wheelCenterPoint, R*1.05f);
+        Collider terrain = null;
+        foreach (Collider collider in neighbors)
+        {
+            if(collider.gameObject.transform.root!=transform.root)
+            {
+                Debug.Log("Collision: " + collider.name);
+                terrain = collider;
+            }
+
+        }*/
+            
         //<CHECK IN AIR>
         RaycastHit raycastHit;
-        //int ignoreLayer = LayerMask.NameToLayer("IgnoreRaycast");
-        //int ignoreMask = (1 << ignoreLayer);
-        //int mask = ~ignoreMask;
-        
-        //int raycastLayer = LayerMask.GetMask("IgnoreRaycast");
-        //int ignoreRaycastLayer = ~raycastLayer;
-
         int raycastLayer = LayerMask.NameToLayer("Ignore Raycast");
         int ignoreRaycastLayer = ~(1 << raycastLayer);
         Debug.Log("raycat layer: " + raycastLayer);
@@ -318,5 +331,25 @@ public class WheelForce : MonoBehaviour, IForce
     void OnApplicationQuit()
     {
         sw?.Close();
+    }
+    void OnTriggerEnter(Collider other)
+    {
+       /* other.
+        foreach (ContactPoint point in collision.contacts)
+        {
+            WheelForce wheelForce = point.thisCollider.gameObject.GetComponent<WheelForce>();
+            if (wheelForce != null)
+            {
+
+                wheelForce.reactionNormalForcePoint = point.point;
+                wheelForce.reactionForceWasUpdated = true;
+                Debug.Log("Wheel contact: " + point.thisCollider.gameObject.name);
+                Debug.Log("Wheel contact point: " + point.point);
+                Vector3 touchPointVelocity = rb.GetPointVelocity(wheelForce.reactionNormalForcePoint);
+                wheelForce.touchGroundPointVelocity = touchPointVelocity;
+                wheelForce.reactionNormalForce = reactionForce;
+                Debug.DrawLine(wheelForce.reactionNormalForcePoint, wheelForce.reactionNormalForcePoint + reactionForce, Color.red);
+            }
+        }*/
     }
 }
