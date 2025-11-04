@@ -21,13 +21,15 @@ public class PlaneController : ForceCalculationManager
     public float spoilerAngularSpeed = 90f;
     public float spoilerCurrentAngle = 0;
     //public float flapsAngularSpeed = 5f;
-    [SerializeField]
-    Transform steeringPart;
+   // [SerializeField]
+   // Transform steeringPart;
     [SerializeField]
     private float steeringSensitivity;
+    //[SerializeField]
+    //private float maxSteeringAngle;
+    // private float steeringAngle;
     [SerializeField]
-    private float maxSteeringAngle;
-    private float steeringAngle;
+    private SteeringManager steeringManager;
     [SerializeField]
     List<WheelForce> wheels;
     [SerializeField]
@@ -93,7 +95,10 @@ public class PlaneController : ForceCalculationManager
     private SpoilersManager spoilersManager;
     [SerializeField]
     private List<FlapsManager> flapsManagers;
-
+    [SerializeField]
+    private AileronManager aileronManager;
+    [SerializeField]
+    private GearManager gearManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -183,15 +188,16 @@ public class PlaneController : ForceCalculationManager
         }
 
         float steeringInput = Input.GetAxis("Mouse X") * Time.deltaTime * steeringSensitivity;
-        steeringPart.Rotate(0, steeringInput, 0, Space.Self);
-        steeringAngle += steeringInput;
-        float correction = 0;
-        if (steeringAngle > maxSteeringAngle)
-            correction = maxSteeringAngle - steeringAngle;
-        if (steeringAngle < -maxSteeringAngle)
-            correction = -maxSteeringAngle - steeringAngle;
-        steeringPart.Rotate(0, correction, 0, Space.Self);
-        steeringAngle += correction;
+        steeringManager.SteeringInput(steeringInput);
+        //steeringPart.Rotate(0, steeringInput, 0, Space.Self);
+        //steeringAngle += steeringInput;
+        //float correction = 0;
+        //if (steeringAngle > maxSteeringAngle)
+        //    correction = maxSteeringAngle - steeringAngle;
+        //if (steeringAngle < -maxSteeringAngle)
+        //    correction = -maxSteeringAngle - steeringAngle;
+        //steeringPart.Rotate(0, correction, 0, Space.Self);
+        //steeringAngle += correction;
 
         if (Input.GetKeyDown(KeyCode.B) && ControlActive)
         {
@@ -203,26 +209,37 @@ public class PlaneController : ForceCalculationManager
             foreach (WheelForce w in wheels)
                 w.BrakeOut();
         }
-        if (Input.GetKeyDown(KeyCode.A) && ControlActive)
+
+        if (Input.GetKey(KeyCode.A) && ControlActive)
         {
-            leftElleron.Rotate(maxEleronAngle, 0, 0);
-            rightElleron.Rotate(-maxEleronAngle, 0, 0);
+            aileronManager.AileronDeflection(1);
         }
-        if (Input.GetKeyUp(KeyCode.A) && ControlActive)
+        else if (Input.GetKey(KeyCode.D) && ControlActive)
         {
-            leftElleron.Rotate(-maxEleronAngle, 0, 0);
-            rightElleron.Rotate(maxEleronAngle, 0, 0);
+            aileronManager.AileronDeflection(-1);
         }
-        if (Input.GetKeyDown(KeyCode.D) && ControlActive)
-        {
-            leftElleron.Rotate(-maxEleronAngle, 0, 0);
-            rightElleron.Rotate(maxEleronAngle, 0, 0);
-        }
-        if (Input.GetKeyUp(KeyCode.D) && ControlActive)
-        {
-            leftElleron.Rotate(maxEleronAngle, 0, 0);
-            rightElleron.Rotate(-maxEleronAngle, 0, 0);
-        }
+        else
+            aileronManager.AileronDeflection(0);
+        /* if (Input.GetKeyDown(KeyCode.A) && ControlActive)
+         {
+             //leftElleron.Rotate(maxEleronAngle, 0, 0);
+            // rightElleron.Rotate(-maxEleronAngle, 0, 0);
+         }
+         if (Input.GetKeyUp(KeyCode.A) && ControlActive)
+         {
+             //leftElleron.Rotate(-maxEleronAngle, 0, 0);
+             //rightElleron.Rotate(maxEleronAngle, 0, 0);
+         }
+         if (Input.GetKeyDown(KeyCode.D) && ControlActive)
+         {
+             //leftElleron.Rotate(-maxEleronAngle, 0, 0);
+             //rightElleron.Rotate(maxEleronAngle, 0, 0);
+         }
+         if (Input.GetKeyUp(KeyCode.D) && ControlActive)
+         {
+             //leftElleron.Rotate(maxEleronAngle, 0, 0);
+            // rightElleron.Rotate(-maxEleronAngle, 0, 0);
+         }*/
         if (Input.GetKeyDown(KeyCode.Alpha0) && ControlActive)
             Flaps(0);
         if (Input.GetKeyDown(KeyCode.Alpha1) && ControlActive)
@@ -286,11 +303,12 @@ public class PlaneController : ForceCalculationManager
         }
         if (Input.GetKeyDown(KeyCode.G) && ControlActive)
         {
-            gearsUp = !gearsUp;
+            gearManager.ToggleGears();
+            /*gearsUp = !gearsUp;
             if (gearsUp)
                 gearsAudioManager.GearsUp();
             else
-                gearsAudioManager.GearsDown();
+                gearsAudioManager.GearsDown();*/
         }
         /*if (reverseIsOn)
             for (int i = 0; i < engineLevels.Count; i++)

@@ -26,7 +26,7 @@ public class MechanicalEngineForce : MonoBehaviour
     void Update()
     {
         if (engineAudioManager != null)
-            engineAudioManager.level = Level;
+            engineAudioManager.rotationlevel = Level;
         if (Input.GetKey(KeyCode.W))
             Level += gasIncrementSpeed * Time.deltaTime;
         if (Input.GetKey(KeyCode.S))

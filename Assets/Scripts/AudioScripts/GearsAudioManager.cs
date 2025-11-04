@@ -4,22 +4,18 @@ using UnityEngine;
 
 public class GearsAudioManager : MonoBehaviour
 {
-    Collider collider;
     [SerializeField]
     AudioSource gearsAudioSource;
-    [SerializeField]
-    AudioClip gearsTouch;
-    [SerializeField]
-    AudioClip gearsRolling;
+    
     [SerializeField]
     AudioClip gearsUp;
     [SerializeField]
     AudioClip gearsDown;
-    Rigidbody rb;
+    //Rigidbody rb;
     // Start is called before the first frame update
     void Start()
     {
-        rb = gameObject.GetComponent<Rigidbody>();
+        //rb = gameObject.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -27,7 +23,7 @@ public class GearsAudioManager : MonoBehaviour
     {
         
     }
-    private void OnCollisionEnter(Collision collision)
+    /*private void OnCollisionEnter(Collision collision)
     {
         gearsAudioSource.PlayOneShot(gearsTouch);
         Debug.Log("Collide");
@@ -46,13 +42,15 @@ public class GearsAudioManager : MonoBehaviour
     private void OnCollisionExit(Collision collision)
     {
         gearsAudioSource.Stop();
-    }
+    }*/
     public void GearsUp()
     {
+        Debug.Log("Gear up audio");
         gearsAudioSource.PlayOneShot(gearsUp);
     }
     public void GearsDown()
     {
+        Debug.Log("Gear down audio");
         gearsAudioSource.PlayOneShot(gearsDown);
     }
 }

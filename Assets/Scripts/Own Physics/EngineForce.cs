@@ -7,7 +7,9 @@ public class EngineForce : MonoBehaviour, IForce
 
     public Vector3 AxisDirection;
     public float MaxForce;
-    private float Level;
+    public float NominalLevel;
+    public float EffectiveLevel;
+    public float ReverseDegree;
     private bool reverseOn;
     public float AxisRadius = 0.1f;
     public float RotationCoeffitient = 1f;
@@ -24,6 +26,7 @@ public class EngineForce : MonoBehaviour, IForce
     private EngineAudioManager engineAudioManager;
     [SerializeField]
     private float reverseLevel = -0.1f;
+
     private Vector3 closedPos;
     private Vector3 openedPos;
     [SerializeField]
@@ -33,22 +36,22 @@ public class EngineForce : MonoBehaviour, IForce
     [SerializeField]
     private Transform reverseDoor;
     // Start is called before the first frame update
-    public void SetEngineLevel(float Level)
+    public void SetEngineLevel(float NominalLevel)
     {
-        if (!reverseOn)
-            this.Level = Level;
+        //if (!reverseOn)
+            this.NominalLevel = NominalLevel;
     }
     public void ReverseOn()
     {
         reverseOn = true;
-        this.Level = reverseLevel;
+        //this.NominalLevel = reverseNominalLevel;
         StopCoroutine(CloseReverseDoor());
         StartCoroutine(OpenReverseDoor());
     }
     public void ReverseOff()
     {
         reverseOn = false;
-        this.Level = 0;
+        //this.NominalLevel = 0;
         StopCoroutine(OpenReverseDoor());
         StartCoroutine(CloseReverseDoor());
     }
@@ -59,6 +62,7 @@ public class EngineForce : MonoBehaviour, IForce
 
         while (Vector3.Dot(dr,reverseDoorOpenOffset)>0)
         {
+            ReverseDegree = 1 - dr.magnitude / reverseDoorOpenOffset.magnitude;
             //elapsed += Time.deltaTime;
             //float t = Mathf.SmoothStep(0f, 1f, elapsed / reverseDoorOpenDuration);
             reverseDoor.localPosition += reverseDoorOpenOffset.normalized * Time.deltaTime * reverseDoorOpenSpeed;
@@ -74,8 +78,11 @@ public class EngineForce : MonoBehaviour, IForce
         //float elapsed = 0f;
         Vector3 dr = closedPos - reverseDoor.localPosition;
 
+     
+
         while (Vector3.Dot(dr, -reverseDoorOpenOffset) > 0)
         {
+            ReverseDegree = dr.magnitude / reverseDoorOpenOffset.magnitude;
             //elapsed += Time.deltaTime;
             //float t = Mathf.SmoothStep(0f, 1f, elapsed / reverseDoorOpenDuration);
             reverseDoor.localPosition += (-reverseDoorOpenOffset.normalized) * Time.deltaTime * reverseDoorOpenSpeed;
@@ -97,21 +104,25 @@ public class EngineForce : MonoBehaviour, IForce
     // Update is called once per frame
     void Update()
     {
-       if(engineAudioManager!=null)
-            engineAudioManager.level = Level;
+        if (engineAudioManager != null)
+        {
+            engineAudioManager.rotationlevel = NominalLevel;
+            engineAudioManager.reverseDegree = ReverseDegree;
+        }
     }
 
     public void CountForce(out List<Vector3> CurrentForceVectors, out List<Vector3> AbsolutePointsOfForceApplying)
     {
         CurrentForceVectors = new List<Vector3>();
         AbsolutePointsOfForceApplying = new List<Vector3>();
-        Vector3 force = AxisDirection * MaxForce * Level;
+        EffectiveLevel = NominalLevel + (reverseLevel - NominalLevel) * ReverseDegree;
+        Vector3 force = AxisDirection * MaxForce * EffectiveLevel;
         
         force = transform.TransformDirection(force);
         CurrentForceVectors.Add(force);
         Vector3 pointOfApplication = Vector3.zero;
         AbsolutePointsOfForceApplying.Add(transform.TransformPoint(pointOfApplication));
-        Vector3 firstRotationForceRelative = RotationCoeffitient*MaxForce * Level * new Vector3(0, 0, 1);
+        Vector3 firstRotationForceRelative = RotationCoeffitient*MaxForce * EffectiveLevel * new Vector3(0, 0, 1);
         Vector3 secondRotationForceRelative = -firstRotationForceRelative;
         if (!clockwiseRotation)
         {

@@ -10,11 +10,15 @@ public class EngineAudioManager : MonoBehaviour
     private AudioClip reverseAudioClip;
     [SerializeField]
     private AudioSource engineAudioSource;
-    public float level = 0f;
+    [SerializeField]
+    private AudioSource reverseAudioSource;
+    public float rotationlevel = 0f;
+    public float reverseDegree = 0f;
     public float minPitch = 1f;
     public float maxPitch = 2f;
     public float minVolume = 0f;
     public float maxVolume = 2f;
+    public float maxReverseVolme = 0.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -26,28 +30,27 @@ public class EngineAudioManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (level >= 0)
+        if (engineAudioSource.clip != engineAudioClip)
         {
-            if (engineAudioSource.clip != engineAudioClip)
-            {
-                engineAudioSource.clip = engineAudioClip;
-                engineAudioSource.Play();
-            }
-            engineAudioSource.pitch = minPitch + (maxPitch - minPitch) * level;
-            engineAudioSource.volume = (maxVolume - minVolume) * level;
+            engineAudioSource.clip = engineAudioClip;
+            engineAudioSource.Play();
+        }
+        engineAudioSource.pitch = minPitch + (maxPitch - minPitch) * rotationlevel;
+        engineAudioSource.volume = (maxVolume - minVolume) * rotationlevel;
 
-        }
-        else 
+        if (reverseDegree > 0)
         {
-            if(engineAudioSource.clip!=reverseAudioClip)
+            if (reverseAudioSource.clip != reverseAudioClip)
             {
-                engineAudioSource.clip = reverseAudioClip;
-                engineAudioSource.pitch = 1;
-                //engineAudioSource.volume = (maxVolume - minVolume) * level;
-                engineAudioSource.volume = 0.25f;
-                engineAudioSource.Play();
+                reverseAudioSource.clip = reverseAudioClip;
+
+                //engineAudioSource.volume = 0.25f;
+                reverseAudioSource.Play();
             }
-            
+            reverseAudioSource.pitch = 1;
+            reverseAudioSource.volume = maxReverseVolme * (reverseDegree*rotationlevel);
         }
+        else
+            reverseAudioSource.volume = 0;
     }
 }

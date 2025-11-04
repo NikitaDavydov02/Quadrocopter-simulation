@@ -74,9 +74,12 @@ public class WheelForce : MonoBehaviour, IForce
     Transform boogieTransform;
     [SerializeField]
     private float relativeBoogieNeutralPosition;
+    
 
     private float time;
     private StreamWriter sw;
+
+    public bool active = true;
     // Start is called before the first frame update
     void OnDestroy()
     {
@@ -154,7 +157,7 @@ public class WheelForce : MonoBehaviour, IForce
         force_point = Vector3.zero;
         frictionForce = Vector3.zero;
         //Debug.DrawLine(transform.position, reactionNormalForcePoint, Color.green);
-        if (reactionNormalForcePoint!=Vector3.zero && Vector3.Dot(reactionNormalForce,Vector3.up)>=0)
+        if (reactionNormalForcePoint!=Vector3.zero && Vector3.Dot(reactionNormalForce,Vector3.up)>=0 && active)
         {
             
             force_point = reactionNormalForcePoint;
