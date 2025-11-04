@@ -365,11 +365,4 @@ public class PlaneController : ForceCalculationManager
     //    Debug.DrawLine(pointOfApplicationINWorldCoordinates, pointOfApplicationINWorldCoordinates + dM, Color.blue);
     //    Debug.DrawLine(rb.worldCenterOfMass, rb.worldCenterOfMass + r, Color.green);
     //}
-    public IEnumerator SpoilersOn()
-    {
-        leftSpoiler.Rotate(spoilerAngularSpeed * Time.deltaTime,0,0,Space.Self);
-        rightSpoiler.Rotate(spoilerAngularSpeed * Time.deltaTime, 0, 0, Space.Self);
-        spoilerCurrentAngle += spoilerAngularSpeed * Time.deltaTime;
-        yield return null;
-    }
 }

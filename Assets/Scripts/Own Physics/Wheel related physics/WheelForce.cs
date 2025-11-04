@@ -81,6 +81,9 @@ public class WheelForce : MonoBehaviour, IForce
 
     public bool active = true;
     // Start is called before the first frame update
+
+    [SerializeField]
+    private WheelAudioManager wheelAudioManager;
     void OnDestroy()
     {
         //sw.Close();
@@ -280,6 +283,8 @@ public class WheelForce : MonoBehaviour, IForce
             status = WheelStatus.InAir;
             wheelMeshRenderer.material.color = Color.blue;
             Debug.DrawLine(parent_rb.position, wheelCenterPoint, Color.black);
+            if (wheelAudioManager != null)
+                wheelAudioManager.roll = false;
             return;
         }
 
@@ -320,6 +325,11 @@ public class WheelForce : MonoBehaviour, IForce
                 status = WheelStatus.Roll;
                 wheelMeshRenderer.material.color = Color.green;
             }
+        }
+        if (wheelAudioManager != null)
+        {
+            wheelAudioManager.roll = true;
+            wheelAudioManager.CurrentSpeed = touchRimPointVelocity.magnitude;
         }
         //</UPDATE STATUS>
     }
