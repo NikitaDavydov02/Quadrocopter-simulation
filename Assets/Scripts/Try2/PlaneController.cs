@@ -56,9 +56,18 @@ public class PlaneController : ForceCalculationManager
     Transform leftSpoiler;
     [SerializeField]
     Transform rightSpoiler;
-
     [SerializeField]
-    TMP_Text accelText;
+    private Transform horizontalStabilizer;
+    [SerializeField]
+    private float maxTrimAngle = 30f;
+    [SerializeField]
+    private float minTrimAngle = -5f;
+    [SerializeField]
+    private float trimRate = 2f;
+    private float currentTrimAngle;
+
+   // [SerializeField]
+   // TMP_Text accelText;
     double lastVelocity = 0f;
 
     public float flaps = 0;
@@ -99,6 +108,17 @@ public class PlaneController : ForceCalculationManager
     private AileronManager aileronManager;
     [SerializeField]
     private GearManager gearManager;
+
+    public float StabilizerTrimAngle
+    {
+        get
+        {
+            float currentAngle = horizontalStabilizer.localEulerAngles.x;
+            if (currentAngle > 180f)
+                currentAngle -= 360f;
+            return currentAngle;
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -141,8 +161,8 @@ public class PlaneController : ForceCalculationManager
         foreach (ResistanceForce rf in resistanceForces)
             rf.density = density;
         rb.centerOfMass = centerOfMassLocal;
-        if (accelText!=null)
-            accelText.text = ((rb.velocity.magnitude - lastVelocity)/ Time.deltaTime).ToString("0.00");
+        //if (accelText!=null)
+        //    accelText.text = ((rb.velocity.magnitude - lastVelocity)/ Time.deltaTime).ToString("0.00");
         lastVelocity = rb.velocity.magnitude;
 
         Debug.Log("Inertia tensor" + rb.inertiaTensor);
@@ -240,7 +260,7 @@ public class PlaneController : ForceCalculationManager
              //leftElleron.Rotate(maxEleronAngle, 0, 0);
             // rightElleron.Rotate(-maxEleronAngle, 0, 0);
          }*/
-        if (Input.GetKeyDown(KeyCode.Alpha0) && ControlActive)
+       /* if (Input.GetKeyDown(KeyCode.Alpha0) && ControlActive)
             Flaps(0);
         if (Input.GetKeyDown(KeyCode.Alpha1) && ControlActive)
             Flaps(1);
@@ -257,7 +277,7 @@ public class PlaneController : ForceCalculationManager
         if (Input.GetKeyDown(KeyCode.Alpha7) && ControlActive)
             Flaps(7);
         if (Input.GetKeyDown(KeyCode.Alpha8) && ControlActive)
-            Flaps(8);
+            Flaps(8);*/
         
         /* if (Input.GetKeyDown(KeyCode.F) && ControlActive)
          {
@@ -301,15 +321,7 @@ public class PlaneController : ForceCalculationManager
             }*/
 
         }
-        if (Input.GetKeyDown(KeyCode.G) && ControlActive)
-        {
-            gearManager.ToggleGears();
-            /*gearsUp = !gearsUp;
-            if (gearsUp)
-                gearsAudioManager.GearsUp();
-            else
-                gearsAudioManager.GearsDown();*/
-        }
+        
         /*if (reverseIsOn)
             for (int i = 0; i < engineLevels.Count; i++)
                 engineLevels[i] = engineReverseLevel;*/
@@ -341,6 +353,10 @@ public class PlaneController : ForceCalculationManager
     //    ForceToCenterOfMass = Vector3.zero;
     //    MomentInCoordinatesTranslatedToCenterOfMass = Vector3.zero;
     //}
+    public void ToggleGear()
+    {
+        gearManager.ToggleGears();
+    }
     public void Flaps(int pos)
     {
         foreach (FlapsManager m in flapsManagers)
@@ -350,6 +366,20 @@ public class PlaneController : ForceCalculationManager
     {
         AngularVelocityInLocalCoordinates = transform.InverseTransformDirection(rb.angularVelocity);
         VelocityInLocalCoordinates = transform.InverseTransformDirection(rb.velocity);
+    }
+    public void Trim(float input)
+    {
+        float d_angle = trimRate * Time.deltaTime * input;
+        Vector3 rot = horizontalStabilizer.localEulerAngles;
+        rot.x += d_angle;
+        float currentAngle = rot.x;
+        if (currentAngle > 180f)
+            currentAngle -= 360f;
+        if (currentAngle < minTrimAngle)
+            rot.x = minTrimAngle;
+        if (currentAngle > maxTrimAngle)
+            rot.x = maxTrimAngle;
+        horizontalStabilizer.localEulerAngles = rot;
     }
     //}
     //private void AddForce(Vector3 forceInWorldCoordinates, Vector3 pointOfApplicationINWorldCoordinates)

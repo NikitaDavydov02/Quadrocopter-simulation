@@ -24,8 +24,8 @@ public class GearManager : MonoBehaviour
     private List<WheelForce> wheels;
     [SerializeField]
     private float extensionTime;
-    private bool extended = true;
-    private bool inProgress = false;
+    public bool extended { get; private set; }
+    public bool inProgress { get; private set; }
     private float elapsedTime = 0f;
 
     [SerializeField]
@@ -38,6 +38,8 @@ public class GearManager : MonoBehaviour
     private GearsAudioManager gearsAudioManager;
     void Start()
     {
+        extended = true;
+        inProgress = false;
         /*gear_init_rotation = gear.localRotation;
         Quaternion rotation = Quaternion.AngleAxis(maxExtensionAngle, Vector3.forward);
         gear_extended_rotation = gear_init_rotation * rotation;
