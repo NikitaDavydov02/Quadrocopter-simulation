@@ -12,7 +12,13 @@ public class FlighInstrumentsManager : MonoBehaviour
     private EngineForce rightEngine;
     [SerializeField]
     private PlaneController planeController;
-    
+    [SerializeField]
+    private AircraftRadar radar;
+
+    public bool ILS_captured { get { return radar.ILS_captured; } }
+    public float Angle_ILS_hor { get { return radar.Angle_ILS_hor; } }
+    public float Angle_ILS_ver { get { return radar.Angle_ILS_ver; } }
+
     public float PitchAngle { get
         {
             float pitch = gyroscope.transform.eulerAngles.x;

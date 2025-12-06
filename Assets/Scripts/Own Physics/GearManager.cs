@@ -36,6 +36,8 @@ public class GearManager : MonoBehaviour
 
     [SerializeField]
     private GearsAudioManager gearsAudioManager;
+
+
     void Start()
     {
         extended = true;

@@ -77,13 +77,18 @@ public class WheelForce : MonoBehaviour, IForce
     
 
     private float time;
-    private StreamWriter sw;
+    //private StreamWriter sw;
 
     public bool active = true;
     // Start is called before the first frame update
 
     [SerializeField]
     private WheelAudioManager wheelAudioManager;
+
+    [SerializeField]
+    private ParticleSystem smokeParticleSystem;
+    [SerializeField]
+    private float smokeTresholdSpeed;
     void OnDestroy()
     {
         //sw.Close();
@@ -93,8 +98,8 @@ public class WheelForce : MonoBehaviour, IForce
         string logPath = "C:\\Users\\User\\Documents\\unity_log_" + gameObject.name + ".txt";
         //sw = new StreamWriter(File.Create("C:\\Users\\User\\Documents\\unity_log.txt"));
         //sw.WriteLine("Hi!");
-        sw = new StreamWriter(new FileStream(logPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite));
-        sw.AutoFlush = true;
+        //sw = new StreamWriter(new FileStream(logPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite));
+        //sw.AutoFlush = true;
         //sw.Close();
         parent_rb = airplane.GetComponent<Rigidbody>();
         wheelMeshRenderer = wheelTransform.gameObject.GetComponent<MeshRenderer>();
@@ -106,7 +111,7 @@ public class WheelForce : MonoBehaviour, IForce
     void FixedUpdate()
     {
         time += Time.deltaTime;
-        sw.Write(time + ";");
+        //sw.Write(time + ";");
         UpdateStatus();
 
         //wheelTransform.position = transform.position + transform.TransformDirection(Vector3.down) * distance_to_the_wheel_center;
@@ -152,7 +157,22 @@ public class WheelForce : MonoBehaviour, IForce
         //--------------------------------//
         wheelTransform.Rotate(Vector3.up, angularVelocity * Time.deltaTime*Mathf.Rad2Deg, Space.Self);
         //</ROTATE WHEEL>
-        sw.WriteLine();
+        //sw.WriteLine();
+
+        if (smokeParticleSystem != null)
+        {
+            if (status != WheelStatus.InAir && smokeParticleSystem != null)
+            {
+                if (slidingSpeed.magnitude > smokeTresholdSpeed)
+                    smokeParticleSystem.enableEmission = true;
+                else
+                    smokeParticleSystem.enableEmission = false;
+
+            }
+            else
+                smokeParticleSystem.enableEmission = false;
+        }
+        
     }
     public void CountForce(out List<Vector3> CurrentForceVectors, out List<Vector3> AbsolutePointsOfForceApplying)
     {
@@ -231,8 +251,8 @@ public class WheelForce : MonoBehaviour, IForce
         if (dx < -max_dx)
             dx = -max_dx;
 
-        sw.Write(dx + ";");
-        sw.Write(spring_velocity + ";");
+        //sw.Write(dx + ";");
+        //sw.Write(spring_velocity + ";");
         Debug.Log("Force_dx: " + dx);
         Debug.Log("Force_v: " + spring_velocity);
         return (dx * k_stiffness + spring_velocity * dumping_coeff);// + velocity * dumping_coeff);
@@ -343,7 +363,7 @@ public class WheelForce : MonoBehaviour, IForce
     }
     void OnApplicationQuit()
     {
-        sw?.Close();
+       // sw?.Close();
     }
     void OnTriggerEnter(Collider other)
     {

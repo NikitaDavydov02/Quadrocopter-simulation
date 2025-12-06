@@ -6,6 +6,8 @@ TagManager:
   tags:
   - TakeoffCamera
   - PlaneCamera
+  - ILS
+  - Aircraft
   layers:
   - Default
   - TransparentFX

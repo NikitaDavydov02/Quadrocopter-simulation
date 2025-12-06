@@ -109,6 +109,13 @@ public class UIManager : MonoBehaviour
     private GameObject flightInstrumentsPanel;
     private bool flightInstrumentPanelIsActive;
     //</ENGINE UI>
+
+    //<ILS directors>
+    [SerializeField]
+    private RectTransform horizontal_ILS_Bar;
+    [SerializeField]
+    private RectTransform vertical_ILS_Bar;
+    //</ILS directors>
     void Start()
     {
         groundRefPosition = horizon.anchoredPosition.y;
@@ -235,8 +242,31 @@ public class UIManager : MonoBehaviour
             string engine_text = (100f * flighInstruments.GetEngineLevel(i)).ToString("F1");
             EngineText[i].text = engine_text;
         }
-        
+
         //</ENGINE THRUST UI>
+
+        //<ILS directors>
+        if (!flighInstruments.ILS_captured)
+        {
+            horizontal_ILS_Bar.gameObject.SetActive(false);
+            vertical_ILS_Bar.gameObject.SetActive(false);
+        }
+        else
+        {
+            horizontal_ILS_Bar.gameObject.SetActive(true);
+            vertical_ILS_Bar.gameObject.SetActive(true);
+            float hor_ILS_director_shift = flighInstruments.Angle_ILS_hor * heightPerDegree;
+            float ver_ILS_director_shift = flighInstruments.Angle_ILS_ver * heightPerDegree;
+
+            Vector2 hor_ILS_bar_pos = horizontal_ILS_Bar.anchoredPosition;
+            hor_ILS_bar_pos.x = hor_ILS_director_shift;
+            horizontal_ILS_Bar.anchoredPosition = hor_ILS_bar_pos;
+
+            Vector2 ver_ILS_bar_pos = vertical_ILS_Bar.anchoredPosition;
+            ver_ILS_bar_pos.y = ver_ILS_director_shift;
+            vertical_ILS_Bar.anchoredPosition = ver_ILS_bar_pos;
+        }
+        //</ILS directors>
     }
 
     public void Flaps(int pos)
