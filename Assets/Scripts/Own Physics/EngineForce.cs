@@ -35,6 +35,10 @@ public class EngineForce : MonoBehaviour, IForce
     private Vector3 reverseDoorOpenOffset;
     [SerializeField]
     private Transform reverseDoor;
+
+    [SerializeField]
+    private Transform turbineBlades;
+    private float maxRPM = 16000f;
     // Start is called before the first frame update
     public void SetEngineLevel(float NominalLevel)
     {
@@ -109,6 +113,12 @@ public class EngineForce : MonoBehaviour, IForce
             engineAudioManager.rotationlevel = NominalLevel;
             engineAudioManager.reverseDegree = ReverseDegree;
         }
+        float RPM = NominalLevel * maxRPM;
+        float angle = RPM * (6f) * Time.deltaTime;
+        if (!clockwiseRotation)
+            angle = -angle;
+        if (turbineBlades != null)
+            turbineBlades.Rotate(Vector3.forward, angle, Space.Self);
     }
 
     public void CountForce(out List<Vector3> CurrentForceVectors, out List<Vector3> AbsolutePointsOfForceApplying)

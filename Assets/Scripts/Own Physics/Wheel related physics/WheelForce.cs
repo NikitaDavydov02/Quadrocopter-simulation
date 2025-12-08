@@ -110,7 +110,14 @@ public class WheelForce : MonoBehaviour, IForce
     // Update is called once per frame
     void FixedUpdate()
     {
+        
         time += Time.deltaTime;
+
+        if (!active)
+        {
+            angular_velocity_abs = Vector3.zero;
+            return;
+        }
         //sw.Write(time + ";");
         UpdateStatus();
 
@@ -161,7 +168,7 @@ public class WheelForce : MonoBehaviour, IForce
 
         if (smokeParticleSystem != null)
         {
-            if (status != WheelStatus.InAir && smokeParticleSystem != null)
+            if (status != WheelStatus.InAir && smokeParticleSystem != null && active)
             {
                 if (slidingSpeed.magnitude > smokeTresholdSpeed)
                     smokeParticleSystem.enableEmission = true;
@@ -234,6 +241,8 @@ public class WheelForce : MonoBehaviour, IForce
     float spring_velocity;
     public float CalculateSpringForce()
     {
+        if (!active)
+            return 0;
         distance_to_the_wheel_center = (wheelCenterPoint - transform.position).magnitude;
         float d_d = distance_to_the_wheel_center - previous_d;
         spring_velocity = d_d / Time.deltaTime;//COMMENT
@@ -259,6 +268,8 @@ public class WheelForce : MonoBehaviour, IForce
     }
     public void UpdateStatus()
     {
+        if (!active)
+            return;
         /*Collider[] neighbors = Physics.OverlapCapsule(wheelCenterPoint, wheelCenterPoint, R*1.05f);
         Collider terrain = null;
         foreach (Collider collider in neighbors)

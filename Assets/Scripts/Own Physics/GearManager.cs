@@ -118,19 +118,16 @@ public class GearManager : MonoBehaviour
         {
             steeringManager.DisableSteeringControl();
             gearsAudioManager.GearsUp();
-        }
-        foreach(Animator animator in gearAnimators)
-        {
-            animator.SetBool("extend", extended);
-            animator.SetBool("inProgress", inProgress);
-        }
-        if (!extended)
-        {
             foreach (WheelForce wheel in wheels)
             {
                 wheel.active = false;
                 wheel.angularVelocity = 0f;
             }
+        }
+        foreach(Animator animator in gearAnimators)
+        {
+            animator.SetBool("extend", extended);
+            animator.SetBool("inProgress", inProgress);
         }
     }
 }

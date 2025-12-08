@@ -30,7 +30,8 @@ public class CalloutsAudioManager : MonoBehaviour
         {
             if(currentAltitude<=limits[i]&&lastAltitude>limits[i])
             {
-                calloutsAudioSource.PlayOneShot(limitClips[i]);
+                if(!calloutsAudioSource.isPlaying)
+                    calloutsAudioSource.PlayOneShot(limitClips[i]);
             }
         }
 
