@@ -11,7 +11,7 @@ public class SteeringManager : MonoBehaviour
     private float steeringSensitivity;
     [SerializeField]
     private float maxSteeringAngle;
-    private float steeringAngle;
+    public float steeringAngle;
     private bool active = true;
     void Start()
     {
@@ -40,11 +40,33 @@ public class SteeringManager : MonoBehaviour
     public void DisableSteeringControl()
     {
         active = false;
-        steeringPart.Rotate(0, -steeringAngle, 0, Space.Self);
-        steeringAngle = 0;
+        // steeringPart.Rotate(0, -steeringAngle, 0, Space.Self);
+        // steeringAngle = 0;
+        Debug.Log("Align start request");
+        StartCoroutine(AlignGear());
     }
     public void EnableSteeringControl()
     {
         active = true;
+        StopAllCoroutines();
+    }
+    IEnumerator AlignGear()
+    {
+        Debug.Log("Align start!");
+        float rate = 10f;
+        if (steeringAngle > 0)
+            rate *= -1;
+        bool stop = false;
+        while (!stop)
+        {
+            float angle = rate * Time.deltaTime;
+            steeringPart.Rotate(0, angle, 0, Space.Self);
+            float old_steering_angle = steeringAngle;
+            steeringAngle += angle;
+            if (steeringAngle * old_steering_angle < 0)
+                stop = true;
+            yield return null;
+        }
+        Debug.Log("Align stop!");
     }
 }

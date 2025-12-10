@@ -41,7 +41,7 @@ public class PlaneController : ForceCalculationManager
     [SerializeField]
     List<ResistanceForce> resistanceForces;
     [SerializeField]
-    Transform heightController;
+    List<Transform> heightController;
     [SerializeField]
     Transform horizontalController;
     [SerializeField]
@@ -184,18 +184,27 @@ public class PlaneController : ForceCalculationManager
             vwrticalInput = 0;
         //Debug.Log("Input:" + vwrticalInput);
         //Debug.Log("Euler:" + heightController.localEulerAngles.x);
-        heightController.Rotate(vwrticalInput, 0, 0, Space.Self);
+
+        foreach (Transform t in heightController)
+            t.Rotate(vwrticalInput, 0, 0, Space.Self);
+
         heightAngle += vwrticalInput;
+        Debug.Log("Height angle: " + heightAngle);
         if (heightAngle < -maxHeightAngle)
         {
-            heightController.Rotate(-vwrticalInput, 0, 0, Space.Self);
+            foreach (Transform t in heightController)
+                t.Rotate(-vwrticalInput, 0, 0, Space.Self);
             heightAngle -= vwrticalInput;
+            Debug.Log("Height angle min");
         }
         if (heightAngle > maxHeightAngle)
         {
-            heightController.Rotate(-vwrticalInput, 0, 0, Space.Self);
+            foreach (Transform t in heightController)
+                t.Rotate(-vwrticalInput, 0, 0, Space.Self);
             heightAngle -= vwrticalInput;
+            Debug.Log("Height angle max");
         }
+            
         float horInput = -Input.GetAxis("Mouse X") * Time.deltaTime * horizontalSensitivity;
         if (!ControlActive)
             horInput = 0;
