@@ -17,7 +17,6 @@
   ],
   "dependencies": {
     "com.cesium.unity": "1.6.4",
-    "com.microsoft.maps.unity": "0.11.2",
     "com.unity.collab-proxy": "1.17.7",
     "com.unity.feature.development": "1.0.1",
     "com.unity.ide.rider": "3.0.16",

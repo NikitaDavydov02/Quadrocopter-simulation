@@ -45,7 +45,7 @@ public class FlighInstrumentsManager : MonoBehaviour
     {
         get
         {
-            Debug.DrawLine(transform.position, transform.position + planeController.transform.TransformDirection(planeController.VelocityInLocalCoordinates), Color.cyan);
+            Debug.DrawLine(transform.position, transform.position + planeController.transform.TransformDirection(planeController.VelocityInLocalCoordinates)-MainManager.Instance.GetWind(planeController.transform.position), Color.cyan);
             return planeController.VelocityInLocalCoordinates;
         }
     }

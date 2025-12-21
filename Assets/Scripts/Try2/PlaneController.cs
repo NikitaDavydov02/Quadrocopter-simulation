@@ -155,7 +155,7 @@ public class PlaneController : ForceCalculationManager
     {
         if(anchor!=null)
             altitude = (float)anchor.height;
-        density = MainManager.GetAirDensity(altitude);
+        density = MainManager.Instance.GetAirDensity(altitude);
         foreach (WingForce wf in wings)
             wf.density = density;
         foreach (ResistanceForce rf in resistanceForces)
@@ -168,6 +168,7 @@ public class PlaneController : ForceCalculationManager
         Debug.Log("Inertia tensor" + rb.inertiaTensor);
         if (inertiaTensor != Vector3.zero)
             rb.inertiaTensor = inertiaTensor;
+        rb.inertiaTensorRotation = Quaternion.Euler(0,0,0);
         CountState();
         if (Input.GetKey(KeyCode.W) && ControlActive)
             generalLevel += generalLevelChangingSpeed * Time.deltaTime;

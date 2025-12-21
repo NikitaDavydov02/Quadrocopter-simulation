@@ -116,8 +116,33 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private RectTransform vertical_ILS_Bar;
     //</ILS directors>
+
+    //<MENU>
+    [SerializeField]
+    private GameObject menu;
+    [SerializeField]
+    private TMP_Text dayTimeText;
+    [SerializeField]
+    private Slider dayTimeSlider;
+    [SerializeField]
+    private TMP_Text windSpeedText;
+    [SerializeField]
+    private Slider windSpeedSlider;
+    [SerializeField]
+    private TMP_Text windAzimuthText;
+    [SerializeField]
+    private Slider windAzimuthSlider;
+    //</MENU>
     void Start()
     {
+        menu.SetActive(false);
+        dayTimeSlider.value = 12f;
+        windAzimuthSlider.value = 0f;
+        windSpeedSlider.value = 0f;
+        ChangeDayTimeValue();
+        ChangeWindAzimuthValue();
+        ChangeWindSpeedValue();
+
         groundRefPosition = horizon.anchoredPosition.y;
         speedMarkRfPosition = speed_mark.anchoredPosition;
         trimMarkMinPos = trimMark.anchoredPosition.y;
@@ -267,6 +292,11 @@ public class UIManager : MonoBehaviour
             vertical_ILS_Bar.anchoredPosition = ver_ILS_bar_pos;
         }
         //</ILS directors>
+
+        //<MENU>
+        if (Input.GetKeyDown(KeyCode.Escape))
+            OpenCloseMenu();
+        //<MENU>
     }
 
     public void Flaps(int pos)
@@ -331,5 +361,32 @@ public class UIManager : MonoBehaviour
     {
         flightInstrumentPanelIsActive = !flightInstrumentPanelIsActive;
         flightInstrumentsPanel.SetActive(flightInstrumentPanelIsActive);
+    }
+    public void OpenCloseMenu()
+    {
+        if (menu.gameObject.active)
+            menu.SetActive(false);
+        else
+            menu.SetActive(true);
+    }
+    public void ChangeDayTimeValue()
+    {
+        float newDayTime = dayTimeSlider.value;
+        MainManager.Instance.DayTime = newDayTime;
+        int hours = (int)Mathf.Floor(newDayTime);
+        float minutes = (int)Mathf.Floor((newDayTime - hours) * 60);
+        string time = hours.ToString() + ":" + minutes.ToString();
+        dayTimeText.text = time;
+
+    }
+    public void ChangeWindSpeedValue()
+    {
+        MainManager.Instance.WindAmplitude = windSpeedSlider.value;
+        windSpeedText.text = ((int)Mathf.Floor(windSpeedSlider.value)).ToString();
+    }
+    public void ChangeWindAzimuthValue()
+    {
+        MainManager.Instance.WindAzimuth = windAzimuthSlider.value;
+        windAzimuthText.text = ((int)Mathf.Floor(windAzimuthSlider.value)).ToString();
     }
 }

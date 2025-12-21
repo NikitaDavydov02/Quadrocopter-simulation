@@ -59,7 +59,6 @@ MonoBehaviour:
   m_Name: ContactShadows
   m_EditorClassIdentifier: 
   active: 1
-  <displayName>k__BackingField: Contact Shadows
   quality:
     m_OverrideState: 0
     m_Value: 1
@@ -144,10 +143,10 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   upperHemisphereLuxValue:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.4660715
   upperHemisphereLuxColor:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: {x: 0.18750614, y: 0.29181972, z: 0.5}
   desiredLuxValue:
     m_OverrideState: 0
@@ -300,7 +299,7 @@ MonoBehaviour:
   active: 1
   skyType:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 4
   cloudType:
     m_OverrideState: 0
     m_Value: 0
@@ -480,7 +479,6 @@ MonoBehaviour:
   m_Name: AmbientOcclusion
   m_EditorClassIdentifier: 
   active: 1
-  <displayName>k__BackingField: 
   quality:
     m_OverrideState: 0
     m_Value: 1
@@ -511,6 +509,7 @@ MonoBehaviour:
   layerMask:
     m_OverrideState: 0
     m_Value:
+      serializedVersion: 2
       m_Bits: 4294967295
   occluderMotionRejection:
     m_OverrideState: 0
