@@ -119,7 +119,11 @@ public class UIManager : MonoBehaviour
 
     //<MENU>
     [SerializeField]
-    private GameObject menu;
+    private GameObject MainMenu;
+    [SerializeField]
+    private GameObject EnvironmentSubmenu;
+    [SerializeField]
+    private GameObject ControlSubmenu;
     [SerializeField]
     private TMP_Text dayTimeText;
     [SerializeField]
@@ -135,7 +139,9 @@ public class UIManager : MonoBehaviour
     //</MENU>
     void Start()
     {
-        menu.SetActive(false);
+        MainMenu.SetActive(false);
+        EnvironmentSubmenu.SetActive(false);
+        ControlSubmenu.SetActive(false);
         dayTimeSlider.value = 12f;
         windAzimuthSlider.value = 0f;
         windSpeedSlider.value = 0f;
@@ -362,12 +368,27 @@ public class UIManager : MonoBehaviour
         flightInstrumentPanelIsActive = !flightInstrumentPanelIsActive;
         flightInstrumentsPanel.SetActive(flightInstrumentPanelIsActive);
     }
+    public void OpenEnvironmentSubmenu()
+    {
+        MainMenu.SetActive(false);
+        EnvironmentSubmenu.SetActive(true);
+    }
+    public void OpenControlSubmenu()
+    {
+        MainMenu.SetActive(false);
+        ControlSubmenu.SetActive(true);
+    }
     public void OpenCloseMenu()
     {
-        if (menu.gameObject.active)
-            menu.SetActive(false);
+        if (MainMenu.gameObject.active || EnvironmentSubmenu.gameObject.active || ControlSubmenu.gameObject.active)
+        {
+            MainMenu.SetActive(false);
+            EnvironmentSubmenu.SetActive(false);
+            ControlSubmenu.SetActive(false);
+        }
         else
-            menu.SetActive(true);
+            MainMenu.SetActive(true);
+
     }
     public void ChangeDayTimeValue()
     {

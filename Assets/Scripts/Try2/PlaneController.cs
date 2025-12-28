@@ -108,6 +108,8 @@ public class PlaneController : ForceCalculationManager
     private AileronManager aileronManager;
     [SerializeField]
     private GearManager gearManager;
+    [SerializeField]
+    private AircraftLightManager lightManager;
 
     public float StabilizerTrimAngle
     {
@@ -270,25 +272,25 @@ public class PlaneController : ForceCalculationManager
              //leftElleron.Rotate(maxEleronAngle, 0, 0);
             // rightElleron.Rotate(-maxEleronAngle, 0, 0);
          }*/
-       /* if (Input.GetKeyDown(KeyCode.Alpha0) && ControlActive)
-            Flaps(0);
-        if (Input.GetKeyDown(KeyCode.Alpha1) && ControlActive)
-            Flaps(1);
-        if (Input.GetKeyDown(KeyCode.Alpha2) && ControlActive)
-            Flaps(2);
-        if (Input.GetKeyDown(KeyCode.Alpha3) && ControlActive)
-            Flaps(3);
-        if (Input.GetKeyDown(KeyCode.Alpha4) && ControlActive)
-            Flaps(4);
-        if (Input.GetKeyDown(KeyCode.Alpha5) && ControlActive)
-            Flaps(5);
-        if (Input.GetKeyDown(KeyCode.Alpha6) && ControlActive)
-            Flaps(6);
-        if (Input.GetKeyDown(KeyCode.Alpha7) && ControlActive)
-            Flaps(7);
-        if (Input.GetKeyDown(KeyCode.Alpha8) && ControlActive)
-            Flaps(8);*/
-        
+        /* if (Input.GetKeyDown(KeyCode.Alpha0) && ControlActive)
+             Flaps(0);
+         if (Input.GetKeyDown(KeyCode.Alpha1) && ControlActive)
+             Flaps(1);
+         if (Input.GetKeyDown(KeyCode.Alpha2) && ControlActive)
+             Flaps(2);
+         if (Input.GetKeyDown(KeyCode.Alpha3) && ControlActive)
+             Flaps(3);
+         if (Input.GetKeyDown(KeyCode.Alpha4) && ControlActive)
+             Flaps(4);
+         if (Input.GetKeyDown(KeyCode.Alpha5) && ControlActive)
+             Flaps(5);
+         if (Input.GetKeyDown(KeyCode.Alpha6) && ControlActive)
+             Flaps(6);
+         if (Input.GetKeyDown(KeyCode.Alpha7) && ControlActive)
+             Flaps(7);
+         if (Input.GetKeyDown(KeyCode.Alpha8) && ControlActive)
+             Flaps(8);*/
+
         /* if (Input.GetKeyDown(KeyCode.F) && ControlActive)
          {
              flaps += flapsStep;
@@ -306,7 +308,10 @@ public class PlaneController : ForceCalculationManager
              leftFlap.GetComponent<WingForce>().degree = flaps;
              rightFlap.GetComponent<WingForce>().degree = flaps;
          }*/
-
+        if (Input.GetKeyDown(KeyCode.L) && ControlActive)
+        {
+            lightManager.On = !lightManager.On;
+        }
         if (Input.GetKeyDown(KeyCode.R) && ControlActive)
         {
             Debug.Log("Reverse");

@@ -8,6 +8,7 @@ TagManager:
   - PlaneCamera
   - ILS
   - Aircraft
+  - Light
   layers:
   - Default
   - TransparentFX
