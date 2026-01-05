@@ -21,7 +21,7 @@ public class WingForce : MonoBehaviour, IForce
     public void CountForce(out List<Vector3> CurrentForceVectors, out List<Vector3> AbsolutePointsOfForceApplying)
     {
         Debug.DrawLine(transform.position, transform.position + MainManager.Instance.GetWind(transform.position), Color.yellow);
-        velocity = rb.velocity - MainManager.Instance.GetWind(transform.position) + Vector3.Cross(rb.angularVelocity, transform.position - rb.gameObject.transform.position);
+        velocity = rb.linearVelocity - MainManager.Instance.GetWind(transform.position) + Vector3.Cross(rb.angularVelocity, transform.position - rb.gameObject.transform.position);
         //velocity = rb.velocity;
         //Debug.Log("velocity" + gameObject.transform.parent.GetComponent<Rigidbody>().velocity);
         //Debug.DrawLine(transform.position, transform.position + velocity, Color.yellow);
@@ -86,7 +86,7 @@ public class WingForce : MonoBehaviour, IForce
     // Update is called once per frame
     void Update()
     {
-        velocity = rb.velocity;
+        velocity = rb.linearVelocity;
 
         //Debug.Log("V:" + velocity);
         lastPosition = rb.centerOfMass;

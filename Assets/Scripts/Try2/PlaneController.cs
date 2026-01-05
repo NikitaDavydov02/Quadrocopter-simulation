@@ -165,7 +165,7 @@ public class PlaneController : ForceCalculationManager
         rb.centerOfMass = centerOfMassLocal;
         //if (accelText!=null)
         //    accelText.text = ((rb.velocity.magnitude - lastVelocity)/ Time.deltaTime).ToString("0.00");
-        lastVelocity = rb.velocity.magnitude;
+        lastVelocity = rb.linearVelocity.magnitude;
 
         Debug.Log("Inertia tensor" + rb.inertiaTensor);
         if (inertiaTensor != Vector3.zero)
@@ -380,7 +380,7 @@ public class PlaneController : ForceCalculationManager
     public void CountState()
     {
         AngularVelocityInLocalCoordinates = transform.InverseTransformDirection(rb.angularVelocity);
-        VelocityInLocalCoordinates = transform.InverseTransformDirection(rb.velocity);
+        VelocityInLocalCoordinates = transform.InverseTransformDirection(rb.linearVelocity);
     }
     public void Trim(float input)
     {

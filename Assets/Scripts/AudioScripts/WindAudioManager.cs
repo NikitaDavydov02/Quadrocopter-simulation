@@ -18,6 +18,6 @@ public class WindAudioManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        windAudioSource.pitch = rb.velocity.magnitude / 100;
+        windAudioSource.pitch = rb.linearVelocity.magnitude / 100;
     }
 }

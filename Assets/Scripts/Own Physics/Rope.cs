@@ -34,8 +34,8 @@ public class Rope:MonoBehaviour
             Vector3 forseActingOnFirst = first.ForceToCenterOfMass;
             Vector3 forceActingOnSecond = second.ForceToCenterOfMass;
 
-            float v2ProjectedToRope = Vector3.Dot(second.rb.velocity, secondActsOnFirstDirection);
-            float v1ProjectedToRope = Vector3.Dot(first.rb.velocity, secondActsOnFirstDirection);
+            float v2ProjectedToRope = Vector3.Dot(second.rb.linearVelocity, secondActsOnFirstDirection);
+            float v1ProjectedToRope = Vector3.Dot(first.rb.linearVelocity, secondActsOnFirstDirection);
             float delta = Vector3.Magnitude(secondPoint - firstPoint) - maxLength;
             Vector3 forseToFirst = secondActsOnFirstDirection * delta * k;
             Vector3 forseToSecond = -forseToFirst;

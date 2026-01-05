@@ -20,7 +20,7 @@ public class BasicLiftForce : MonoBehaviour, IForce
     }
     public void CountForce(out List<Vector3> CurrentForceVectors, out List<Vector3> AbsolutePointsOfForceApplying)
     {
-        Vector3 force = Vector3.up * K * (rb.velocity.magnitude) * (rb.velocity.magnitude);
+        Vector3 force = Vector3.up * K * (rb.linearVelocity.magnitude) * (rb.linearVelocity.magnitude);
         CurrentForceVectors = new List<Vector3>() { force };
         AbsolutePointsOfForceApplying = new List<Vector3>() { rb.worldCenterOfMass };
     }
