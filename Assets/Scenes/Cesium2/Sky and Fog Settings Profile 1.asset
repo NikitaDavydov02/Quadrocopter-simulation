@@ -178,11 +178,11 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: {x: 0, y: -6378.1, z: 0}
   windOrientation:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   windSpeed:
-    m_OverrideState: 1
-    m_Value: 100
+    m_OverrideState: 0
+    m_Value: 0
   fogType:
     m_OverrideState: 1
     m_Value: 0
@@ -296,7 +296,6 @@ MonoBehaviour:
   - {fileID: -2809427655301680519}
   - {fileID: 5237058922494777220}
   - {fileID: 6105614476328007498}
-  - {fileID: 7224262491797677220}
 --- !u!114 &5237058922494777220
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -483,10 +482,10 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: {x: 0, y: 0}
   bottomAltitude:
-    m_OverrideState: 0
-    m_Value: 1200
+    m_OverrideState: 1
+    m_Value: 0.01
   altitudeRange:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 2000
   fadeInMode:
     m_OverrideState: 0
@@ -512,14 +511,14 @@ MonoBehaviour:
     m_Value: {fileID: 0}
     dimension: 2
   cloudControl:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   cloudSimpleMode:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   m_CloudPreset:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 4
   cumulusMap:
     m_OverrideState: 0
     m_Value: {fileID: 0}
@@ -549,7 +548,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 64
   densityCurve:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value:
       serializedVersion: 2
       m_Curve:
@@ -584,7 +583,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   erosionCurve:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value:
       serializedVersion: 2
       m_Curve:
@@ -619,7 +618,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   ambientOcclusionCurve:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value:
       serializedVersion: 2
       m_Curve:
@@ -663,34 +662,34 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0.5
   densityMultiplier:
-    m_OverrideState: 0
-    m_Value: 0.25
+    m_OverrideState: 1
+    m_Value: 0.4
   shapeFactor:
-    m_OverrideState: 0
-    m_Value: 0.75
+    m_OverrideState: 1
+    m_Value: 0.9
   shapeScale:
-    m_OverrideState: 0
-    m_Value: 2.5
+    m_OverrideState: 1
+    m_Value: 5
   shapeOffset:
     m_OverrideState: 0
     m_Value: {x: 0, y: 0, z: 0}
   erosionFactor:
-    m_OverrideState: 0
-    m_Value: 0.5
+    m_OverrideState: 1
+    m_Value: 0.8
   erosionScale:
-    m_OverrideState: 0
-    m_Value: 50
+    m_OverrideState: 1
+    m_Value: 107
   erosionNoiseType:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   microErosion:
     m_OverrideState: 0
     m_Value: 0
   microErosionFactor:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.5
   microErosionScale:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 200
   ambientLightProbeDimmer:
     m_OverrideState: 0
@@ -776,49 +775,3 @@ MonoBehaviour:
   m_ObsoleteShapeOffsetZ:
     m_OverrideState: 0
     m_Value: 0
---- !u!114 &7224262491797677220
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24f077503be6ae942a1e1245dbd53ea9, type: 3}
-  m_Name: Bloom
-  m_EditorClassIdentifier: 
-  active: 0
-  quality:
-    m_OverrideState: 0
-    m_Value: 1
-  threshold:
-    m_OverrideState: 1
-    m_Value: 1.2
-  intensity:
-    m_OverrideState: 1
-    m_Value: 1
-  scatter:
-    m_OverrideState: 1
-    m_Value: 0.936
-  tint:
-    m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
-  dirtTexture:
-    m_OverrideState: 0
-    m_Value: {fileID: 0}
-  dirtIntensity:
-    m_OverrideState: 0
-    m_Value: 0
-  anamorphic:
-    m_OverrideState: 0
-    m_Value: 1
-  m_Resolution:
-    m_OverrideState: 0
-    m_Value: 2
-  m_HighQualityPrefiltering:
-    m_OverrideState: 0
-    m_Value: 0
-  m_HighQualityFiltering:
-    m_OverrideState: 0
-    m_Value: 1
