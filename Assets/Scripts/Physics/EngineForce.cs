@@ -49,14 +49,14 @@ public class EngineForce : MonoBehaviour, IForce
     {
         reverseOn = true;
         //this.NominalLevel = reverseNominalLevel;
-        StopCoroutine(CloseReverseDoor());
+        StopAllCoroutines();
         StartCoroutine(OpenReverseDoor());
     }
     public void ReverseOff()
     {
         reverseOn = false;
         //this.NominalLevel = 0;
-        StopCoroutine(OpenReverseDoor());
+        StopAllCoroutines();
         StartCoroutine(CloseReverseDoor());
     }
     IEnumerator OpenReverseDoor()
@@ -125,7 +125,10 @@ public class EngineForce : MonoBehaviour, IForce
     {
         CurrentForceVectors = new List<Vector3>();
         AbsolutePointsOfForceApplying = new List<Vector3>();
-        EffectiveLevel = NominalLevel + (reverseLevel - NominalLevel) * ReverseDegree;
+        //EffectiveLevel = NominalLevel + (reverseLevel - NominalLevel) * ReverseDegree;
+        EffectiveLevel = NominalLevel + (reverseLevel* NominalLevel - NominalLevel) * ReverseDegree;
+
+
         Vector3 force = AxisDirection * MaxForce * EffectiveLevel;
         
         force = transform.TransformDirection(force);

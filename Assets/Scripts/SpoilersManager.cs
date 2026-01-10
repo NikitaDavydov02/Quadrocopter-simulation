@@ -138,15 +138,14 @@ public class SpoilersManager : MonoBehaviour
     }
     public void SpoilersToggle()
     {
+        StopAllCoroutines();
         spoilersExtended = !spoilersExtended;
         if (spoilersExtended)
         {
-            StopCoroutine(RetractSpoilersAnimation());
             StartCoroutine(ExtendSpoilersAnimation());
         }
         else
         {
-            StopCoroutine(ExtendSpoilersAnimation());
             StartCoroutine(RetractSpoilersAnimation());
         }
     }
