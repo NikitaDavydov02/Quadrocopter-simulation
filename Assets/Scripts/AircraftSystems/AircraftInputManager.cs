@@ -1,5 +1,7 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,12 +14,29 @@ public class AircraftInputManager : MonoBehaviour
     private UIManager UIManager;
     [SerializeField]
     private GearManager gearManager;
+    //[SerializeField]
+    //private CinemachineInputProvider cinemachineInputProvider;
+    [SerializeField]
+    private CamerasManager camerasManager;  
 
-    private PlaneInput planeInput;
+    private PlaneInputAction planeInput;
     void Start()
     {
-        planeInput = new PlaneInput();
+        planeInput = new PlaneInputAction();
+        //planeInput = cinemachineInputProvider.XYAxis.action.actionMap.asset;
+
+        planeInput.Menu.Disable();
+        planeInput.FreeLookCamera.Disable();
         planeInput.PlaneFlight.Enable();
+
+        //InputActionReference actionRef = new InputActionReference();
+        //actionRef = planeInput.FreeLookCamera.CustomLook.
+        //actionRef.action = planeInput.FreeLookCamera.CustomLook;
+
+        InputActionReference reference = InputActionReference.Create(planeInput.FreeLookCamera.CustomLook);
+        //cinemachineInputProvider.XYAxis = reference;
+        camerasManager.SetFreeLookCameraInputActionreference(reference);
+
         planeInput.PlaneFlight.Brake.started += Brake_started;
         planeInput.PlaneFlight.Brake.canceled += Brake_canceled;
 
@@ -33,7 +52,35 @@ public class AircraftInputManager : MonoBehaviour
         //planeInput.PlaneFlight.Thrust.performed += Thrust;        
         planeInput.PlaneFlight.OpenMenu.performed += OpenMenu_performed;
 
+        planeInput.PlaneFlight.FreelLookCamera.performed += FreelLookCamera_performed;
+
+        planeInput.PlaneFlight.SwitchCamera.performed += SwitchCamera_performed;
+
         planeInput.Menu.CloseMenu.performed += CloseMenu_performed;
+
+        planeInput.FreeLookCamera.TurnOffFreeLookCamera.performed += TurnOffFreeLookCamera_performed;
+
+    }
+
+    private void SwitchCamera_performed(InputAction.CallbackContext obj)
+    {
+        camerasManager.SwitchCamera();
+    }
+
+    private void TurnOffFreeLookCamera_performed(InputAction.CallbackContext obj)
+    {
+        planeInput.PlaneFlight.Enable();
+        planeInput.FreeLookCamera.Disable();
+
+        camerasManager.TurnOffFreeLookCamera();
+    }
+
+    private void FreelLookCamera_performed(InputAction.CallbackContext obj)
+    {
+        planeInput.PlaneFlight.Disable();
+        planeInput.FreeLookCamera.Enable();
+        
+        camerasManager.TurnOnFreeLookCamera();
     }
 
     private void CloseMenu_performed(InputAction.CallbackContext obj)
@@ -120,7 +167,6 @@ public class AircraftInputManager : MonoBehaviour
             Flaps(7);
         if (Input.GetKeyDown(KeyCode.Alpha8))
             Flaps(8);*/
-
 
 
     }

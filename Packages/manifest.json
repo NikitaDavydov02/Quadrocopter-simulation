@@ -18,6 +18,7 @@
   "dependencies": {
     "com.cesium.unity": "1.6.4",
     "com.unity.ai.navigation": "2.0.9",
+    "com.unity.cinemachine": "2.10.5",
     "com.unity.collab-proxy": "2.10.2",
     "com.unity.feature.development": "1.0.2",
     "com.unity.ide.rider": "3.0.38",

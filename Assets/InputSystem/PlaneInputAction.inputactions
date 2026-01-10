@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "name": "PlaneInput",
+    "name": "PlaneInputAction",
     "maps": [
         {
             "name": "PlaneFlight",
@@ -109,6 +109,24 @@
                     "name": "OpenMenu",
                     "type": "Button",
                     "id": "b98f457d-cc8b-434a-b81f-746c3703ce48",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FreelLookCamera",
+                    "type": "Button",
+                    "id": "45bd72b0-9f1b-40d5-9c8c-c1518504ac72",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchCamera",
+                    "type": "Button",
+                    "id": "5d782952-5c4c-4b58-902b-e031eef52052",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -401,6 +419,28 @@
                     "action": "OpenMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3e14034b-b6ed-46c6-91a0-8d111fd8dedd",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FreelLookCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a92ff5c6-05a7-40b3-8b9a-59990ae6dd6b",
+                    "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -427,6 +467,54 @@
                     "processors": "",
                     "groups": "",
                     "action": "CloseMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "FreeLookCamera",
+            "id": "595de91b-2478-4eb4-8bea-eb47eb079d2a",
+            "actions": [
+                {
+                    "name": "CustomLook",
+                    "type": "Value",
+                    "id": "85b440f0-945e-425b-a322-4b2a7a185c8b",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "TurnOffFreeLookCamera",
+                    "type": "Button",
+                    "id": "2d59037e-7ada-413d-845e-5bd0f52546f7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "22001196-1d00-429f-93b1-6dd1e077b4d6",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CustomLook",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "450680e4-7e85-4209-9ea9-a933cdc1db9e",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TurnOffFreeLookCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
