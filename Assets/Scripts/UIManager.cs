@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 
 public class UIManager : MonoBehaviour
@@ -136,7 +137,14 @@ public class UIManager : MonoBehaviour
     private TMP_Text windAzimuthText;
     [SerializeField]
     private Slider windAzimuthSlider;
+    [SerializeField]
+    private TMP_Text cloudHeightText;
+    [SerializeField]
+    private Slider cloudHeightSlider;
+    [SerializeField]
+    private TMP_Dropdown cloudDropdown;
     //</MENU>
+
     void Start()
     {
         MainMenu.SetActive(false);
@@ -148,6 +156,10 @@ public class UIManager : MonoBehaviour
         ChangeDayTimeValue();
         ChangeWindAzimuthValue();
         ChangeWindSpeedValue();
+        ChaneCloudHeight();
+        ChangeCloudType();
+        cloudDropdown.ClearOptions();
+        cloudDropdown.AddOptions(System.Enum.GetNames(typeof(CloudMode)).ToList());
 
         groundRefPosition = horizon.anchoredPosition.y;
         speedMarkRfPosition = speed_mark.anchoredPosition;
@@ -409,5 +421,16 @@ public class UIManager : MonoBehaviour
     {
         MainManager.Instance.WindAzimuth = windAzimuthSlider.value;
         windAzimuthText.text = ((int)Mathf.Floor(windAzimuthSlider.value)).ToString();
+    }
+    public void ChaneCloudHeight()
+    {
+        MainManager.Instance.SetCloudHeight(cloudHeightSlider.value);
+        cloudHeightText.text = ((int)Mathf.Floor(cloudHeightSlider.value)).ToString();
+    }
+    public void ChangeCloudType()
+    {
+        int option = cloudDropdown.value;
+        CloudMode mode = (CloudMode)option;
+        MainManager.Instance.ChangeCloudType(mode);
     }
 }

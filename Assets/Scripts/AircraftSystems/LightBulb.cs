@@ -18,6 +18,9 @@ public class LightBulb : MonoBehaviour
     private Renderer glowRenderer;
     private Material glowMaterial;
     private Light lightSource;
+
+    [SerializeField]
+    private float lightSourceIntensityCoeffitient = 1f;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -38,7 +41,7 @@ public class LightBulb : MonoBehaviour
         glowMaterial.SetColor("_EmissiveColor", lightColor * intensity);
         //_EmissionColor
         lightSource.color = lightColor;
-        lightSource.intensity = intensity;
+        lightSource.intensity = intensity*lightSourceIntensityCoeffitient;
     }
     void Start()
     {

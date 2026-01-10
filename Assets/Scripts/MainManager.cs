@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.HighDefinition;
 
 public class MainManager : MonoBehaviour
 {
@@ -27,6 +30,17 @@ public class MainManager : MonoBehaviour
     [SerializeField]
     private Light sun;
 
+   // [SerializeField] VolumeProfile profile;
+    [SerializeField]
+    public Volume globalVolume;
+    [SerializeField]
+    public VolumetricClouds clouds;
+    private CloudMode cloudState;
+    private float cloudheight;
+
+    [SerializeField]
+    private PlaneController plane;
+
     private void Awake()
     {
         // Ensure there is only one instance
@@ -44,6 +58,22 @@ public class MainManager : MonoBehaviour
     void Start()
     {
         //WindVector = Vector3.forward * amplitude;
+        //VolumeProfile profile = volumeProfile.GetComponent<Volume>().sharedProfile;
+
+        if (globalVolume.profile.TryGet<VolumetricClouds>(out clouds))
+        {
+            clouds.active = true;
+            Debug.Log("Clouds!");
+            //clouds.densityMultiplier.value = 0.8f;
+        }
+        else
+            Debug.Log("No Clouds :(");
+
+  
+
+        //profile.TryGet<VolumetricClouds>(out clouds);
+        //clouds.cloudPreset.value = VolumetricClouds.CloudPresets.Overcast;
+        //clouds.cloudPreset = VolumetricClouds.CloudPresets.Overcast;
     }
 
     // Update is called once per frame
@@ -60,6 +90,24 @@ public class MainManager : MonoBehaviour
         float angle_hor = dt_noon * 30f;
         float angle_ver = MaxSunAngle * (1 - Mathf.Abs(dt_noon) / 6f);
         sun.transform.eulerAngles = new Vector3(angle_ver, angle_hor, 0f);
+
+        if (angle_ver < -11f)
+        {
+            //Night
+            sun.intensity = 0.25f;
+            sun.colorTemperature = 20000f;
+            sun.transform.eulerAngles = new Vector3(20f, 180-angle_hor, 0f);
+            HDAdditionalLightData hdLight = sun.GetComponent<HDAdditionalLightData>();
+            hdLight.flareSize = 0f;
+        }
+        else
+        {
+            sun.intensity = 100000f;
+            sun.colorTemperature = 6633;
+            HDAdditionalLightData hdLight = sun.GetComponent<HDAdditionalLightData>();
+            hdLight.flareSize = 2f;
+        }
+
     }
     public Vector3 GetWind(Vector3 posotion)
     {
@@ -79,4 +127,36 @@ public class MainManager : MonoBehaviour
         //seddy = Vector3.zero;
         return AirDensity*Mathf.Exp(-0.029f*9.81f*altitude/(8.314f*273));
     }
+    public void SetCloudHeight(float heightMeters)
+    {
+        clouds.bottomAltitude.value = heightMeters;
+        cloudheight = heightMeters;
+    }
+    public void OnSubsceneEnable()
+    {
+        if(cloudState!=CloudMode.None)
+            clouds.active = true;
+    }
+    public void OnSubsceneDisnable()
+    {
+        clouds.active = false;
+    }
+    public void ChangeCloudType(CloudMode mode)
+    {
+        cloudState = mode;
+        clouds.active = true;
+        if (mode == CloudMode.Overcast)
+            clouds.cloudPreset = VolumetricClouds.CloudPresets.Overcast;
+        if (mode == CloudMode.Sparse)
+            clouds.cloudPreset = VolumetricClouds.CloudPresets.Sparse;
+        if (mode == CloudMode.None)
+            clouds.active = false;
+        clouds.bottomAltitude.value = cloudheight;
+    }
+}
+public enum CloudMode
+{
+    None,
+    Sparse,
+    Overcast,
 }
