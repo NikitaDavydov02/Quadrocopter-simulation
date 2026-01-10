@@ -311,10 +311,7 @@ public class UIManager : MonoBehaviour
         }
         //</ILS directors>
 
-        //<MENU>
-        if (Input.GetKeyDown(KeyCode.Escape))
-            OpenCloseMenu();
-        //<MENU>
+        
     }
 
     public void Flaps(int pos)

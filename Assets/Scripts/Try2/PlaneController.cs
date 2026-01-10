@@ -172,55 +172,12 @@ public class PlaneController : ForceCalculationManager
             rb.inertiaTensor = inertiaTensor;
         rb.inertiaTensorRotation = Quaternion.Euler(0,0,0);
         CountState();
-        if (Input.GetKey(KeyCode.W) && ControlActive)
-            generalLevel += generalLevelChangingSpeed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.S) && ControlActive)
-            generalLevel -= generalLevelChangingSpeed * Time.deltaTime;
-        if (generalLevel > 1)
-            generalLevel = 1;
-        if (generalLevel < 0)
-            generalLevel = 0;
-        for (int i = 0; i < engineLevels.Count; i++)
-            engineLevels[i] = generalLevel;
-        float vwrticalInput = Input.GetAxis("Mouse Y") * Time.deltaTime * heigtSensitivity;
-        if (!ControlActive)
-            vwrticalInput = 0;
-        //Debug.Log("Input:" + vwrticalInput);
-        //Debug.Log("Euler:" + heightController.localEulerAngles.x);
-
-        foreach (Transform t in heightController)
-            t.Rotate(vwrticalInput, 0, 0, Space.Self);
-
-        heightAngle += vwrticalInput;
-        Debug.Log("Height angle: " + heightAngle);
-        if (heightAngle < -maxHeightAngle)
-        {
-            foreach (Transform t in heightController)
-                t.Rotate(-vwrticalInput, 0, 0, Space.Self);
-            heightAngle -= vwrticalInput;
-            Debug.Log("Height angle min");
-        }
-        if (heightAngle > maxHeightAngle)
-        {
-            foreach (Transform t in heightController)
-                t.Rotate(-vwrticalInput, 0, 0, Space.Self);
-            heightAngle -= vwrticalInput;
-            Debug.Log("Height angle max");
-        }
+        
+        
             
-        float horInput = -Input.GetAxis("Mouse X") * Time.deltaTime * horizontalSensitivity;
-        if (!ControlActive)
-            horInput = 0;
-        horizontalController.Rotate(horInput, 0, 0, Space.Self);
-        horizontAngle += horInput;
-        if (horizontAngle < -maxHorizontalAngle || horizontAngle > maxHorizontalAngle)
-        {
-            horizontalController.Rotate(-horInput, 0, 0, Space.Self);
-            horizontAngle -= horInput;
-        }
+        
 
-        float steeringInput = Input.GetAxis("Mouse X") * Time.deltaTime * steeringSensitivity;
-        steeringManager.SteeringInput(steeringInput);
+        
         //steeringPart.Rotate(0, steeringInput, 0, Space.Self);
         //steeringAngle += steeringInput;
         //float correction = 0;
@@ -231,18 +188,9 @@ public class PlaneController : ForceCalculationManager
         //steeringPart.Rotate(0, correction, 0, Space.Self);
         //steeringAngle += correction;
 
-        if (Input.GetKeyDown(KeyCode.B) && ControlActive)
-        {
-            foreach (WheelForce w in wheels)
-                w.BrakeIn();
-        }
-        if (Input.GetKeyUp(KeyCode.B) && ControlActive)
-        {
-            foreach (WheelForce w in wheels)
-                w.BrakeOut();
-        }
+   
 
-        if (Input.GetKey(KeyCode.A) && ControlActive)
+        /*if (Input.GetKey(KeyCode.A) && ControlActive)
         {
             aileronManager.AileronDeflection(1);
         }
@@ -251,7 +199,8 @@ public class PlaneController : ForceCalculationManager
             aileronManager.AileronDeflection(-1);
         }
         else
-            aileronManager.AileronDeflection(0);
+            aileronManager.AileronDeflection(0);*/
+
         /* if (Input.GetKeyDown(KeyCode.A) && ControlActive)
          {
              //leftElleron.Rotate(maxEleronAngle, 0, 0);
@@ -308,34 +257,7 @@ public class PlaneController : ForceCalculationManager
              leftFlap.GetComponent<WingForce>().degree = flaps;
              rightFlap.GetComponent<WingForce>().degree = flaps;
          }*/
-        if (Input.GetKeyDown(KeyCode.L) && ControlActive)
-        {
-            lightManager.On = !lightManager.On;
-        }
-        if (Input.GetKeyDown(KeyCode.R) && ControlActive)
-        {
-            Debug.Log("Reverse");
-            reverseManager.ReverseToggle();
-            spoilersManager.SpoilersToggle();
-            /*reverseIsOn = !reverseIsOn;
-            if(reverseIsOn)
-            {
-                leftSpoiler.GetComponent<WingForce>().degree = 1;
-                rightSpoiler.GetComponent<WingForce>().degree = 1;
-                leftSpoiler.Rotate(90, 0, 0, Space.Self);
-                rightSpoiler.Rotate(90, 0, 0, Space.Self);
-            }
-            else 
-            {
-                leftSpoiler.GetComponent<WingForce>().degree = 0;
-                rightSpoiler.GetComponent<WingForce>().degree = 0;
-                leftSpoiler.Rotate(-90, 0, 0, Space.Self);
-                rightSpoiler.Rotate(-90, 0, 0, Space.Self);
-                for (int i = 0; i < engineLevels.Count; i++)
-                    engineLevels[i] = 0.1f;
-            }*/
-
-        }
+        
         
         /*if (reverseIsOn)
             for (int i = 0; i < engineLevels.Count; i++)
@@ -395,6 +317,87 @@ public class PlaneController : ForceCalculationManager
         if (currentAngle > maxTrimAngle)
             rot.x = maxTrimAngle;
         horizontalStabilizer.localEulerAngles = rot;
+    }
+    public void Thrust(float input)
+    {
+        generalLevel += generalLevelChangingSpeed * Time.deltaTime * input;
+        if (generalLevel > 1)
+            generalLevel = 1;
+        if (generalLevel < 0)
+            generalLevel = 0;
+        for (int i = 0; i < engineLevels.Count; i++)
+            engineLevels[i] = generalLevel;
+    }
+    public void BrakeIn()
+    {
+        foreach (WheelForce w in wheels)
+            w.BrakeIn();
+    }
+    public void BrakeOut()
+    {
+        foreach (WheelForce w in wheels)
+            w.BrakeOut();
+    }
+    public void Ailerons(float input)
+    {
+        aileronManager.AileronDeflection(input);
+    }
+
+    public void Reverses()
+    {
+        reverseManager.ReverseToggle();
+        spoilersManager.SpoilersToggle();
+    }
+
+    public void Lights()
+    {
+        lightManager.On = !lightManager.On;
+    }
+    public void Elevator(float input)
+    {
+        float vwrticalInput = input * Time.deltaTime * heigtSensitivity;
+        if (!ControlActive)
+            vwrticalInput = 0;
+        //Debug.Log("Input:" + vwrticalInput);
+        //Debug.Log("Euler:" + heightController.localEulerAngles.x);
+
+        foreach (Transform t in heightController)
+            t.Rotate(vwrticalInput, 0, 0, Space.Self);
+
+        heightAngle += vwrticalInput;
+        Debug.Log("Height angle: " + heightAngle);
+        if (heightAngle < -maxHeightAngle)
+        {
+            foreach (Transform t in heightController)
+                t.Rotate(-vwrticalInput, 0, 0, Space.Self);
+            heightAngle -= vwrticalInput;
+            Debug.Log("Height angle min");
+        }
+        if (heightAngle > maxHeightAngle)
+        {
+            foreach (Transform t in heightController)
+                t.Rotate(-vwrticalInput, 0, 0, Space.Self);
+            heightAngle -= vwrticalInput;
+            Debug.Log("Height angle max");
+        }
+    }
+    public void SteeringWheel(float input)
+    {
+        float steeringInput = input * Time.deltaTime * steeringSensitivity;
+        steeringManager.SteeringInput(steeringInput);
+    }
+    public void Rudder(float input)
+    {
+        float horInput = -input * Time.deltaTime * horizontalSensitivity;
+        if (!ControlActive)
+            horInput = 0;
+        horizontalController.Rotate(horInput, 0, 0, Space.Self);
+        horizontAngle += horInput;
+        if (horizontAngle < -maxHorizontalAngle || horizontAngle > maxHorizontalAngle)
+        {
+            horizontalController.Rotate(-horInput, 0, 0, Space.Self);
+            horizontAngle -= horInput;
+        }
     }
     //}
     //private void AddForce(Vector3 forceInWorldCoordinates, Vector3 pointOfApplicationINWorldCoordinates)

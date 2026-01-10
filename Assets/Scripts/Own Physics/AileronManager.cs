@@ -11,7 +11,7 @@ public class AileronManager : MonoBehaviour
     public float maxAileronAngle;
     public float aileronRotationSpeed;
     // Start is called before the first frame update
-    private int input = 0;
+    private float input = 0;
     Quaternion leftInit;
     Quaternion rightInit;
     private float currentAngle;
@@ -40,7 +40,7 @@ public class AileronManager : MonoBehaviour
         leftAileron.localRotation = leftInit * rotation;
         rightAileron.localRotation = rightInit * rotation;
     }
-    public void AileronDeflection(int input)
+    public void AileronDeflection(float input)
     {
         this.input = input;
     }
