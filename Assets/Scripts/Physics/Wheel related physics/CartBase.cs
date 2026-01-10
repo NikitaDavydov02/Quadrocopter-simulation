@@ -9,8 +9,8 @@ public class CartBase : ForceCalculationManager
      [SerializeField]
      Vector3 forceOffset;*/
     //Rigidbody rb;
-    [SerializeField]
-    BasicLiftForce basicLift;
+    //[SerializeField]
+    //BasicLiftForce basicLift;
     [SerializeField]
     ResistanceForce resistanceForce;
     [SerializeField]
@@ -32,7 +32,7 @@ public class CartBase : ForceCalculationManager
         //rb = GetComponent<Rigidbody>();
         Init();
        rb.centerOfMass = centerOfMassLocal;
-        Debug.Log("Inertia tensor" + rb.inertiaTensor);
+        //Debug.Log("Inertia tensor" + rb.inertiaTensor);
         if (inertiaTensor != Vector3.zero)
             rb.inertiaTensor = inertiaTensor;
 
@@ -43,8 +43,8 @@ public class CartBase : ForceCalculationManager
         
         if(engForce!=null)
             forceSources.Add(engForce);
-        if (basicLift != null)
-            forceSources.Add(basicLift);
+        //if (basicLift != null)
+        //    forceSources.Add(basicLift);
     }
 
     // Update is called once per frame

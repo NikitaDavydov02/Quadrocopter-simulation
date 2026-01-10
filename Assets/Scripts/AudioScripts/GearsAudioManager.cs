@@ -45,12 +45,12 @@ public class GearsAudioManager : MonoBehaviour
     }*/
     public void GearsUp()
     {
-        Debug.Log("Gear up audio");
+        //Debug.Log("Gear up audio");
         gearsAudioSource.PlayOneShot(gearsUp);
     }
     public void GearsDown()
     {
-        Debug.Log("Gear down audio");
+        //Debug.Log("Gear down audio");
         gearsAudioSource.PlayOneShot(gearsDown);
     }
 }

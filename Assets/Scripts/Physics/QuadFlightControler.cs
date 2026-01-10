@@ -46,8 +46,8 @@ public abstract class QuadFlightControler : ForceCalculationManager
     {
         float gas = Input.GetAxis("Mouse ScrollWheel") * gasSensitivity * Time.deltaTime;
         generalLevel += Input.GetAxis("Mouse ScrollWheel")* generalLevelChangingSpeed;
-        Debug.Log("Scroll: " + Input.GetAxis("Mouse ScrollWheel"));
-        Debug.Log("Gas: " + gas);
+        //Debug.Log("Scroll: " + Input.GetAxis("Mouse ScrollWheel"));
+        //Debug.Log("Gas: " + gas);
         /* if (Input.GetKey(KeyCode.UpArrow))
              generalLevel += generalLevelChangingSpeed * Time.deltaTime;
          if (Input.GetKey(KeyCode.DownArrow))

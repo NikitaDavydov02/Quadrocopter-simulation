@@ -71,7 +71,7 @@ public class EngineForce : MonoBehaviour, IForce
             //float t = Mathf.SmoothStep(0f, 1f, elapsed / reverseDoorOpenDuration);
             reverseDoor.localPosition += reverseDoorOpenOffset.normalized * Time.deltaTime * reverseDoorOpenSpeed;
             dr = openedPos - reverseDoor.localPosition;
-            Debug.Log("Open door");
+            //Debug.Log("Open door");
             yield return null;
         }
 
@@ -91,7 +91,7 @@ public class EngineForce : MonoBehaviour, IForce
             //float t = Mathf.SmoothStep(0f, 1f, elapsed / reverseDoorOpenDuration);
             reverseDoor.localPosition += (-reverseDoorOpenOffset.normalized) * Time.deltaTime * reverseDoorOpenSpeed;
             dr = closedPos - reverseDoor.localPosition;
-            Debug.Log("Close door");
+            //Debug.Log("Close door");
             yield return null;
         }
 

@@ -15,7 +15,7 @@ public class SubSceneScript : MonoBehaviour
     }
     private void OnDisable()
     {
-        Debug.Log("Scene disable!");
+        //Debug.Log("Scene disable!");
         MainManager.Instance.OnSubsceneDisnable();
     }
 }

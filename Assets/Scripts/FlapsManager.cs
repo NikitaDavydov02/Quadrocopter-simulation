@@ -66,7 +66,7 @@ public class FlapsManager : MonoBehaviour
     }
     IEnumerator ExtendFlapsAnimation(int nextPositionIndex)
     {
-        Debug.Log(gameObject.name + " extend to position " + nextPositionIndex);
+        //Debug.Log(gameObject.name + " extend to position " + nextPositionIndex);
         Vector3[] left_start_pos = new Vector3[FlapsLeftCount];
         Vector3[] right_start_pos = new Vector3[FlapsLeftCount];
 
@@ -85,7 +85,7 @@ public class FlapsManager : MonoBehaviour
             left_start_pos[i] = leftFlapsTransform[i].localPosition;
             right_start_pos[i] = rightFlapsTransform[i].localPosition;
         }
-        Debug.Log("Extend flaps start local pos: " + leftFlapsTransform[0].localPosition);
+        //Debug.Log("Extend flaps start local pos: " + leftFlapsTransform[0].localPosition);
         //Debug.Log("Extend flaps start");
         //Debug.Log("d_left_angle flaps: " + d_left_angle[0]);
         //Debug.Log("d_right_angle flaps: " + d_right_angle[0]);
@@ -93,7 +93,7 @@ public class FlapsManager : MonoBehaviour
         float elapsedTime = 0;
         while (elapsedTime < extensionTime)
         {
-            Debug.Log("Extending flaps: " + elapsedTime / extensionTime);
+            //Debug.Log("Extending flaps: " + elapsedTime / extensionTime);
             for (int i = 0; i < FlapsLeftCount; i++)
             {
                 //Quaternion leftCurrent = leftFlapsTransform[i].rotation;
@@ -108,7 +108,7 @@ public class FlapsManager : MonoBehaviour
                 Vector3 right_pos = Vector3.Lerp(right_start_pos[i], right_start_pos[i]+offsets[nextPositionIndex]-offsets[currentPos], elapsedTime / extensionTime);
                 leftFlapsTransform[i].localPosition = left_pos;
                 rightFlapsTransform[i].localPosition =right_pos;
-                Debug.Log(gameObject.name + " flaps pos: " + left_pos);
+                //Debug.Log(gameObject.name + " flaps pos: " + left_pos);
             }
 
             elapsedTime += Time.deltaTime;
@@ -120,7 +120,7 @@ public class FlapsManager : MonoBehaviour
             float degree = currentPos / (float)(offsets.Count-1);
             foreach (WingForce w in flaps)
                 w.degree = degree;
-            Debug.Log("Set degree: " + degree);
+            //Debug.Log("Set degree: " + degree);
         }
     }
     public void Flaps(int pos)
@@ -133,7 +133,7 @@ public class FlapsManager : MonoBehaviour
     }
     private IEnumerator SequentialFlapsExtension(int pos)
     {
-        Debug.Log(gameObject.name + " start sequential");
+        //Debug.Log(gameObject.name + " start sequential");
         int step = 0;
         if (pos > currentPos)
             step = 1;

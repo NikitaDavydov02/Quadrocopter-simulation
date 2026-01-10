@@ -52,7 +52,7 @@ public class SteeringManager : MonoBehaviour
     }
     IEnumerator AlignGear()
     {
-        Debug.Log("Align start!");
+        //Debug.Log("Align start!");
         float rate = 10f;
         if (steeringAngle > 0)
             rate *= -1;
@@ -67,6 +67,6 @@ public class SteeringManager : MonoBehaviour
                 stop = true;
             yield return null;
         }
-        Debug.Log("Align stop!");
+        //Debug.Log("Align stop!");
     }
 }

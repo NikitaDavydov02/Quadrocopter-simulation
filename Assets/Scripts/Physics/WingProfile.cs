@@ -9,12 +9,12 @@ public class WingProfile : MonoBehaviour
     public string nameOfProfile = "NewProfile";
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

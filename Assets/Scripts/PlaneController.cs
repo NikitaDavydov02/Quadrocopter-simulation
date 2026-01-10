@@ -127,7 +127,7 @@ public class PlaneController : ForceCalculationManager
         anchor = gameObject.GetComponent<CesiumGlobeAnchor>();
         Init();
         rb.centerOfMass = centerOfMassLocal;
-        Debug.Log("Inertia tensor" + rb.inertiaTensor);
+       // Debug.Log("Inertia tensor" + rb.inertiaTensor);
         if (inertiaTensor != Vector3.zero)
             rb.inertiaTensor = inertiaTensor;
 
@@ -167,7 +167,7 @@ public class PlaneController : ForceCalculationManager
         //    accelText.text = ((rb.velocity.magnitude - lastVelocity)/ Time.deltaTime).ToString("0.00");
         lastVelocity = rb.linearVelocity.magnitude;
 
-        Debug.Log("Inertia tensor" + rb.inertiaTensor);
+        //Debug.Log("Inertia tensor" + rb.inertiaTensor);
         if (inertiaTensor != Vector3.zero)
             rb.inertiaTensor = inertiaTensor;
         rb.inertiaTensorRotation = Quaternion.Euler(0,0,0);
@@ -365,20 +365,20 @@ public class PlaneController : ForceCalculationManager
             t.Rotate(vwrticalInput, 0, 0, Space.Self);
 
         heightAngle += vwrticalInput;
-        Debug.Log("Height angle: " + heightAngle);
+       // Debug.Log("Height angle: " + heightAngle);
         if (heightAngle < -maxHeightAngle)
         {
             foreach (Transform t in heightController)
                 t.Rotate(-vwrticalInput, 0, 0, Space.Self);
             heightAngle -= vwrticalInput;
-            Debug.Log("Height angle min");
+            //Debug.Log("Height angle min");
         }
         if (heightAngle > maxHeightAngle)
         {
             foreach (Transform t in heightController)
                 t.Rotate(-vwrticalInput, 0, 0, Space.Self);
             heightAngle -= vwrticalInput;
-            Debug.Log("Height angle max");
+            //Debug.Log("Height angle max");
         }
     }
     public void SteeringWheel(float input)

@@ -64,10 +64,10 @@ public class SpoilersManager : MonoBehaviour
             d_left_angle[i] = leftExtandedLocalRotation[i] - leftSpoilersTransform[i].localEulerAngles;
             d_right_angle[i] = rightExtandedLocalRotation[i] - rightSpoilersTransform[i].localEulerAngles;
         }
-        Debug.Log("Extend");
+        //Debug.Log("Extend");
         while (!stopExtending)
         {
-            Debug.Log("Extending");
+            //Debug.Log("Extending");
             stopExtending = true;
             for (int i = 0; i < spoilersLeftCount; i++)
             {
@@ -86,7 +86,7 @@ public class SpoilersManager : MonoBehaviour
             }
             yield return null;
         }
-        Debug.Log("Extend end");
+        //Debug.Log("Extend end");
 
         for (int i = 0; i < spoilersLeftCount; i++)
         {
@@ -106,10 +106,10 @@ public class SpoilersManager : MonoBehaviour
             d_left_angle[i] = leftRetractedLocalRotation[i] - leftSpoilersTransform[i].localEulerAngles;
             d_right_angle[i] = rightRetractedLocalRotation[i] - rightSpoilersTransform[i].localEulerAngles;
         }
-        Debug.Log("Extend");
+        //Debug.Log("Extend");
         while (!stopExtending)
         {
-            Debug.Log("Extending");
+            //Debug.Log("Extending");
             stopExtending = true;
             for (int i = 0; i < spoilersLeftCount; i++)
             {
@@ -128,7 +128,7 @@ public class SpoilersManager : MonoBehaviour
             }
             yield return null;
         }
-        Debug.Log("Extend end");
+        //Debug.Log("Extend end");
 
         for (int i = 0; i < spoilersLeftCount; i++)
         {

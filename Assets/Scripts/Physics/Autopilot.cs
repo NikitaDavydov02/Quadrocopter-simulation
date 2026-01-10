@@ -31,13 +31,13 @@ public class Autopilot : MonoBehaviour
         //Debug.Log("Angle:"+angle);
         if (angle > limitAngle)
         {
-            Debug.Log("Turn to the right");
+            //Debug.Log("Turn to the right");
             leftElleron.localEulerAngles=new Vector3(-maxEleronAngle, 0, 0);
             rightElleron.localEulerAngles = new Vector3(maxEleronAngle, 0, 0);
         }
         if (angle < -limitAngle)
         {
-            Debug.Log("Turn to the left");
+            //Debug.Log("Turn to the left");
             leftElleron.localEulerAngles = new Vector3(maxEleronAngle, 0, 0);
             rightElleron.localEulerAngles = new Vector3(-maxEleronAngle, 0, 0);
         

@@ -217,16 +217,16 @@ public class UIManager : MonoBehaviour
 
         artificialHorizonMaskHeight = artificialHorizonMask.rect.height;
         float heightPerDegree = artificialHorizonMaskHeight / pitchAnglesInArtificialHorizon;
-        Debug.Log("UI Height per degree: " + heightPerDegree);
+        //Debug.Log("UI Height per degree: " + heightPerDegree);
         float horizonShift_y = heightPerDegree * flighInstruments.PitchAngle*Mathf.Cos(flighInstruments.BankAngle*Mathf.Deg2Rad);
         float horizonShift_x = -heightPerDegree * flighInstruments.PitchAngle * Mathf.Sin(flighInstruments.BankAngle * Mathf.Deg2Rad);
-        Debug.Log("UI pitch angle: " + flighInstruments.PitchAngle);
+        //Debug.Log("UI pitch angle: " + flighInstruments.PitchAngle);
         Vector3 pos = horizon.anchoredPosition;
         pos.y = groundRefPosition + horizonShift_y;
         pos.x = horizonShift_x;
         horizon.anchoredPosition = pos;
 
-        Debug.Log("UI speed: " + flighInstruments.Velocity.magnitude);
+        //Debug.Log("UI speed: " + flighInstruments.Velocity.magnitude);
         string speed_text = (1.94f*(flighInstruments.Velocity.magnitude)).ToString("F0");
         speed.text = speed_text;
 

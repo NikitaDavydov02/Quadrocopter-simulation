@@ -35,8 +35,8 @@ public class CameraManager : MonoBehaviour
         {
 
             //return;
-            Debug.DrawLine(targets[currentTarget].transform.position, targets[currentTarget].transform.position + offcets[currentTarget],Color.yellow);
-            Debug.DrawLine(targets[currentTarget].transform.position, targets[currentTarget].transform.position + targets[currentTarget].transform.TransformDirection(offcets[currentTarget]), Color.black);
+            //Debug.DrawLine(targets[currentTarget].transform.position, targets[currentTarget].transform.position + offcets[currentTarget],Color.yellow);
+            //Debug.DrawLine(targets[currentTarget].transform.position, targets[currentTarget].transform.position + targets[currentTarget].transform.TransformDirection(offcets[currentTarget]), Color.black);
             //Vector3 delta = Quaternion.Euler(offcetsRotation[currentTarget]) * offcets[currentTarget];
             Vector3 cameraPos = targets[currentTarget].transform.position + targets[currentTarget].transform.TransformDirection(offcets[currentTarget]);
             this.transform.position = cameraPos;

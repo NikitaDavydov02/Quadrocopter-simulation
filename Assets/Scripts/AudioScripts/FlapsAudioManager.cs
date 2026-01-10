@@ -32,12 +32,12 @@ public class FlapsAudioManager : MonoBehaviour
     }
     public void StartFlaps()
     {
-        Debug.Log("Flaps on");
+        //Debug.Log("Flaps on");
         active = true;
     }
     public void StopFlaps()
     {
-        Debug.Log("Flaps off");
+        //Debug.Log("Flaps off");
         active = false;
     }
 }

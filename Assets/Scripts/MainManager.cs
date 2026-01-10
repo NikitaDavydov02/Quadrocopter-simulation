@@ -63,11 +63,11 @@ public class MainManager : MonoBehaviour
         if (globalVolume.profile.TryGet<VolumetricClouds>(out clouds))
         {
             clouds.active = true;
-            Debug.Log("Clouds!");
+            //Debug.Log("Clouds!");
             //clouds.densityMultiplier.value = 0.8f;
         }
-        else
-            Debug.Log("No Clouds :(");
+        //else
+        //    Debug.Log("No Clouds :(");
 
   
 

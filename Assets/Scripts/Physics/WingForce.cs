@@ -78,7 +78,7 @@ public class WingForce : MonoBehaviour, IForce
         {
             CxDependenceVSAngleOfAtack = profile.CxDependenceVSAngleOfAtack;
             CyDependenceVSAngleOfAtack = profile.CyDependenceVSAngleOfAtack;
-            Debug.Log("My profile is now " + profile.nameOfProfile);
+            //Debug.Log("My profile is now " + profile.nameOfProfile);
         }
 
     }

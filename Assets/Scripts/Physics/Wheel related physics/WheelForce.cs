@@ -103,8 +103,8 @@ public class WheelForce : MonoBehaviour, IForce
         //sw.Close();
         parent_rb = airplane.GetComponent<Rigidbody>();
         wheelMeshRenderer = wheelTransform.gameObject.GetComponent<MeshRenderer>();
-        if (wheel_inertia_moment == 0)
-            Debug.LogError("wheel_inertia_moment==0");
+        //if (wheel_inertia_moment == 0)
+        //    Debug.LogError("wheel_inertia_moment==0");
     }
 
     // Update is called once per frame
@@ -126,7 +126,7 @@ public class WheelForce : MonoBehaviour, IForce
         {
             Vector3 newBoggiePos = transform.position + airplane.transform.TransformDirection(Vector3.down) * (relativeBoogieNeutralPosition + distance_to_the_wheel_center - rest_distance_to_the_wheel_center);
             boogieTransform.Translate(newBoggiePos - boogieTransform.position, Space.World);
-            Debug.Log("Distance to the wheel center: " + distance_to_the_wheel_center);
+            //Debug.Log("Distance to the wheel center: " + distance_to_the_wheel_center);
         }
         else
             wheelTransform.position = transform.position + transform.TransformDirection(Vector3.down) * distance_to_the_wheel_center;
@@ -134,10 +134,10 @@ public class WheelForce : MonoBehaviour, IForce
         //<ROTATE WHEEL>
         Vector3 r = force_point - wheelCenterPoint;
         Vector3 M = Vector3.Cross(r, frictionForce);
-        Debug.DrawLine(wheelCenterPoint, wheelCenterPoint + globalAxisMomentum, Color.blue);
+        /*Debug.DrawLine(wheelCenterPoint, wheelCenterPoint + globalAxisMomentum, Color.blue);
         Debug.Log("M_friction " + M );
         Debug.Log("M_engine: " + globalAxisMomentum.magnitude);
-        Debug.Log("Dor(M_friction,M_engine):" + Vector3.Dot(M.normalized, globalAxisMomentum.normalized));
+        Debug.Log("Dor(M_friction,M_engine):" + Vector3.Dot(M.normalized, globalAxisMomentum.normalized));*/
         if (!braking)
         {
             M += globalAxisMomentum;//COMMENT
@@ -145,12 +145,12 @@ public class WheelForce : MonoBehaviour, IForce
         }
         if (braking)
         {
-            Debug.Log("Braking");
+            //Debug.Log("Braking");
             //calculate braking momentum
             M -= angular_velocity_abs.normalized * (brakingMoment);
             //angularVelocity = 0f;
         }
-        Debug.DrawLine(wheelCenterPoint, wheelCenterPoint + M, Color.blue);
+        //Debug.DrawLine(wheelCenterPoint, wheelCenterPoint + M, Color.blue);
         angular_velocity_abs += M * Time.deltaTime / wheel_inertia_moment;
         angularVelocity = Vector3.Dot(angular_velocity_abs, wheelTransform.TransformDirection(Vector3.up));
         /*if (Vector3.Dot(M, transform.TransformDirection(Vector3.up))>0)
@@ -207,7 +207,7 @@ public class WheelForce : MonoBehaviour, IForce
             //Debug.LogError("Exceeding force limit: " + force_abs);
             force_abs = Vector3.zero;
         }
-        Debug.Log("Wheel force: " + force_abs);
+        //Debug.Log("Wheel force: " + force_abs);
 
         //<FILTER>
         /*if(previoud_force_friction!=Vector3.zero)
@@ -262,8 +262,8 @@ public class WheelForce : MonoBehaviour, IForce
 
         //sw.Write(dx + ";");
         //sw.Write(spring_velocity + ";");
-        Debug.Log("Force_dx: " + dx);
-        Debug.Log("Force_v: " + spring_velocity);
+        //Debug.Log("Force_dx: " + dx);
+        //Debug.Log("Force_v: " + spring_velocity);
         return (dx * k_stiffness + spring_velocity * dumping_coeff);// + velocity * dumping_coeff);
     }
     public void UpdateStatus()
@@ -286,25 +286,25 @@ public class WheelForce : MonoBehaviour, IForce
         RaycastHit raycastHit;
         int raycastLayer = LayerMask.NameToLayer("Ignore Raycast");
         int ignoreRaycastLayer = ~(1 << raycastLayer);
-        Debug.Log("raycat layer: " + raycastLayer);
-        Debug.Log("ignore raycast layer: " + ignoreRaycastLayer);
+        //Debug.Log("raycat layer: " + raycastLayer);
+        //Debug.Log("ignore raycast layer: " + ignoreRaycastLayer);
 
         wheelRestCenterPoint = transform.position + transform.TransformDirection(Vector3.down) * rest_distance_to_the_wheel_center;
        
-        Debug.Log("Wheel " + name + " position: " + wheelRestCenterPoint);
-        Debug.DrawLine(parent_rb.position, wheelRestCenterPoint, Color.black);
+       // Debug.Log("Wheel " + name + " position: " + wheelRestCenterPoint);
+       // Debug.DrawLine(parent_rb.position, wheelRestCenterPoint, Color.black);
         //if (Physics.Raycast(new Ray(transform.position,Vector3.down),out raycastHit,max_distance_to_the_wheel_center+R))
         if (Physics.Raycast(new Ray(transform.position, transform.TransformDirection(Vector3.down)), out raycastHit, max_distance_to_the_wheel_center + R, ignoreRaycastLayer))
         {
-            Debug.Log("raycast hit: " + raycastHit.collider.name);
+            //Debug.Log("raycast hit: " + raycastHit.collider.name);
             wheelCenterPoint = raycastHit.point - transform.TransformDirection(Vector3.down) * R;
             reactionNormalForcePoint = raycastHit.point;
             reactionNormalForce = Vector3.down * CalculateSpringForce();
            
             touchGroundPointVelocity = parent_rb.GetPointVelocity(raycastHit.point);
             touchGroundPointVelocity.y = 0;//COMMENT
-            Debug.DrawLine(parent_rb.position, wheelCenterPoint, Color.black);
-            Debug.DrawLine(parent_rb.position, raycastHit.point, Color.yellow);
+            //Debug.DrawLine(parent_rb.position, wheelCenterPoint, Color.black);
+            //Debug.DrawLine(parent_rb.position, raycastHit.point, Color.yellow);
         }
         else
         {
@@ -313,7 +313,7 @@ public class WheelForce : MonoBehaviour, IForce
             wheelCenterPoint = transform.position + transform.TransformDirection(Vector3.down) * rest_distance_to_the_wheel_center;
             status = WheelStatus.InAir;
             wheelMeshRenderer.material.color = Color.blue;
-            Debug.DrawLine(parent_rb.position, wheelCenterPoint, Color.black);
+            //Debug.DrawLine(parent_rb.position, wheelCenterPoint, Color.black);
             if (wheelAudioManager != null)
                 wheelAudioManager.roll = false;
             return;
@@ -323,13 +323,13 @@ public class WheelForce : MonoBehaviour, IForce
         //<UPDATE STATUS>
         Vector3 radius_abs = transform.TransformDirection(Vector3.down) * R;
         angular_velocity_abs = wheelTransform.TransformDirection(Vector3.up) * angularVelocity;
-        Debug.DrawLine(wheelTransform.position, wheelTransform.position+angular_velocity_abs, Color.yellow);
+        //Debug.DrawLine(wheelTransform.position, wheelTransform.position+angular_velocity_abs, Color.yellow);
         touchRimPointVelocity = Vector3.Cross(angular_velocity_abs, radius_abs);
-        Debug.Log("Radius abs: " + radius_abs);
-        Debug.DrawLine(reactionNormalForcePoint, reactionNormalForcePoint + touchRimPointVelocity, Color.cyan);
-        Debug.DrawLine(reactionNormalForcePoint, reactionNormalForcePoint + touchGroundPointVelocity, Color.cyan);
+        //Debug.Log("Radius abs: " + radius_abs);
+        //Debug.DrawLine(reactionNormalForcePoint, reactionNormalForcePoint + touchRimPointVelocity, Color.cyan);
+        //Debug.DrawLine(reactionNormalForcePoint, reactionNormalForcePoint + touchGroundPointVelocity, Color.cyan);
         slidingSpeed = touchRimPointVelocity + touchGroundPointVelocity;
-        Debug.DrawLine(reactionNormalForcePoint, reactionNormalForcePoint + slidingSpeed, Color.black);
+        //Debug.DrawLine(reactionNormalForcePoint, reactionNormalForcePoint + slidingSpeed, Color.black);
         if (touchGroundPointVelocity.magnitude > 0.01f)
         {
            if (slidingSpeed.magnitude / touchGroundPointVelocity.magnitude > sliding_relative_tolerance)
