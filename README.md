@@ -1,5 +1,8 @@
 # RWing airplane simulator
 
+## Installation
+To install RWing for Windows (x64) download and run RWing_Setup.exe file from Release section of this repository.
+
 ## Overview
 The present Unity project represents open source Boeing 737-800 single player simulator with the georeferenced world with the following functionality:
 * 3rd person view of an aircraft from several views with orbiting
