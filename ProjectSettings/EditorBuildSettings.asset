@@ -4,7 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Cesium2.unity
+    guid: e0f035cea23a00a4dacc3fd772760e1e
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: a0ec91a025fe4114694c37d7cce84630, type: 3}
   m_UseUCBPForAssetBundles: 0
